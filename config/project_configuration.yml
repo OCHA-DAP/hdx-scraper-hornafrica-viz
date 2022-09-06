@@ -1,0 +1,138 @@
+tabs:
+  regional: "RegionalData"
+  national: "NationalData"
+  subnational: "SubnationalData"
+  sources: "Sources"
+
+
+googlesheets:
+  prod: "https://docs.google.com/spreadsheets/d/15vW6LUfAAHLsblWPt2bvZ8WrWTwsqwjdJy09grI3CrM/edit#gid=0"
+  scratch: "https://docs.google.com/spreadsheets/d/1kAyXs1UDCPYhOrwcQiXWJ3AReQx8mMFNK5QksXu8r3s/edit#gid=0"
+
+json:
+  output: "all.json"
+
+additional_sources:
+  - indicator: "#affected+food+p3plus+num"
+    source: "Multiple sources"
+    force_date_today: True
+    source_url: "https://data.humdata.org/search?q=(name:ipc-country-data%20OR%20name:cadre-harmonise)"
+
+# national
+scraper_national:
+  population:
+    source: "WorldPop"
+    source_url: "https://data.humdata.org/search?organization=worldpop&q=%22population%20counts%22"
+    url: "https://api.worldbank.org/v2/en/indicator/SP.POP.TOTL?downloadformat=excel&dataformat=list"
+    format: "xls"
+    sheet: "Data"
+    headers: 3
+    prefilter: "Value is not None"
+    admin:
+      - "Country Code"
+    date: "Year"
+    date_type: "year"
+    input:
+      - "Value"
+    output:
+      - "Population"
+    output_hxl:
+      - "#population"
+
+# subnational
+ipc:
+  dataset: "ipc-country-data"
+  url: "https://api.ipcinfo.org"
+
+scraper_subnational:
+  population:
+    source: "WorldPop/UNFPA"
+    source_url: "https://data.humdata.org/search?organization=worldpop&q=%22population%20counts%22"
+    dataset: "admin-1-population-statistics-for-data-explorers"
+    format: "csv"
+    admin:
+      - "alpha_3"
+      - "ADM1_PCODE"
+    input:
+      - "Population"
+    transform:
+      "Population": "get_numeric_if_possible(Population)"
+    output:
+      - "Population"
+    output_hxl:
+      - "#population"
+
+countries:
+  - ETH
+  - KEN
+  - SOM
+
+country_name_overrides:
+
+country_name_mappings:
+
+admin1_info:
+  - {country: Ethiopia, iso3: ETH, pcode: ET14, name: Addis Ababa}
+  - {country: Ethiopia, iso3: ETH, pcode: ET02, name: Afar}
+  - {country: Ethiopia, iso3: ETH, pcode: ET03, name: Amhara}
+  - {country: Ethiopia, iso3: ETH, pcode: ET06, name: Benishangul Gumz}
+  - {country: Ethiopia, iso3: ETH, pcode: ET15, name: Dire Dawa}
+  - {country: Ethiopia, iso3: ETH, pcode: ET12, name: Gambela}
+  - {country: Ethiopia, iso3: ETH, pcode: ET13, name: Harari}
+  - {country: Ethiopia, iso3: ETH, pcode: ET04, name: Oromia}
+  - {country: Ethiopia, iso3: ETH, pcode: ET07, name: SNNP}
+  - {country: Ethiopia, iso3: ETH, pcode: ET16, name: Sidama}
+  - {country: Ethiopia, iso3: ETH, pcode: ET05, name: Somali}
+  - {country: Ethiopia, iso3: ETH, pcode: ET11, name: South West Ethiopia}
+  - {country: Ethiopia, iso3: ETH, pcode: ET01, name: Tigray}
+  - {country: Somalia, iso3: SOM, pcode: SO11, name: Awdal}
+  - {country: Somalia, iso3: SOM, pcode: SO25, name: Bakool}
+  - {country: Somalia, iso3: SOM, pcode: SO22, name: Banadir}
+  - {country: Somalia, iso3: SOM, pcode: SO16, name: Bari}
+  - {country: Somalia, iso3: SOM, pcode: SO24, name: Bay}
+  - {country: Somalia, iso3: SOM, pcode: SO19, name: Galgaduud}
+  - {country: Somalia, iso3: SOM, pcode: SO26, name: Gedo}
+  - {country: Somalia, iso3: SOM, pcode: SO20, name: Hiraan}
+  - {country: Somalia, iso3: SOM, pcode: SO28, name: Lower Juba}
+  - {country: Somalia, iso3: SOM, pcode: SO23, name: Lower Shabelle}
+  - {country: Somalia, iso3: SOM, pcode: SO27, name: Middle Juba}
+  - {country: Somalia, iso3: SOM, pcode: SO21, name: Middle Shabelle}
+  - {country: Somalia, iso3: SOM, pcode: SO18, name: Mudug}
+  - {country: Somalia, iso3: SOM, pcode: SO17, name: Nugaal}
+  - {country: Somalia, iso3: SOM, pcode: SO15, name: Sanaag}
+  - {country: Somalia, iso3: SOM, pcode: SO14, name: Sool}
+  - {country: Somalia, iso3: SOM, pcode: SO13, name: Togdheer}
+  - {country: Somalia, iso3: SOM, pcode: SO12, name: Woqooyi Galbeed}
+
+admin1_name_mappings:
+  "ben-gumz": "ET06"
+  "PL.Sool": "SO14"
+  "PL.Sanag": "SO15"
+  "PL.Mudug": "SO18"
+  "Sc.Mudug": "SO18"
+  "Shabelle dhexe": "SO21"
+  "Shabelle hoose": "SO23"
+  "Juba dhexe": "SO27"
+  "Juba hoose": "SO28"
+
+admin1_name_replacements:
+  " urban": ""
+  "sud": "south"
+  "ouest": "west"
+  "est": "east"
+  "nord": "north"
+  "'": ""
+  "/": " "
+  ".": " "
+  " region": ""
+
+admin1_fuzzy_dont:
+  - "nord"
+  - "north"
+  - "sud"
+  - "south"
+  - "est"
+  - "east"
+  - "ouest"
+  - "west"
+  - "syria"
