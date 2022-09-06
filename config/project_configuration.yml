@@ -39,6 +39,12 @@ scraper_national:
     output_hxl:
       - "#population"
 
+aggregate_regional:
+  "#population":
+    action: "sum"
+  "#affected+food+ipc+p3plus+num":
+    action: "sum"
+
 # subnational
 ipc:
   dataset: "ipc-country-data"

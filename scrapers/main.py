@@ -70,6 +70,15 @@ def get_indicators(
 
     runner.add_customs((ipc,))
 
+    runner.add_aggregators(
+        True,
+        configuration["aggregate_regional"],
+        "national",
+        "regional",
+        countries,
+        force_add_to_run=True,
+    )
+
     runner.run(
         prioritise_scrapers=(
             "population_national",
