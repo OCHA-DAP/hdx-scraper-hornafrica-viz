@@ -86,6 +86,53 @@ admin1_info:
   - {country: Ethiopia, iso3: ETH, pcode: ET05, name: Somali}
   - {country: Ethiopia, iso3: ETH, pcode: ET11, name: South West Ethiopia}
   - {country: Ethiopia, iso3: ETH, pcode: ET01, name: Tigray}
+  - {country: Kenya, iso3: KEN, pcode: KE030, name: Baringo}
+  - {country: Kenya, iso3: KEN, pcode: KE036, name: Bomet}
+  - {country: Kenya, iso3: KEN, pcode: KE039, name: Bungoma}
+  - {country: Kenya, iso3: KEN, pcode: KE040, name: Busia}
+  - {country: Kenya, iso3: KEN, pcode: KE028, name: Elgeyo Marakwet}
+  - {country: Kenya, iso3: KEN, pcode: KE014, name: Embu}
+  - {country: Kenya, iso3: KEN, pcode: KE007, name: Garissa}
+  - {country: Kenya, iso3: KEN, pcode: KE043, name: Homa Bay}
+  - {country: Kenya, iso3: KEN, pcode: KE011, name: Isiolo}
+  - {country: Kenya, iso3: KEN, pcode: KE034, name: Kajiado}
+  - {country: Kenya, iso3: KEN, pcode: KE037, name: Kakamega}
+  - {country: Kenya, iso3: KEN, pcode: KE035, name: Kericho}
+  - {country: Kenya, iso3: KEN, pcode: KE022, name: Kiambu}
+  - {country: Kenya, iso3: KEN, pcode: KE003, name: Kilifi}
+  - {country: Kenya, iso3: KEN, pcode: KE020, name: Kirinyaga}
+  - {country: Kenya, iso3: KEN, pcode: KE045, name: Kisii}
+  - {country: Kenya, iso3: KEN, pcode: KE042, name: Kisumu}
+  - {country: Kenya, iso3: KEN, pcode: KE015, name: Kitui}
+  - {country: Kenya, iso3: KEN, pcode: KE002, name: Kwale}
+  - {country: Kenya, iso3: KEN, pcode: KE031, name: Laikipia}
+  - {country: Kenya, iso3: KEN, pcode: KE005, name: Lamu}
+  - {country: Kenya, iso3: KEN, pcode: KE016, name: Machakos}
+  - {country: Kenya, iso3: KEN, pcode: KE017, name: Makueni}
+  - {country: Kenya, iso3: KEN, pcode: KE009, name: Mandera}
+  - {country: Kenya, iso3: KEN, pcode: KE010, name: Marsabit}
+  - {country: Kenya, iso3: KEN, pcode: KE012, name: Meru}
+  - {country: Kenya, iso3: KEN, pcode: KE044, name: Migori}
+  - {country: Kenya, iso3: KEN, pcode: KE001, name: Mombasa}
+  - {country: Kenya, iso3: KEN, pcode: KE021, name: Muranga}
+  - {country: Kenya, iso3: KEN, pcode: KE047, name: Nairobi}
+  - {country: Kenya, iso3: KEN, pcode: KE032, name: Nakuru}
+  - {country: Kenya, iso3: KEN, pcode: KE029, name: Nandi}
+  - {country: Kenya, iso3: KEN, pcode: KE033, name: Narok}
+  - {country: Kenya, iso3: KEN, pcode: KE046, name: Nyamira}
+  - {country: Kenya, iso3: KEN, pcode: KE018, name: Nyandarua}
+  - {country: Kenya, iso3: KEN, pcode: KE019, name: Nyeri}
+  - {country: Kenya, iso3: KEN, pcode: KE025, name: Samburu}
+  - {country: Kenya, iso3: KEN, pcode: KE041, name: Siaya}
+  - {country: Kenya, iso3: KEN, pcode: KE006, name: Taita Taveta}
+  - {country: Kenya, iso3: KEN, pcode: KE004, name: Tana River}
+  - {country: Kenya, iso3: KEN, pcode: KE013, name: Tharaka Nithi}
+  - {country: Kenya, iso3: KEN, pcode: KE026, name: Trans Nzoia}
+  - {country: Kenya, iso3: KEN, pcode: KE023, name: Turkana}
+  - {country: Kenya, iso3: KEN, pcode: KE027, name: Uasin Gishu}
+  - {country: Kenya, iso3: KEN, pcode: KE038, name: Vihiga}
+  - {country: Kenya, iso3: KEN, pcode: KE008, name: Wajir}
+  - {country: Kenya, iso3: KEN, pcode: KE024, name: West Pokot}
   - {country: Somalia, iso3: SOM, pcode: SO11, name: Awdal}
   - {country: Somalia, iso3: SOM, pcode: SO25, name: Bakool}
   - {country: Somalia, iso3: SOM, pcode: SO22, name: Banadir}
