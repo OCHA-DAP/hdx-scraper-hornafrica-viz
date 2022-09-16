@@ -14,6 +14,7 @@ from hdx.scraper.runner import Runner
 from hdx.scraper.utilities.fallbacks import Fallbacks
 
 from .ipc import IPC
+from .utilities import update_admintwo
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +41,8 @@ def get_indicators(
     else:
         countries = configuration["countries"]
     configuration["countries_fuzzy_try"] = countries
-    adminone = AdminOne(configuration)
+    adminone = AdminOne(configuration["admin1"])
+    admintwo = AdminOne(configuration["admin2"])
     if fallbacks_root is not None:
         fallbacks_path = join(fallbacks_root, configuration["json"]["output"])
         levels_mapping = {
@@ -61,12 +63,12 @@ def get_indicators(
         scrapers_to_run=scrapers_to_run,
     )
     configurable_scrapers = dict()
-    for level in ("national", "subnational"):
+    for level in ("national", "adminone"):
         suffix = f"_{level}"
         configurable_scrapers[level] = runner.add_configurables(
             configuration[f"scraper{suffix}"], level, suffix=suffix
         )
-    ipc = IPC(configuration["ipc"], today, countries, adminone)
+    ipc = IPC(configuration["ipc"], today, countries, adminone, admintwo)
 
     runner.add_customs((ipc,))
 
@@ -79,10 +81,12 @@ def get_indicators(
         force_add_to_run=True,
     )
 
+    runner.admintwo = admintwo
+
     runner.run(
         prioritise_scrapers=(
             "population_national",
-            "population_subnational",
+            "population_adminone",
             "population_regional",
         )
     )
@@ -96,12 +100,19 @@ def get_indicators(
             countries,
             outputs,
         )
-    if "subnational" in tabs:
-        update_subnational(runner, adminone, outputs)
+    if "adminone" in tabs:
+        update_subnational(runner, adminone, outputs, level="adminone", tab="adminone")
+
+    if "admintwo" in tabs:
+        update_admintwo(runner, admintwo, outputs)
 
     adminone.output_matches()
     adminone.output_ignored()
     adminone.output_errors()
+
+    admintwo.output_matches()
+    admintwo.output_ignored()
+    admintwo.output_errors()
 
     if "sources" in tabs:
         update_sources(

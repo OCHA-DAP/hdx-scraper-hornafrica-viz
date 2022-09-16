@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 class IPC(BaseScraper):
-    def __init__(self, datasetinfo, today, countryiso3s, adminone):
+    def __init__(self, datasetinfo, today, countryiso3s, adminone, admintwo):
         self.phases = ["3", "4", "5"]
         self.projections = ["Current", "First Projection", "Second Projection"]
         p3plus_header = "FoodInsecurityIPCP3+"
@@ -31,12 +31,14 @@ class IPC(BaseScraper):
             datasetinfo,
             {
                 "national": (tuple(colheaders), tuple(hxltags)),
-                "subnational": ((p3plus_header,), (p3plus_hxltag,)),
+                "adminone": ((p3plus_header,), (p3plus_hxltag,)),
+                "admintwo": ((p3plus_header,), (p3plus_hxltag,)),
             },
         )
         self.today = today
         self.countryiso3s = countryiso3s
         self.adminone = adminone
+        self.admintwo = admintwo
 
     def get_period(self, projections):
         today = self.today.date()
@@ -79,7 +81,8 @@ class IPC(BaseScraper):
         national_period = national_outputs[i + 2]
         national_start = national_outputs[i + 3]
         national_end = national_outputs[i + 4]
-        subnational_populations = self.get_values("subnational")[0]
+        adminone_populations = self.get_values("adminone")[0]
+        admintwo_populations = self.get_values("admintwo")[0]
         projection_names = ["Current", "First Projection", "Second Projection"]
         projection_mappings = ["", "_projected", "_second_projected"]
         analysis_dates = set()
@@ -111,9 +114,9 @@ class IPC(BaseScraper):
             national_period[countryiso3] = projection_names[projection_number]
             national_start[countryiso3] = start
             national_end[countryiso3] = end
-            areas = country_data.get("areas", country_data.get("groups"))
-            if areas:
-                for area in areas:
+            admin1_areas = country_data.get("groups")
+            if admin1_areas:
+                for area in admin1_areas:
                     pcode, _ = self.adminone.get_pcode(countryiso3, area["name"], "IPC")
                     if not pcode:
                         continue
@@ -122,9 +125,25 @@ class IPC(BaseScraper):
                         pop = area.get(f"phase{phase}_population{projection_mapping}")
                         if pop:
                             sum += pop
-                    cur_sum = subnational_populations.get(pcode)
+                    cur_sum = adminone_populations.get(pcode)
                     if cur_sum:
-                        subnational_populations[pcode] = cur_sum + sum
+                        adminone_populations[pcode] = cur_sum + sum
                     else:
-                        subnational_populations[pcode] = sum
+                        adminone_populations[pcode] = sum
+            admin2_areas = country_data.get("areas", country_data.get("groups"))
+            if admin2_areas:
+                for area in admin2_areas:
+                    pcode, _ = self.admintwo.get_pcode(countryiso3, area["name"], "IPC")
+                    if not pcode:
+                        continue
+                    sum = 0
+                    for phase in self.phases:
+                        pop = area.get(f"phase{phase}_population{projection_mapping}")
+                        if pop:
+                            sum += pop
+                    cur_sum = admintwo_populations.get(pcode)
+                    if cur_sum:
+                        admintwo_populations[pcode] = cur_sum + sum
+                    else:
+                        admintwo_populations[pcode] = sum
         reader.read_hdx_metadata(self.datasetinfo)
