@@ -48,7 +48,8 @@ def get_indicators(
         levels_mapping = {
             "regional": "regional_data",
             "national": "national_data",
-            "subnational": "subnational_data",
+            "adminone": "adminone_data",
+            "admintwo": "admintwo_data",
         }
         Fallbacks.add(
             fallbacks_path,
