@@ -40,7 +40,17 @@ class IPC(BaseScraper):
         self.adminone = adminone
         self.admintwo = admintwo
 
-    def get_period(self, projections):
+    def get_period(self, projections, countryiso3):
+        if countryiso3 == "ETH":
+            projection_number = 0
+            projection = projections[projection_number]
+            start = datetime.strptime(projection[0:8], "%b %Y").date()
+            end = datetime.strptime(projection[11:19], "%b %Y").date() + relativedelta(
+                day=31
+            )
+            return projection_number, start.strftime("%Y-%m-%d"), end.strftime(
+                "%Y-%m-%d")
+
         today = self.today.date()
         projection_number = None
         for i, projection in enumerate(projections):
@@ -98,7 +108,7 @@ class IPC(BaseScraper):
             projections.append(country_data["current_period_dates"])
             projections.append(country_data["projected_period_dates"])
             projections.append(country_data["second_projected_period_dates"])
-            projection_number, start, end = self.get_period(projections)
+            projection_number, start, end = self.get_period(projections, countryiso3)
             sum = 0
             projection_mapping = projection_mappings[projection_number]
             for phase in self.phases:
@@ -116,13 +126,13 @@ class IPC(BaseScraper):
             national_end[countryiso3] = end
             admin1_areas = country_data.get("groups")
             if admin1_areas:
-                for area in admin1_areas:
-                    pcode, _ = self.adminone.get_pcode(countryiso3, area["name"], "IPC")
+                for admin1_area in admin1_areas:
+                    pcode, _ = self.adminone.get_pcode(countryiso3, admin1_area["name"], "IPC")
                     if not pcode:
                         continue
                     sum = 0
                     for phase in self.phases:
-                        pop = area.get(f"phase{phase}_population{projection_mapping}")
+                        pop = admin1_area.get(f"phase{phase}_population{projection_mapping}")
                         if pop:
                             sum += pop
                     cur_sum = adminone_populations.get(pcode)
@@ -130,20 +140,21 @@ class IPC(BaseScraper):
                         adminone_populations[pcode] = cur_sum + sum
                     else:
                         adminone_populations[pcode] = sum
-            admin2_areas = country_data.get("areas", country_data.get("groups"))
-            if admin2_areas:
-                for area in admin2_areas:
-                    pcode, _ = self.admintwo.get_pcode(countryiso3, area["name"], "IPC")
-                    if not pcode:
-                        continue
-                    sum = 0
-                    for phase in self.phases:
-                        pop = area.get(f"phase{phase}_population{projection_mapping}")
-                        if pop:
-                            sum += pop
-                    cur_sum = admintwo_populations.get(pcode)
-                    if cur_sum:
-                        admintwo_populations[pcode] = cur_sum + sum
-                    else:
-                        admintwo_populations[pcode] = sum
+
+                    admin2_areas = admin1_area.get("areas")
+                    if admin2_areas:
+                        for admin2_area in admin2_areas:
+                            pcode, _ = self.admintwo.get_pcode(countryiso3, admin2_area["name"], "IPC")
+                            if not pcode:
+                                continue
+                            sum = 0
+                            for phase in self.phases:
+                                pop = admin2_area.get(f"phase{phase}_population{projection_mapping}")
+                                if pop:
+                                    sum += pop
+                            cur_sum = admintwo_populations.get(pcode)
+                            if cur_sum:
+                                admintwo_populations[pcode] = cur_sum + sum
+                            else:
+                                admintwo_populations[pcode] = sum
         reader.read_hdx_metadata(self.datasetinfo)
