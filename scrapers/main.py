@@ -64,7 +64,7 @@ def get_indicators(
         scrapers_to_run=scrapers_to_run,
     )
     configurable_scrapers = dict()
-    for level in ("national", "adminone"):  # can add admintwo here for if tehre is a scraper_admintwo section in YAML
+    for level in ("national", "adminone"):  # can add admintwo here for if there is a scraper_admintwo section in YAML
         suffix = f"_{level}"
         configurable_scrapers[level] = runner.add_configurables(
             configuration[f"scraper{suffix}"], level, suffix=suffix
