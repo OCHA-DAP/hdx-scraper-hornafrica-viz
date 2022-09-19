@@ -1,7 +1,7 @@
 import logging
 from os.path import join
 
-from hdx.location.adminone import AdminOne
+from hdx.location.adminlevel import AdminLevel
 from hdx.location.country import Country
 from hdx.scraper.outputs.update_tabs import (
     get_toplevel_rows,
@@ -13,6 +13,8 @@ from hdx.scraper.outputs.update_tabs import (
 from hdx.scraper.runner import Runner
 from hdx.scraper.utilities.fallbacks import Fallbacks
 
+from .fts import FTS
+from .iom_dtm import IOMDTM
 from .ipc import IPC
 
 logger = logging.getLogger(__name__)
@@ -40,13 +42,15 @@ def get_indicators(
     else:
         countries = configuration["countries"]
     configuration["countries_fuzzy_try"] = countries
-    adminone = AdminOne(configuration)
+    adminone = AdminLevel(configuration["admin1"])
+    admintwo = AdminLevel(configuration["admin2"])
     if fallbacks_root is not None:
         fallbacks_path = join(fallbacks_root, configuration["json"]["output"])
         levels_mapping = {
             "regional": "regional_data",
             "national": "national_data",
-            "subnational": "subnational_data",
+            #            "adminone": "adminone_data",
+            #            "admintwo": "admintwo_data",
         }
         Fallbacks.add(
             fallbacks_path,
@@ -55,20 +59,25 @@ def get_indicators(
         )
     runner = Runner(
         countries,
-        adminone,
         today,
         errors_on_exit=errors_on_exit,
         scrapers_to_run=scrapers_to_run,
     )
     configurable_scrapers = dict()
-    for level in ("national", "subnational"):
+    for level in (
+        "national",
+        "regional",
+        "adminone",
+    ):  # can add admintwo here for if there is a scraper_admintwo section in YAML
         suffix = f"_{level}"
         configurable_scrapers[level] = runner.add_configurables(
-            configuration[f"scraper{suffix}"], level, suffix=suffix
+            configuration[f"scraper{suffix}"], level, adminlevel=adminone, suffix=suffix
         )
-    ipc = IPC(configuration["ipc"], today, countries, adminone)
+    ipc = IPC(configuration["ipc"], today, countries, adminone, admintwo)
+    fts = FTS(configuration["fts"], today, outputs, countries)
+    iom_dtm = IOMDTM(configuration["iom_dtm"], today, admintwo)
 
-    runner.add_customs((ipc,))
+    runner.add_customs((ipc, fts, iom_dtm))
 
     runner.add_aggregators(
         True,
@@ -82,7 +91,7 @@ def get_indicators(
     runner.run(
         prioritise_scrapers=(
             "population_national",
-            "population_subnational",
+            "population_adminone",
             "population_regional",
         )
     )
@@ -96,12 +105,19 @@ def get_indicators(
             countries,
             outputs,
         )
-    if "subnational" in tabs:
-        update_subnational(runner, adminone, outputs)
+    if "adminone" in tabs:
+        update_subnational(runner, adminone, outputs, level="adminone", tab="adminone")
+
+    if "admintwo" in tabs:
+        update_subnational(runner, admintwo, outputs, level="admintwo", tab="admintwo")
 
     adminone.output_matches()
     adminone.output_ignored()
     adminone.output_errors()
+
+    admintwo.output_matches()
+    admintwo.output_ignored()
+    admintwo.output_errors()
 
     if "sources" in tabs:
         update_sources(

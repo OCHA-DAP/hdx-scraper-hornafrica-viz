@@ -1,4 +1,11 @@
+from typing import Dict, Optional
+
+from hdx.location.country import Country
+from hdx.scraper.outputs.base import BaseOutput
+from hdx.scraper.outputs.update_tabs import update_tab
+from hdx.scraper.runner import Runner
 from hdx.utilities.text import get_fraction_str
+from hdx.utilities.typehint import ListTuple
 
 
 def calculate_ratios(ratios, items_per_country, affected_items_per_country):
