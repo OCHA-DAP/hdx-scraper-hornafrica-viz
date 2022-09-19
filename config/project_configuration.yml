@@ -153,6 +153,25 @@ scraper_adminone:
     output_hxl:
       - "#population"
 
+scraper_admintwo:
+  population:
+    source: "WorldPop/UNFPA"
+    source_url: "https://data.humdata.org/search?organization=worldpop&q=%22population%20counts%22"
+    dataset: "population-statistics-for-data-explorers"
+    format: "csv"
+    admin:
+      - "alpha_3"
+      - "ADM_PCODE"
+    admin_exact: True
+    input:
+      - "Population"
+    transform:
+      "Population": "get_numeric_if_possible(Population)"
+    output:
+      - "Population"
+    output_hxl:
+      - "#population"
+
 iom_dtm:
   source: "IOM"
   url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR1SwDBdPjnlzQBZpSzkIlxkWcCyyP9y66tdVmKV3ytSUGpJzYNjn3xz4_bFWAoe1v-AItEqKlMucxr/pub?gid=0&single=true&output=csv"

@@ -68,8 +68,14 @@ def get_indicators(
         "national",
         "regional",
         "adminone",
-    ):  # can add admintwo here for if there is a scraper_admintwo section in YAML
+        "admintwo",
+    ):
         suffix = f"_{level}"
+        if level == "admintwo":
+            configurable_scrapers[level] = runner.add_configurables(
+                configuration[f"scraper{suffix}"], level, adminlevel=admintwo, suffix=suffix
+            )
+            continue
         configurable_scrapers[level] = runner.add_configurables(
             configuration[f"scraper{suffix}"], level, adminlevel=adminone, suffix=suffix
         )
@@ -92,6 +98,7 @@ def get_indicators(
         prioritise_scrapers=(
             "population_national",
             "population_adminone",
+            "population_admintwo",
             "population_regional",
         )
     )
