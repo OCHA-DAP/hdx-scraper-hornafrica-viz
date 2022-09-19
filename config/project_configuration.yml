@@ -13,6 +13,12 @@ googlesheets:
 json:
   output: "all.json"
 
+additional_sources:
+  - indicator: "#climate+rainfall+anomaly"
+    source: "USGS, UCSB"
+    source_date: "2022-06-21"
+    source_url: "https://edcintl.cr.usgs.gov/downloads/sciweb1/shared/fews/web/africa/east/pentadal/chirps/seasaccum/marmay/anom/lta/downloads/pentadal/"
+
 # national
 scraper_national:
   population:

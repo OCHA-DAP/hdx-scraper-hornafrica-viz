@@ -130,5 +130,6 @@ def get_indicators(
         update_sources(
             runner,
             outputs,
+            additional_sources=configuration["additional_sources"],
         )
     return countries
