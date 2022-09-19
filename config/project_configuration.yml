@@ -33,12 +33,101 @@ scraper_national:
       - "Population"
     output_hxl:
       - "#population"
+  inneed:
+    dataset: "interagency-response-plans"
+    format: "csv"
+    use_hxl: True
+    input:
+      - "#inneed"
+    output:
+      - "PeopleInNeed"
+    output_hxl:
+      - "#affected+inneed"
+  idps:
+    dataset: "idmc-internally-displaced-persons-idps"
+    format: "csv"
+    use_hxl: True
+    date: "#date+year"
+    date_type: "year"
+    input:
+      - "#affected+idps+ind+stock+conflict"
+      - "#affected+idps+ind+stock+disaster"
+    transform:
+      "#affected+idps+ind+stock+conflict": "int(#affected+idps+ind+stock+conflict) if #affected+idps+ind+stock+conflict else 0"
+      "#affected+idps+ind+stock+disaster": "int(#affected+idps+ind+stock+disaster) if #affected+idps+ind+stock+disaster else 0"
+    process:
+      - "#affected+idps+ind+stock+conflict + #affected+idps+ind+stock+disaster"
+    output:
+      - "TotalIDPs"
+    output_hxl:
+      - "#affected+displaced"
+  gam:
+    dataset: "world-global-expanded-database-on-severe-wasting"
+    format: "xlsx"
+    sheet: "Trend"
+    headers:
+      - 3
+      - 4
+    admin:
+      - "ISO"
+    date: "Year*"
+    date_type: "year"
+    input:
+      - "National Point Estimate"
+    transform:
+      "National Point Estimate": "number_format(National Point Estimate, trailing_zeros=False)"
+    output:
+      - "Malnutrition Estimate"
+    output_hxl:
+      - "#severity+malnutrition+num+national"
+  unicef_sam:
+    dataset: "number-of-admissions-for-treatment-of-severe-acute-malnutrition-sam"
+    format: "csv"
+    use_hxl: True
+    admin:
+      - "#country+code"
+    date: "#date"
+    date_type: "date"
+    use_date: True
+    input:
+      - "#affected+reached"
+    output:
+      - "NoChildrenSAM"
+    output_hxl:
+      - "#affected+children+sam"
+
+fts:
+  source: "OCHA"
+  source_url: "https://data.humdata.org/dataset/covid-19-data-visual-inputs"
+  url: "https://api.hpc.tools/v"
+
 
 aggregate_regional:
   "#population":
     action: "sum"
+  "#affected+inneed":
+    action: "sum"
+  "#affected+displaced":
+    action: "sum"
+  "#value+funding+hrp+required+usd":
+    output: "RequiredFunding"
+    action: "sum"
+  "#value+funding+hrp+total+usd":
+    output: "Funding"
+    action: "sum"
+  "#value+funding+hrp+pct":
+    output: "PercentFunded"
+    action: "eval"
+    formula: "get_fraction_str(#value+funding+hrp+total+usd, #value+funding+hrp+required+usd) if #value+funding+hrp+total+usd is not None and #value+funding+hrp+required+usd is not None else ''"
+  "#severity+malnutrition+num+national":
+    action: "sum"
+  "#affected+children+sam":
+    action: "sum"
   "#affected+food+ipc+p3plus+num":
     action: "sum"
+
+# regional
+scraper_regional: {}
 
 # subnational
 ipc:
@@ -64,6 +153,10 @@ scraper_adminone:
     output_hxl:
       - "#population"
 
+iom_dtm:
+  source: "IOM"
+  url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR1SwDBdPjnlzQBZpSzkIlxkWcCyyP9y66tdVmKV3ytSUGpJzYNjn3xz4_bFWAoe1v-AItEqKlMucxr/pub?gid=0&single=true&output=csv"
+
 countries:
   - ETH
   - KEN
@@ -74,7 +167,7 @@ country_name_overrides:
 country_name_mappings:
 
 admin1:
-  admin1_info:
+  admin_info:
     - {country: Ethiopia, iso3: ETH, pcode: ET14, name: Addis Ababa}
     - {country: Ethiopia, iso3: ETH, pcode: ET02, name: Afar}
     - {country: Ethiopia, iso3: ETH, pcode: ET03, name: Amhara}
@@ -155,7 +248,7 @@ admin1:
     - {country: Somalia, iso3: SOM, pcode: SO12, name: Woqooyi Galbeed}
 
 admin2:
-  admin1_info:
+  admin_info:
     - {country: Ethiopia, iso3: ETH, pcode: ET0508, name: Afder}
     - {country: Ethiopia, iso3: ETH, pcode: ET1202, name: Agnewak}
     - {country: Ethiopia, iso3: ETH, pcode: ET0712, name: Alle}
