@@ -48,8 +48,11 @@ class IPC(BaseScraper):
             end = datetime.strptime(projection[11:19], "%b %Y").date() + relativedelta(
                 day=31
             )
-            return projection_number, start.strftime("%Y-%m-%d"), end.strftime(
-                "%Y-%m-%d")
+            return (
+                projection_number,
+                start.strftime("%Y-%m-%d"),
+                end.strftime("%Y-%m-%d"),
+            )
 
         today = self.today.date()
         projection_number = None
@@ -127,12 +130,16 @@ class IPC(BaseScraper):
             admin1_areas = country_data.get("groups")
             if admin1_areas:
                 for admin1_area in admin1_areas:
-                    pcode, _ = self.adminone.get_pcode(countryiso3, admin1_area["name"], "IPC")
+                    pcode, _ = self.adminone.get_pcode(
+                        countryiso3, admin1_area["name"], "IPC"
+                    )
                     if not pcode:
                         continue
                     sum = 0
                     for phase in self.phases:
-                        pop = admin1_area.get(f"phase{phase}_population{projection_mapping}")
+                        pop = admin1_area.get(
+                            f"phase{phase}_population{projection_mapping}"
+                        )
                         if pop:
                             sum += pop
                     cur_sum = adminone_populations.get(pcode)
@@ -149,12 +156,16 @@ class IPC(BaseScraper):
                     admin2_areas = admin1_area.get("areas")
                     if admin2_areas:
                         for admin2_area in admin2_areas:
-                            pcode, _ = self.admintwo.get_pcode(countryiso3, admin2_area["name"], "IPC")
+                            pcode, _ = self.admintwo.get_pcode(
+                                countryiso3, admin2_area["name"], "IPC"
+                            )
                             if not pcode:
                                 continue
                             sum = 0
                             for phase in self.phases:
-                                pop = admin2_area.get(f"phase{phase}_population{projection_mapping}")
+                                pop = admin2_area.get(
+                                    f"phase{phase}_population{projection_mapping}"
+                                )
                                 if pop:
                                     sum += pop
                             cur_sum = admintwo_populations.get(pcode)

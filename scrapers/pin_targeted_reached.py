@@ -11,7 +11,12 @@ class PINTargetedReached(BaseScraper):
         super().__init__(
             "pin_target_reach",
             datasetinfo,
-            {"admintwo": (("PIN", "Targeted", "Reached"), ("#affected+inneed", "#affected+targeted", "#affected+reached"))},
+            {
+                "admintwo": (
+                    ("PIN", "Targeted", "Reached"),
+                    ("#inneed", "#targeted", "#reached"),
+                )
+            },
         )
         self.today = today
         self.admintwo = admintwo
@@ -38,7 +43,9 @@ class PINTargetedReached(BaseScraper):
                 logger.warning(f"No PIN Targeted Reached data for {countryiso3}.")
                 continue
             resource = dataset.get_resource()
-            headers, iterator = reader.get_tabular_rows(resource["url"], dict_form=True, format="xlsx", sheet=2, headers=[1, 2])
+            headers, iterator = reader.get_tabular_rows(
+                resource["url"], dict_form=True, format="xlsx", sheet=2, headers=[1, 2]
+            )
             admin_level = self.admintwo.get_admin_level(countryiso3)
             admcode = f"LOCATION admin{admin_level}Pcode"
             pcodes_found = False
