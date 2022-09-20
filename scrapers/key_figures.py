@@ -14,6 +14,7 @@ class KeyFigures(BaseScraper):
             {
                 "national": (
                     (
+                        "FundingTimeline"
                         "RequiredFunding",
                         "Funding",
                         "PercentFunded",
@@ -22,6 +23,7 @@ class KeyFigures(BaseScraper):
                         "Reached",
                     ),
                     (
+                        "#date+funding",
                         "#value+funding+required+usd",
                         "#value+funding+total+usd",
                         "#value+funding+pct",
@@ -41,12 +43,13 @@ class KeyFigures(BaseScraper):
             url, headers=1, dict_form=True, format="csv"
         )
         rows = list(iterator)
-        requirements = self.get_values("national")[0]
-        funding = self.get_values("national")[1]
-        percentage = self.get_values("national")[2]
-        affected = self.get_values("national")[3]
-        targeted = self.get_values("national")[4]
-        reached = self.get_values("national")[5]
+        timelines = self.get_values("national")[0]
+        requirements = self.get_values("national")[1]
+        funding = self.get_values("national")[2]
+        percentage = self.get_values("national")[3]
+        affected = self.get_values("national")[4]
+        targeted = self.get_values("national")[5]
+        reached = self.get_values("national")[6]
         reader = self.get_reader("hdx")
         for ds_row in rows:
             countryiso3 = ds_row["Country ISO"]
@@ -63,6 +66,7 @@ class KeyFigures(BaseScraper):
                 resource["url"], dict_form=True, format="xlsx"
             )
             for row in iterator:
+                timelines[countryiso3] = row["Funding timeline"]
                 requirements[countryiso3] = number_format(
                     row["Total Fund Requirement"], format="%.0f"
                 )
