@@ -102,31 +102,38 @@ scraper_national:
     output_hxl:
       - "#affected+children+sam"
 
+key_figures:
+  source: "Multiple Sources (Humanitarian Partners)"
+  url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR1SwDBdPjnlzQBZpSzkIlxkWcCyyP9y66tdVmKV3ytSUGpJzYNjn3xz4_bFWAoe1v-AItEqKlMucxr/pub?gid=903879215&single=true&output=csv"
+
 fts:
   source: "OCHA"
   source_url: "https://data.humdata.org/dataset/covid-19-data-visual-inputs"
   url: "https://api.hpc.tools/v"
 
-
 aggregate_regional:
   "#population":
+    action: "sum"
+  "#affected":
+    action: "sum"
+  "#targeted":
+    action: "sum"
+  "#reached":
     action: "sum"
   "#inneed":
     action: "sum"
   "#affected+idps":
     action: "sum"
-  "#value+funding+hrp+required+usd":
+  "#value+funding+required+usd":
     output: "RequiredFunding"
     action: "sum"
-  "#value+funding+hrp+total+usd":
+  "#value+funding+total+usd":
     output: "Funding"
     action: "sum"
-  "#value+funding+hrp+pct":
+  "#value+funding+pct":
     output: "PercentFunded"
     action: "eval"
-    formula: "get_fraction_str(#value+funding+hrp+total+usd, #value+funding+hrp+required+usd) if #value+funding+hrp+total+usd is not None and #value+funding+hrp+required+usd is not None else ''"
-  "#severity+malnutrition+num+national":
-    action: "sum"
+    formula: "get_fraction_str(#value+funding+total+usd, #value+funding+required+usd) if #value+funding+total+usd is not None and #value+funding+required+usd is not None else ''"
   "#affected+children+sam":
     action: "sum"
   "#affected+food+ipc+p3plus+num":

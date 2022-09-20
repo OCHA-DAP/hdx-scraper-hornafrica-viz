@@ -2,6 +2,7 @@ import logging
 
 from hdx.scraper.base_scraper import BaseScraper
 from hdx.utilities.dictandlist import dict_of_lists_add
+from hdx.utilities.text import number_format
 
 logger = logging.getLogger(__name__)
 
@@ -22,10 +23,10 @@ class PINTargetedReached(BaseScraper):
         self.admintwo = admintwo
 
     def run(self) -> None:
-        pin_url = self.datasetinfo["url"]
+        url = self.datasetinfo["url"]
         reader = self.get_reader()
         headers, iterator = reader.get_tabular_rows(
-            pin_url, headers=1, dict_form=True, format="csv"
+            url, headers=1, dict_form=True, format="csv"
         )
         rows = list(iterator)
         inneeddict = dict()
@@ -74,7 +75,9 @@ class PINTargetedReached(BaseScraper):
                 if pcode not in self.admintwo.pcodes:
                     logger.error(f"PCode {pcode} in {countryiso3} does not exist!")
                 else:
-                    output[pcode] = sum(input[countrypcode])
+                    output[pcode] = number_format(
+                        sum(input[countrypcode]), format="%.0f"
+                    )
 
         inneed = self.get_values("admintwo")[0]
         fill_values(inneeddict, inneed)

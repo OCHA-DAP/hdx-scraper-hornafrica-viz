@@ -16,6 +16,7 @@ from hdx.scraper.utilities.fallbacks import Fallbacks
 from .fts import FTS
 from .iom_dtm import IOMDTM
 from .ipc import IPC
+from .key_figures import KeyFigures
 from .pin_targeted_reached import PINTargetedReached
 
 # from .unhcr_somalia_idps import idps_post_run
@@ -91,6 +92,7 @@ def get_indicators(
     #     "idps_national", overrideinfo=configuration["unhcr_somalia_idps"]
     # )
     # runner.add_post_run("idps_national", idps_post_run)
+    key_figures = KeyFigures(configuration["key_figures"], today)
     ipc = IPC(configuration["ipc"], today, countries, adminone, admintwo)
     fts = FTS(configuration["fts"], today, outputs, countries)
     iom_dtm = IOMDTM(configuration["iom_dtm"], today, admintwo)
@@ -98,7 +100,7 @@ def get_indicators(
         configuration["pin_targeted_reached"], today, admintwo
     )
 
-    runner.add_customs((ipc, fts, iom_dtm, pintargetreach))
+    runner.add_customs((key_figures, ipc, fts, iom_dtm, pintargetreach))
     runner.add_aggregators(
         True,
         configuration["aggregate_regional"],
