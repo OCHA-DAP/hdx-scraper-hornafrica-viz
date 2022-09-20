@@ -228,7 +228,6 @@ if __name__ == "__main__":
     facade(
         main,
         hdx_key=hdx_key,
-        hdx_read_only=True,
         user_agent=user_agent,
         preprefix=preprefix,
         hdx_site=hdx_site,

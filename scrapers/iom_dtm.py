@@ -38,11 +38,14 @@ class IOMDTM(BaseScraper):
             data = reader.read_hxl_resource(countryiso3, resource, "IOM DTM data")
             if data is None:
                 continue
+            admin_level = self.admintwo.get_admin_level(countryiso3)
+            admcode = f"#adm{admin_level}+code"
+            admname = f"#adm{admin_level}+name"
             pcodes_found = False
             for row in data:
-                pcode = row.get("#adm2+code")
+                pcode = row.get(admcode)
                 if not pcode:
-                    adm2name = row.get("#adm2+name")
+                    adm2name = row.get(admname)
                     if adm2name:
                         pcode, _ = self.admintwo.get_pcode(
                             countryiso3, adm2name, "iom_dtm"

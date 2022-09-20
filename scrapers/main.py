@@ -16,6 +16,9 @@ from hdx.scraper.utilities.fallbacks import Fallbacks
 from .fts import FTS
 from .iom_dtm import IOMDTM
 from .ipc import IPC
+from .pin_targeted_reached import PINTargetedReached
+
+# from .unhcr_somalia_idps import idps_post_run
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +46,9 @@ def get_indicators(
         countries = configuration["countries"]
     configuration["countries_fuzzy_try"] = countries
     adminone = AdminLevel(configuration["admin1"])
-    admintwo = AdminLevel(configuration["admin2"])
+    admintwo = AdminLevel(
+        configuration["admin2"], admin_level=2, admin_level_overrides={"KEN": 1}
+    )
     if fallbacks_root is not None:
         fallbacks_path = join(fallbacks_root, configuration["json"]["output"])
         levels_mapping = {
@@ -73,18 +78,27 @@ def get_indicators(
         suffix = f"_{level}"
         if level == "admintwo":
             configurable_scrapers[level] = runner.add_configurables(
-                configuration[f"scraper{suffix}"], level, adminlevel=admintwo, suffix=suffix
+                configuration[f"scraper{suffix}"],
+                level,
+                adminlevel=admintwo,
+                suffix=suffix,
             )
             continue
         configurable_scrapers[level] = runner.add_configurables(
             configuration[f"scraper{suffix}"], level, adminlevel=adminone, suffix=suffix
         )
+    # runner.add_instance_variables(
+    #     "idps_national", overrideinfo=configuration["unhcr_somalia_idps"]
+    # )
+    # runner.add_post_run("idps_national", idps_post_run)
     ipc = IPC(configuration["ipc"], today, countries, adminone, admintwo)
     fts = FTS(configuration["fts"], today, outputs, countries)
     iom_dtm = IOMDTM(configuration["iom_dtm"], today, admintwo)
+    pintargetreach = PINTargetedReached(
+        configuration["pin_targeted_reached"], today, admintwo
+    )
 
-    runner.add_customs((ipc, fts, iom_dtm))
-
+    runner.add_customs((ipc, fts, iom_dtm, pintargetreach))
     runner.add_aggregators(
         True,
         configuration["aggregate_regional"],
