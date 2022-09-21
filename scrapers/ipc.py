@@ -14,6 +14,8 @@ class IPC(BaseScraper):
         self.projections = ["Current", "First Projection", "Second Projection"]
         p3plus_header = "FoodInsecurityIPCP3+"
         p3plus_hxltag = "#affected+food+ipc+p3plus+num"
+        phase_header = "FoodInsecurityIPCPhase"
+        phase_hxltag = "#affected+food+ipc+phase+type"
         colheaders = [f"FoodInsecurityIPC{phase}" for phase in self.phases]
         colheaders.append(p3plus_header)
         colheaders.append("FoodInsecurityIPCAnalysedNum")
@@ -31,8 +33,10 @@ class IPC(BaseScraper):
             datasetinfo,
             {
                 "national": (tuple(colheaders), tuple(hxltags)),
-                "adminone": ((p3plus_header,), (p3plus_hxltag,)),
-                "admintwo": ((p3plus_header,), (p3plus_hxltag,)),
+                #"adminone":((p3plus_header,), (p3plus_hxltag,)),
+                #"admintwo": ((p3plus_header,), (p3plus_hxltag,)),
+                "adminone": ((p3plus_header, phase_header,), (p3plus_hxltag, phase_hxltag,)),
+                "admintwo": ((p3plus_header, phase_header,), (p3plus_hxltag, phase_hxltag,)),
             },
         )
         self.today = today
@@ -96,6 +100,8 @@ class IPC(BaseScraper):
         national_end = national_outputs[i + 4]
         adminone_populations = self.get_values("adminone")[0]
         admintwo_populations = self.get_values("admintwo")[0]
+        adminone_phases = self.get_values("adminone")[1]
+        admintwo_phases = self.get_values("admintwo")[1]
         projection_names = ["Current", "First Projection", "Second Projection"]
         projection_mappings = ["", "_projected", "_second_projected"]
         analysis_dates = set()
@@ -147,11 +153,29 @@ class IPC(BaseScraper):
                         adminone_populations[pcode] = cur_sum + sum
                     else:
                         adminone_populations[pcode] = sum
+                    phase_class = None
+                    for phase in range(1, 6):
+                        pct = admin1_area.get(
+                            f"phase{phase}_percentage{projection_mapping}"
+                        )
+                        if pct and pct >= 0.2:
+                            phase_class = phase
+                    cur_phase = adminone_phases.get(pcode)
+                    if cur_phase:
+                        if phase_class and phase_class > cur_phase:
+                            adminone_phases[pcode] = phase_class
+                    else:
+                        adminone_phases[pcode] = phase_class
                     if self.admintwo.get_admin_level(countryiso3) == 1:
                         if cur_sum:
                             admintwo_populations[pcode] = cur_sum + sum
                         else:
                             admintwo_populations[pcode] = sum
+                        if cur_phase:
+                            if phase_class and phase_class > cur_phase:
+                                admintwo_phases[pcode] = phase_class
+                        else:
+                            admintwo_phases[pcode] = phase_class
                         continue
                     admin2_areas = admin1_area.get("areas")
                     if admin2_areas:
@@ -173,4 +197,17 @@ class IPC(BaseScraper):
                                 admintwo_populations[pcode] = cur_sum + sum
                             else:
                                 admintwo_populations[pcode] = sum
+                            phase_class = None
+                            for phase in range(1, 6):
+                                pct = admin2_area.get(
+                                    f"phase{phase}_percentage{projection_mapping}"
+                                )
+                                if pct and pct >= 0.2:
+                                    phase_class = phase
+                            cur_phase = admintwo_phases.get(pcode)
+                            if cur_phase:
+                                if phase_class and phase_class > cur_phase:
+                                    admintwo_phases[pcode] = phase_class
+                            else:
+                                admintwo_phases[pcode] = phase_class
         reader.read_hdx_metadata(self.datasetinfo)
