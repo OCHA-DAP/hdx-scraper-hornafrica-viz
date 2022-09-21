@@ -14,7 +14,7 @@ class KeyFigures(BaseScraper):
             {
                 "national": (
                     (
-                        "FundingTimeline"
+                        "FundingTimeline",
                         "RequiredFunding",
                         "Funding",
                         "PercentFunded",

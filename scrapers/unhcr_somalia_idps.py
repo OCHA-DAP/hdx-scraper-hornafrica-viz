@@ -1,22 +1,31 @@
 import logging
 
+from hdx.utilities.dictandlist import dict_of_lists_add
+
 logger = logging.getLogger(__name__)
 
 
 def idps_post_run(self) -> None:
-    try:
-        url = self.overrideinfo["url"]
-        reader = self.get_reader(prefix="idps_override")
-        json = reader.download_json(url)
-        number_idps = int(json["data"][0]["individuals"])
-        index = self.get_headers("national")[1].index("#affected+displaced")
-        values = self.get_values("national")[index]
-        logger.info(f"Adding {number_idps} for SOM IDPs!")
-        values["SOM"] = number_idps
-        self.get_source_urls().add(url)
-        logger.info("Processed UNHCR Somalia IDPs")
-    except Exception as ex:
-        msg = "Not using UNHCR Somalia IDPs override!"
-        logger.exception(msg)
-        if self.errors_on_exit:
-            self.errors_on_exit.add(f"{msg} Error: {ex}")
+    reader = self.get_reader(prefix="idps_override")
+    index = self.get_headers("admintwo")[1].index("#affected+idps+ind")
+    values = self.get_values("admintwo")[index]
+    dataset = reader.read_dataset(self.overrideinfo["dataset"])
+    resource = dataset.get_resource()
+    headers, iterator = reader.get_tabular_rows(
+        resource["url"], dict_form=True, format="xlsx"
+    )
+    idpsdict = dict()
+    for row in iterator:
+        if row["Year"] != self.today.year:
+            continue
+        idps = row["Number of Individuals"]
+        if not idps:
+            continue
+        dict_of_lists_add(idpsdict, row["Current (Arrival) District"], idps)
+    for adm2name in idpsdict:
+        pcode, _ = self.admintwo.get_pcode(
+            "SOM", adm2name, "idps_override"
+        )
+        if pcode:
+            values[pcode] = sum(idpsdict[adm2name])
+    logger.info(f"Adding SOM IDPs!")

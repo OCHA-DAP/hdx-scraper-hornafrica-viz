@@ -190,7 +190,7 @@ iom_dtm:
   url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR1SwDBdPjnlzQBZpSzkIlxkWcCyyP9y66tdVmKV3ytSUGpJzYNjn3xz4_bFWAoe1v-AItEqKlMucxr/pub?gid=0&single=true&output=csv"
 
 unhcr_somalia_idps:
-  url: "https://data.unhcr.org/population/?widget_id=346187&geo_id=192&population_group=4721"
+  dataset: "somalia-internally-displaced-persons-idps"
 
 pin_targeted_reached:
   source: "Multiple Sources (Humanitarian Partners)"

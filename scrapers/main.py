@@ -19,7 +19,7 @@ from .ipc import IPC
 from .key_figures import KeyFigures
 from .pin_targeted_reached import PINTargetedReached
 
-# from .unhcr_somalia_idps import idps_post_run
+from .unhcr_somalia_idps import idps_post_run
 
 logger = logging.getLogger(__name__)
 
@@ -88,10 +88,6 @@ def get_indicators(
         configurable_scrapers[level] = runner.add_configurables(
             configuration[f"scraper{suffix}"], level, adminlevel=adminone, suffix=suffix
         )
-    # runner.add_instance_variables(
-    #     "idps_national", overrideinfo=configuration["unhcr_somalia_idps"]
-    # )
-    # runner.add_post_run("idps_national", idps_post_run)
     key_figures = KeyFigures(configuration["key_figures"], today)
     ipc = IPC(configuration["ipc"], today, countries, adminone, admintwo)
     fts = FTS(configuration["fts"], today, outputs, countries)
@@ -101,6 +97,10 @@ def get_indicators(
     )
 
     runner.add_customs((key_figures, ipc, fts, iom_dtm, pintargetreach))
+    runner.add_instance_variables(
+        "iom_dtm", overrideinfo=configuration["unhcr_somalia_idps"]
+    )
+    runner.add_post_run("iom_dtm", idps_post_run)
     runner.add_aggregators(
         True,
         configuration["aggregate_regional"],
