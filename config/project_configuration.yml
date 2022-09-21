@@ -39,24 +39,6 @@ scraper_national:
       - "Population"
     output_hxl:
       - "#population"
-  idps:
-    dataset: "idmc-internally-displaced-persons-idps"
-    format: "csv"
-    use_hxl: True
-    date: "#date+year"
-    date_type: "year"
-    input:
-      - "#affected+idps+ind+stock+conflict"
-      - "#affected+idps+ind+stock+disaster"
-    transform:
-      "#affected+idps+ind+stock+conflict": "int(#affected+idps+ind+stock+conflict) if #affected+idps+ind+stock+conflict else 0"
-      "#affected+idps+ind+stock+disaster": "int(#affected+idps+ind+stock+disaster) if #affected+idps+ind+stock+disaster else 0"
-    process:
-      - "#affected+idps+ind+stock+conflict + #affected+idps+ind+stock+disaster"
-    output:
-      - "TotalIDPs"
-    output_hxl:
-      - "#affected+idps"
   gam:
     dataset: "world-global-expanded-database-on-severe-wasting"
     format: "xlsx"

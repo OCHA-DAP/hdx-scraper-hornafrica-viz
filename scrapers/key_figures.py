@@ -20,6 +20,12 @@ class KeyFigures(BaseScraper):
                         "InNeed",
                         "Targeted",
                         "Reached",
+                        "Internal Displacement",
+                        "Food Insecurity",
+                        "SAM",
+                        "MAM",
+                        "GAM",
+                        "Water Insecurity",
                     ),
                     (
                         "#value+funding+required+usd",
@@ -28,6 +34,12 @@ class KeyFigures(BaseScraper):
                         "#inneed",
                         "#targeted",
                         "#reached",
+                        "#affected+idps",
+                        "#affected+food",
+                        "#affected+sam",
+                        "#affected+mam",
+                        "#affected+gam",
+                        "#affected+water",
                     ),
                 )
             },
@@ -41,13 +53,8 @@ class KeyFigures(BaseScraper):
             url, headers=1, dict_form=True, format="csv"
         )
         rows = list(iterator)
-        requirements = self.get_values("national")[0]
-        funding = self.get_values("national")[1]
-        percentage = self.get_values("national")[2]
-        affected = self.get_values("national")[3]
-        targeted = self.get_values("national")[4]
-        reached = self.get_values("national")[5]
-        reader = self.get_reader("hdx")
+        hxltags = self.get_headers("national")[1]
+        values = self.get_values("national")
         for ds_row in rows:
             countryiso3 = ds_row["Country ISO"]
             dataset_name = ds_row["Dataset Name"]
@@ -63,20 +70,8 @@ class KeyFigures(BaseScraper):
             if data is None:
                 continue
             for row in data:
-                requirements[countryiso3] = number_format(
-                    row.get("#value+funding+required"), format="%.0f"
-                )
-                funding[countryiso3] = number_format(row.get("#value+funding+total"), format="%.0f")
-                percentage[countryiso3] = number_format(row.get("#value+funding+pct"), format="%.2f")
-                affected[countryiso3] = number_format(
-                    row.get("#inneed"), format="%.0f"
-                )
-                targeted[countryiso3] = number_format(
-                    row.get("#targeted"), format="%.0f"
-                )
-                reached[countryiso3] = number_format(
-                    row.get("#reached"), format="%.0f"
-                )
+                for i, hxltag in enumerate(hxltags):
+                    values[i][countryiso3] = row.get(hxltag)
 
         self.datasetinfo["source_date"] = self.today
         self.datasetinfo["source_url"] = ""
