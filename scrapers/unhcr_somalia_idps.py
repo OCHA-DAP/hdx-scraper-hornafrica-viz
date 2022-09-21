@@ -23,9 +23,7 @@ def idps_post_run(self) -> None:
             continue
         dict_of_lists_add(idpsdict, row["Current (Arrival) District"], idps)
     for adm2name in idpsdict:
-        pcode, _ = self.admintwo.get_pcode(
-            "SOM", adm2name, "idps_override"
-        )
+        pcode, _ = self.admintwo.get_pcode("SOM", adm2name, "idps_override")
         if pcode:
             values[pcode] = sum(idpsdict[adm2name])
     logger.info(f"Adding SOM IDPs!")

@@ -18,7 +18,6 @@ from .iom_dtm import IOMDTM
 from .ipc import IPC
 from .key_figures import KeyFigures
 from .pin_targeted_reached import PINTargetedReached
-
 from .unhcr_somalia_idps import idps_post_run
 
 logger = logging.getLogger(__name__)
