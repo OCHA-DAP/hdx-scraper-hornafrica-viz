@@ -39,16 +39,6 @@ scraper_national:
       - "Population"
     output_hxl:
       - "#population"
-  inneed:
-    dataset: "interagency-response-plans"
-    format: "csv"
-    use_hxl: True
-    input:
-      - "#inneed"
-    output:
-      - "PeopleInNeed"
-    output_hxl:
-      - "#inneed"
   idps:
     dataset: "idmc-internally-displaced-persons-idps"
     format: "csv"
