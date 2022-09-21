@@ -14,13 +14,13 @@ class KeyFigures(BaseScraper):
             {
                 "national": (
                     (
-                        "RequiredFunding",
-                        "Funding",
-                        "PercentFunded",
                         "InNeed",
                         "Targeted",
                         "Reached",
                         "Internal Displacement",
+                        "RequiredFunding",
+                        "Funding",
+                        "PercentFunded",
                         "Food Insecurity",
                         "SAM",
                         "MAM",
@@ -28,13 +28,13 @@ class KeyFigures(BaseScraper):
                         "Water Insecurity",
                     ),
                     (
-                        "#value+funding+required+usd",
-                        "#value+funding+total+usd",
-                        "#value+funding+pct",
                         "#inneed",
                         "#targeted",
                         "#reached",
                         "#affected+idps",
+                        "#value+funding+required+usd",
+                        "#value+funding+total+usd",
+                        "#value+funding+pct",
                         "#affected+food",
                         "#affected+sam",
                         "#affected+mam",
