@@ -127,7 +127,7 @@ class IPC(BaseScraper):
             national_period[countryiso3] = projection_names[projection_number]
             national_start[countryiso3] = start
             national_end[countryiso3] = end
-            admin1_areas = country_data.get("groups")
+            admin1_areas = country_data.get("groups", country_data.get("areas"))
             if admin1_areas:
                 for admin1_area in admin1_areas:
                     pcode, _ = self.adminone.get_pcode(
