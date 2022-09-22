@@ -86,10 +86,6 @@ aggregate_regional:
 scraper_regional: {}
 
 # subnational
-ipc:
-  dataset: "ipc-country-data"
-  url: "https://api.ipcinfo.org"
-
 scraper_adminone:
   population:
     source: "WorldPop/UNFPA"
@@ -168,6 +164,13 @@ iom_dtm:
 
 unhcr_somalia_idps:
   dataset: "somalia-internally-displaced-persons-idps"
+
+ipc:
+  dataset: "ipc-country-data"
+  url: "https://api.ipcinfo.org"
+
+ipc_somalia:
+  dataset: "somalia-acute-food-insecurity-country-data"
 
 pin_targeted_reached:
   source: "Multiple Sources (Humanitarian Partners)"

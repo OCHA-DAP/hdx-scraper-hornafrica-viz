@@ -6,8 +6,9 @@ logger = logging.getLogger(__name__)
 
 
 def idps_post_run(self) -> None:
-    reader = self.get_reader(prefix="idps_override")
-    index = self.get_headers("admintwo")[1].index("#affected+idps+ind")
+    identifier = "idps_override"
+    reader = self.get_reader(prefix=identifier)
+    index = self.get_headers("admintwo")[1].index(self.hxltag)
     values = self.get_values("admintwo")[index]
     dataset = reader.read_dataset(self.overrideinfo["dataset"])
     resource = dataset.get_resource()
@@ -23,7 +24,7 @@ def idps_post_run(self) -> None:
             continue
         dict_of_lists_add(idpsdict, row["Current (Arrival) District"], idps)
     for adm2name in idpsdict:
-        pcode, _ = self.admintwo.get_pcode("SOM", adm2name, "idps_override")
+        pcode, _ = self.admintwo.get_pcode("SOM", adm2name, identifier)
         if pcode:
             values[pcode] = sum(idpsdict[adm2name])
     logger.info(f"Adding SOM IDPs!")

@@ -16,6 +16,7 @@ from hdx.scraper.utilities.fallbacks import Fallbacks
 from .fts import FTS
 from .iom_dtm import IOMDTM
 from .ipc import IPC
+from .ipc_somalia import ipc_post_run
 from .pin_targeted_reached import PINTargetedReached
 from .unhcr_somalia_idps import idps_post_run
 
@@ -98,6 +99,8 @@ def get_indicators(
         "iom_dtm", overrideinfo=configuration["unhcr_somalia_idps"]
     )
     runner.add_post_run("iom_dtm", idps_post_run)
+    runner.add_instance_variables("ipc", overrideinfo=configuration["ipc_somalia"])
+    runner.add_post_run("ipc", ipc_post_run)
     runner.add_aggregators(
         True,
         configuration["aggregate_regional"],

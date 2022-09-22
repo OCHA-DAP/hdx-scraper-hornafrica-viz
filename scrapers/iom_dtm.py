@@ -8,10 +8,11 @@ logger = logging.getLogger(__name__)
 
 class IOMDTM(BaseScraper):
     def __init__(self, datasetinfo, today, admintwo):
+        self.hxltag = "#affected+idps+ind"
         super().__init__(
             "iom_dtm",
             datasetinfo,
-            {"admintwo": (("IDPs",), ("#affected+idps+ind",))},
+            {"admintwo": (("IDPs",), (self.hxltag,))},
         )
         self.today = today
         self.admintwo = admintwo

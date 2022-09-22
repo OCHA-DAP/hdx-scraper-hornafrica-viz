@@ -13,9 +13,9 @@ class IPC(BaseScraper):
         self.phases = ["3", "4", "5"]
         self.projections = ["Current", "First Projection", "Second Projection"]
         p3plus_header = "FoodInsecurityIPCP3+"
-        p3plus_hxltag = "#affected+food+ipc+p3plus+num"
+        self.p3plus_hxltag = "#affected+food+ipc+p3plus+num"
         phase_header = "FoodInsecurityIPCPhase"
-        phase_hxltag = "#affected+food+ipc+phase+type"
+        self.phase_hxltag = "#affected+food+ipc+phase+type"
         colheaders = [f"FoodInsecurityIPC{phase}" for phase in self.phases]
         colheaders.append(p3plus_header)
         colheaders.append("FoodInsecurityIPCAnalysedNum")
@@ -23,7 +23,7 @@ class IPC(BaseScraper):
         colheaders.append("FoodInsecurityIPCAnalysisPeriodStart")
         colheaders.append("FoodInsecurityIPCAnalysisPeriodEnd")
         hxltags = [f"#affected+food+ipc+p{phase}+num" for phase in self.phases]
-        hxltags.append(p3plus_hxltag)
+        hxltags.append(self.p3plus_hxltag)
         hxltags.append("#affected+food+ipc+analysed+num")
         hxltags.append("#date+ipc+period")
         hxltags.append("#date+ipc+start")
@@ -33,10 +33,26 @@ class IPC(BaseScraper):
             datasetinfo,
             {
                 "national": (tuple(colheaders), tuple(hxltags)),
-                #"adminone":((p3plus_header,), (p3plus_hxltag,)),
-                #"admintwo": ((p3plus_header,), (p3plus_hxltag,)),
-                "adminone": ((p3plus_header, phase_header,), (p3plus_hxltag, phase_hxltag,)),
-                "admintwo": ((p3plus_header, phase_header,), (p3plus_hxltag, phase_hxltag,)),
+                "adminone": (
+                    (
+                        p3plus_header,
+                        phase_header,
+                    ),
+                    (
+                        self.p3plus_hxltag,
+                        self.phase_hxltag,
+                    ),
+                ),
+                "admintwo": (
+                    (
+                        p3plus_header,
+                        phase_header,
+                    ),
+                    (
+                        self.p3plus_hxltag,
+                        self.phase_hxltag,
+                    ),
+                ),
             },
         )
         self.today = today
