@@ -33,44 +33,15 @@ scraper_national:
       - "Population"
     output_hxl:
       - "#population"
-  gam:
-    dataset: "world-global-expanded-database-on-severe-wasting"
-    format: "xlsx"
-    sheet: "Trend"
-    headers:
-      - 3
-      - 4
-    admin:
-      - "ISO"
-    date: "Year*"
-    date_type: "year"
-    input:
-      - "National Point Estimate"
-    transform:
-      "National Point Estimate": "number_format(National Point Estimate, trailing_zeros=False)"
-    output:
-      - "Malnutrition Estimate"
-    output_hxl:
-      - "#severity+malnutrition+num+national"
-  unicef_sam:
-    dataset: "number-of-admissions-for-treatment-of-severe-acute-malnutrition-sam"
+  key_figures:
+    source: "Multiple Sources (Humanitarian Partners)"
+    source_url: ""
+    url:
+      - "https://docs.google.com/spreadsheets/d/e/2PACX-1vRppQx8JTKkKRCKmzfnCMmTFEcvCpkbP9PdHs1sQTUyacmbsx8tlAXpgBLFce-lcehukreGGuXjA_4S/pub?gid=0&single=true&output=csv"
+      - "https://docs.google.com/spreadsheets/d/e/2PACX-1vRppQx8JTKkKRCKmzfnCMmTFEcvCpkbP9PdHs1sQTUyacmbsx8tlAXpgBLFce-lcehukreGGuXjA_4S/pub?gid=2015311116&single=true&output=csv"
+      - "https://docs.google.com/spreadsheets/d/e/2PACX-1vRppQx8JTKkKRCKmzfnCMmTFEcvCpkbP9PdHs1sQTUyacmbsx8tlAXpgBLFce-lcehukreGGuXjA_4S/pub?gid=1275038715&single=true&output=csv"
     format: "csv"
     use_hxl: True
-    admin:
-      - "#country+code"
-    date: "#date"
-    date_type: "date"
-    use_date: True
-    input:
-      - "#affected+reached"
-    output:
-      - "NoChildrenSAM"
-    output_hxl:
-      - "#affected+children+sam"
-
-key_figures:
-  source: "Multiple Sources (Humanitarian Partners)"
-  url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR1SwDBdPjnlzQBZpSzkIlxkWcCyyP9y66tdVmKV3ytSUGpJzYNjn3xz4_bFWAoe1v-AItEqKlMucxr/pub?gid=903879215&single=true&output=csv"
 
 fts:
   source: "OCHA"
@@ -107,8 +78,6 @@ aggregate_regional:
   "#affected+gam":
     action: "sum"
   "#affected+water":
-    action: "sum"
-  "#affected+children+sam":
     action: "sum"
   "#affected+food+ipc+p3plus+num":
     action: "sum"

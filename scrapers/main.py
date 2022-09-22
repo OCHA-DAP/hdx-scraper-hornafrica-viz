@@ -16,7 +16,6 @@ from hdx.scraper.utilities.fallbacks import Fallbacks
 from .fts import FTS
 from .iom_dtm import IOMDTM
 from .ipc import IPC
-from .key_figures import KeyFigures
 from .pin_targeted_reached import PINTargetedReached
 from .unhcr_somalia_idps import idps_post_run
 
@@ -87,7 +86,6 @@ def get_indicators(
         configurable_scrapers[level] = runner.add_configurables(
             configuration[f"scraper{suffix}"], level, adminlevel=adminone, suffix=suffix
         )
-    key_figures = KeyFigures(configuration["key_figures"], today)
     ipc = IPC(configuration["ipc"], today, countries, adminone, admintwo)
     fts = FTS(configuration["fts"], today, outputs, countries)
     iom_dtm = IOMDTM(configuration["iom_dtm"], today, admintwo)
@@ -95,7 +93,7 @@ def get_indicators(
         configuration["pin_targeted_reached"], today, admintwo
     )
 
-    runner.add_customs((key_figures, ipc, fts, iom_dtm, pintargetreach))
+    runner.add_customs((ipc, fts, iom_dtm, pintargetreach))
     runner.add_instance_variables(
         "iom_dtm", overrideinfo=configuration["unhcr_somalia_idps"]
     )
