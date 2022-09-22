@@ -56,12 +56,12 @@ class PINTargetedReached(BaseScraper):
                 for key in row:
                     lowerkey = key.lower()
                     value = row[key]
+                    if not value:
+                        continue
                     if "priority" in lowerkey:
                         dict_of_lists_add(prioritydict, f"{countryiso3}:{pcode}", value)
                         continue
                     if "overall" not in lowerkey:
-                        continue
-                    if not value:
                         continue
                     if "reached" in lowerkey:
                         dict_of_lists_add(reacheddict, f"{countryiso3}:{pcode}", value)
