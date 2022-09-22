@@ -14,8 +14,8 @@ class PINTargetedReached(BaseScraper):
             datasetinfo,
             {
                 "admintwo": (
-                    ("PIN", "Targeted", "Reached"),
-                    ("#inneed", "#targeted", "#reached"),
+                    ("PIN", "Targeted", "Reached", "Priority"),
+                    ("#inneed", "#targeted", "#reached", "#priority"),
                 )
             },
         )
@@ -32,6 +32,7 @@ class PINTargetedReached(BaseScraper):
         inneeddict = dict()
         targeteddict = dict()
         reacheddict = dict()
+        prioritydict = dict()
         reader = self.get_reader("hdx")
         for ds_row in rows:
             countryiso3 = ds_row["Country ISO"]
@@ -54,30 +55,34 @@ class PINTargetedReached(BaseScraper):
                 pcode = row[admcode].strip().upper()
                 for key in row:
                     lowerkey = key.lower()
+                    value = row[key]
+                    if "priority" in lowerkey:
+                        dict_of_lists_add(prioritydict, f"{countryiso3}:{pcode}", value)
+                        continue
                     if "overall" not in lowerkey:
                         continue
-                    value = row[key]
                     if not value:
                         continue
-                    if "target" in lowerkey:
-                        dict_of_lists_add(targeteddict, f"{countryiso3}:{pcode}", value)
-                    elif "reached" in lowerkey:
+                    if "reached" in lowerkey:
                         dict_of_lists_add(reacheddict, f"{countryiso3}:{pcode}", value)
+                    elif "target" in lowerkey:
+                        dict_of_lists_add(targeteddict, f"{countryiso3}:{pcode}", value)
                     else:
                         dict_of_lists_add(inneeddict, f"{countryiso3}:{pcode}", value)
                 pcodes_found = True
             if not pcodes_found:
                 logger.warning(f"No pcodes found for {countryiso3}.")
 
-        def fill_values(input, output):
+        def fill_values(input, output, average=False):
             for countrypcode in input:
                 countryiso3, pcode = countrypcode.split(":")
                 if pcode not in self.admintwo.pcodes:
                     logger.error(f"PCode {pcode} in {countryiso3} does not exist!")
                 else:
-                    output[pcode] = number_format(
-                        sum(input[countrypcode]), format="%.0f"
-                    )
+                    aggregate_value = sum(input[countrypcode])
+                    if average:
+                        aggregate_value /= len(input[countrypcode])
+                    output[pcode] = number_format(aggregate_value, format="%.0f")
 
         inneed = self.get_values("admintwo")[0]
         fill_values(inneeddict, inneed)
@@ -85,5 +90,7 @@ class PINTargetedReached(BaseScraper):
         fill_values(targeteddict, targeted)
         reached = self.get_values("admintwo")[2]
         fill_values(reacheddict, reached)
+        priority = self.get_values("admintwo")[3]
+        fill_values(prioritydict, priority, average=True)
         self.datasetinfo["source_date"] = self.today
         self.datasetinfo["source_url"] = ""
