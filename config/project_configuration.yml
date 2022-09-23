@@ -117,9 +117,9 @@ scraper_adminone:
       - "ADM_PCODE"
     admin_exact: True
     input:
-      - "CHIRPS"
+      - "CHIRPS_mean"
     transform:
-      "CHIRPS": "get_numeric_if_possible(CHIRPS)"
+      "CHIRPS_mean": "get_numeric_if_possible(CHIRPS_mean)"
     output:
       - "MeanRainfallAnomaly"
     output_hxl:
@@ -153,9 +153,9 @@ scraper_admintwo:
       - "ADM_PCODE"
     admin_exact: True
     input:
-      - "CHIRPS"
+      - "CHIRPS_mean"
     transform:
-      "CHIRPS": "get_numeric_if_possible(CHIRPS)"
+      "CHIRPS_mean": "get_numeric_if_possible(CHIRPS_mean)"
     output:
       - "MeanRainfallAnomaly"
     output_hxl:
