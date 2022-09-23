@@ -13,6 +13,9 @@ googlesheets:
 json:
   output: "all.json"
 
+custom_sources:
+  url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTA0UzW4ayDSGMurZqwE_PFJGRkQ0uw1K0EHgqCyvV0Ok1Fyb2gP9OoAdcIiVR1-SYGGsSn4RW7F_72/pub?gid=0&single=true&output=csv"
+
 # national
 scraper_national:
   population:

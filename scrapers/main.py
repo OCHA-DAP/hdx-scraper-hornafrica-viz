@@ -19,6 +19,7 @@ from .ipc import IPC
 from .ipc_somalia import ipc_post_run
 from .pin_targeted_reached import PINTargetedReached
 from .unhcr_somalia_idps import idps_post_run
+from .utilities.sources import custom_sources
 
 logger = logging.getLogger(__name__)
 
@@ -143,8 +144,10 @@ def get_indicators(
     admintwo.output_errors()
 
     if "sources" in tabs:
+        sources = custom_sources(configuration["custom_sources"])
         update_sources(
             runner,
             outputs,
+            custom_sources=sources,
         )
     return countries
