@@ -45,6 +45,8 @@ scraper_national:
       - "https://docs.google.com/spreadsheets/d/e/2PACX-1vRppQx8JTKkKRCKmzfnCMmTFEcvCpkbP9PdHs1sQTUyacmbsx8tlAXpgBLFce-lcehukreGGuXjA_4S/pub?gid=1275038715&single=true&output=csv"
     format: "csv"
     use_hxl: True
+    date: "#date"
+    date_type: "date"
 
 fts:
   source: "OCHA"
@@ -175,9 +177,12 @@ ipc:
 ipc_somalia:
   dataset: "somalia-acute-food-insecurity-country-data"
 
-pin_targeted_reached:
+affected_targeted_reached:
   source: "Multiple Sources (Humanitarian Partners)"
-  url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR1SwDBdPjnlzQBZpSzkIlxkWcCyyP9y66tdVmKV3ytSUGpJzYNjn3xz4_bFWAoe1v-AItEqKlMucxr/pub?gid=1670093438&single=true&output=csv"
+  urls:
+    SOM: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRppQx8JTKkKRCKmzfnCMmTFEcvCpkbP9PdHs1sQTUyacmbsx8tlAXpgBLFce-lcehukreGGuXjA_4S/pub?gid=1287849586&single=true&output=csv"
+    ETH: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRppQx8JTKkKRCKmzfnCMmTFEcvCpkbP9PdHs1sQTUyacmbsx8tlAXpgBLFce-lcehukreGGuXjA_4S/pub?gid=1428130716&single=true&output=csv"
+    KEN: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRppQx8JTKkKRCKmzfnCMmTFEcvCpkbP9PdHs1sQTUyacmbsx8tlAXpgBLFce-lcehukreGGuXjA_4S/pub?gid=1774496556&single=true&output=csv"
 
 countries:
   - ETH

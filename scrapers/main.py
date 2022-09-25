@@ -17,7 +17,7 @@ from .fts import FTS
 from .iom_dtm import IOMDTM
 from .ipc import IPC
 from .ipc_somalia import ipc_post_run
-from .pin_targeted_reached import PINTargetedReached
+from .affected_targeted_reached import AffectedTargetedReached
 from .unhcr_somalia_idps import idps_post_run
 from .utilities.sources import custom_sources
 
@@ -91,11 +91,11 @@ def get_indicators(
     ipc = IPC(configuration["ipc"], today, countries, adminone, admintwo)
     fts = FTS(configuration["fts"], today, outputs, countries)
     iom_dtm = IOMDTM(configuration["iom_dtm"], today, admintwo)
-    pintargetreach = PINTargetedReached(
-        configuration["pin_targeted_reached"], today, admintwo
+    affectedtargetedreached = AffectedTargetedReached(
+        configuration["affected_targeted_reached"], today, admintwo
     )
 
-    runner.add_customs((ipc, fts, iom_dtm, pintargetreach))
+    runner.add_customs((ipc, fts, iom_dtm, affectedtargetedreached))
     runner.add_instance_variables(
         "iom_dtm", overrideinfo=configuration["unhcr_somalia_idps"]
     )
