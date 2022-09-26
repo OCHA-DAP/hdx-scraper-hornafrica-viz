@@ -274,6 +274,38 @@ admin1:
     - {country: Somalia, iso3: SOM, pcode: SO13, name: Togdheer}
     - {country: Somalia, iso3: SOM, pcode: SO12, name: Woqooyi Galbeed}
 
+  admin_name_mappings:
+    "ben-gumz": "ET06"
+    "PL.Sool": "SO14"
+    "PL.Sanag": "SO15"
+    "PL.Mudug": "SO18"
+    "Sc.Mudug": "SO18"
+    "Shabelle dhexe": "SO21"
+    "Shabelle hoose": "SO23"
+    "Juba dhexe": "SO27"
+    "Juba hoose": "SO28"
+
+  admin_name_replacements:
+    " urban": ""
+    "sud": "south"
+    "ouest": "west"
+    "est": "east"
+    "nord": "north"
+    "'": ""
+    "/": " "
+    ".": " "
+    " region": ""
+
+  admin_fuzzy_dont:
+    - "nord"
+    - "north"
+    - "sud"
+    - "south"
+    - "est"
+    - "east"
+    - "ouest"
+    - "west"
+
 admin2:
   admin_info:
     - {country: Ethiopia, iso3: ETH, pcode: ET0508, name: Afder}
@@ -490,36 +522,26 @@ admin2:
     - {country: Somalia, iso3: SOM, pcode: SO2501, name: Xudur}
     - {country: Somalia, iso3: SOM, pcode: SO1104, name: Zeylac}
 
+  admin_name_mappings:
+    "Baidoa": "SO2401"
 
-admin1_name_mappings:
-  "ben-gumz": "ET06"
-  "PL.Sool": "SO14"
-  "PL.Sanag": "SO15"
-  "PL.Mudug": "SO18"
-  "Sc.Mudug": "SO18"
-  "Shabelle dhexe": "SO21"
-  "Shabelle hoose": "SO23"
-  "Juba dhexe": "SO27"
-  "Juba hoose": "SO28"
+  admin_name_replacements:
+    " urban": ""
+    "sud": "south"
+    "ouest": "west"
+    "est": "east"
+    "nord": "north"
+    "'": ""
+    "/": " "
+    ".": " "
+    " region": ""
 
-admin1_name_replacements:
-  " urban": ""
-  "sud": "south"
-  "ouest": "west"
-  "est": "east"
-  "nord": "north"
-  "'": ""
-  "/": " "
-  ".": " "
-  " region": ""
-
-admin1_fuzzy_dont:
-  - "nord"
-  - "north"
-  - "sud"
-  - "south"
-  - "est"
-  - "east"
-  - "ouest"
-  - "west"
-  - "syria"
+  admin_fuzzy_dont:
+    - "nord"
+    - "north"
+    - "sud"
+    - "south"
+    - "est"
+    - "east"
+    - "ouest"
+    - "west"
