@@ -217,6 +217,8 @@ class FTS(BaseScraper):
         ]
         for plan in plans:
             plan_id = str(plan["id"])
+            if plan_id == "1071": #  Ignore South Sudan Regional Response Plan:
+                continue
             plan_name = plan["name"]
             allreq = plan["requirements"]["revisedRequirements"]
             funding = plan.get("funding")
