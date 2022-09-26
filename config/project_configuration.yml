@@ -56,7 +56,7 @@ fts:
 aggregate_regional:
   "#population":
     action: "sum"
-  "#inneed":
+  "#affected":
     action: "sum"
   "#targeted":
     action: "sum"
