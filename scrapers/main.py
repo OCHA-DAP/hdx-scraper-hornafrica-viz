@@ -5,19 +5,21 @@ from hdx.location.adminlevel import AdminLevel
 from hdx.location.country import Country
 from hdx.scraper.outputs.update_tabs import (
     get_toplevel_rows,
+    sources_headers,
     update_national,
     update_sources,
     update_subnational,
+    update_tab,
     update_toplevel,
 )
 from hdx.scraper.runner import Runner
 from hdx.scraper.utilities.fallbacks import Fallbacks
 
+from .affected_targeted_reached import AffectedTargetedReached
 from .fts import FTS
 from .iom_dtm import IOMDTM
 from .ipc import IPC
 from .ipc_somalia import ipc_post_run
-from .affected_targeted_reached import AffectedTargetedReached
 from .unhcr_somalia_idps import idps_post_run
 from .utilities.sources import custom_sources
 
@@ -144,10 +146,10 @@ def get_indicators(
     admintwo.output_errors()
 
     if "sources" in tabs:
-        sources = custom_sources(configuration["custom_sources"])
-        update_sources(
-            runner,
-            outputs,
-            custom_sources=sources,
+        sources = (
+            list(sources_headers)
+            + custom_sources(configuration["custom_sources_keyfigures"])
+            + custom_sources(configuration["custom_sources_other"])
         )
+        update_tab(outputs, "sources", sources)
     return countries
