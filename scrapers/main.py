@@ -84,11 +84,16 @@ def get_indicators(
                 configuration[f"scraper{suffix}"],
                 level,
                 adminlevel=admintwo,
+                admin_sources=True,
                 suffix=suffix,
             )
             continue
         configurable_scrapers[level] = runner.add_configurables(
-            configuration[f"scraper{suffix}"], level, adminlevel=adminone, suffix=suffix
+            configuration[f"scraper{suffix}"],
+            level,
+            adminlevel=adminone,
+            admin_sources=True,
+            suffix=suffix,
         )
     ipc = IPC(configuration["ipc"], today, countries, adminone, admintwo)
     fts = FTS(configuration["fts"], today, outputs, countries)

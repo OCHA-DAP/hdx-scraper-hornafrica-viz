@@ -33,7 +33,7 @@ class TestHornAfrica:
             with temp_dir(
                 "TestHornAfricaViz", delete_on_success=True, delete_on_failure=False
             ) as temp_folder:
-                today = parse_date("2022-09-05")
+                today = parse_date("2022-09-29")
                 Read.create_readers(
                     temp_folder,
                     join(folder, "input"),

@@ -1,1 +1,2 @@
-hdx-python-scraper==1.9.4
+git+https://github.com/OCHA-DAP/hdx-python-scraper@main#egg=hdx-python-scraper
+
