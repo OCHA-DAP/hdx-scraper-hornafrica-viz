@@ -94,7 +94,7 @@ def get_indicators(
     fts = FTS(configuration["fts"], today, outputs, countries)
     iom_dtm = IOMDTM(configuration["iom_dtm"], today, admintwo)
     affectedtargetedreached = AffectedTargetedReached(
-        configuration["affected_targeted_reached"], today, admintwo
+        configuration["affected_targeted_reached"], today, adminone, admintwo
     )
 
     runner.add_customs((ipc, fts, iom_dtm, affectedtargetedreached))
