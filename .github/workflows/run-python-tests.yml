@@ -3,8 +3,7 @@
 
 name: build
 
-on: #[push, pull_request]
-  workflow_dispatch: # add run button in github
+on: [push, pull_request]
 
 jobs:
   build:
