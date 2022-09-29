@@ -13,6 +13,7 @@ class IOMDTM(BaseScraper):
             "iom_dtm",
             datasetinfo,
             {"admintwo": (("IDPs",), (self.hxltag,))},
+            admin_sources=True,
         )
         self.today = today
         self.admintwo = admintwo

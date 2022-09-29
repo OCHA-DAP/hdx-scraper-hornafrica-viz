@@ -34,13 +34,15 @@ class AffectedTargetedReached(BaseScraper):
                     ),
                 ),
             },
+            admin_sources=True,
         )
         self.today = today
         self.adminone = adminone
         self.admintwo = admintwo
 
     def run(self) -> None:
-        urls = self.datasetinfo["urls"]
+        datasets = self.datasetinfo["datasets"]
+        reader = self.get_reader()
         affecteddict1 = dict()
         targeteddict1 = dict()
         reacheddict1 = dict()
@@ -50,8 +52,19 @@ class AffectedTargetedReached(BaseScraper):
         reacheddict2 = dict()
         prioritydict2 = dict()
 
-        for countryiso3, url in urls.items():
-            data = hxl.data(url, InputOptions(allow_local=True)).cache()
+        self.datasetinfo["source_date"] = {}
+        source_dates = self.datasetinfo["source_date"]
+        self.datasetinfo["source"] = {}
+        sources = self.datasetinfo["source"]
+        self.datasetinfo["source_url"] = {}
+        source_urls = self.datasetinfo["source_url"]
+        for countryiso3, dataset in datasets.items():
+            datasetinfo = {"dataset": dataset, "format": "csv"}
+            resource = reader.read_hdx_metadata(datasetinfo)
+            source_dates[f"ADM_{countryiso3}"] = datasetinfo["source_date"]
+            sources[f"ADM_{countryiso3}"] = datasetinfo["source"]
+            source_urls[f"ADM_{countryiso3}"] = datasetinfo["source_url"]
+            data = reader.read_hxl_resource(f"{self.name}-{countryiso3}", resource, self.name)
             admin_level1 = self.adminone.get_admin_level(countryiso3)
             admin_level2 = self.admintwo.get_admin_level(countryiso3)
             for row in data:

@@ -56,6 +56,7 @@ class FTS(BaseScraper):
                     tuple(base_hxltags),
                 ),
             },
+            admin_sources=True,
         )
         self.today = today
         self.outputs = outputs

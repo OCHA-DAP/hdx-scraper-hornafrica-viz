@@ -54,6 +54,7 @@ class IPC(BaseScraper):
                     ),
                 ),
             },
+            admin_sources=True,
         )
         self.today = today
         self.countryiso3s = countryiso3s
