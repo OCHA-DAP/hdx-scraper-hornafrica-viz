@@ -1,10 +1,13 @@
 import hxl
 from hdx.location.country import Country
+from hdx.scraper.utilities.reader import Read
 from hxl import InputOptions
 
 
 def custom_sources(configuration):
-    data = hxl.data(configuration["url"], InputOptions(allow_local=True)).cache()
+    reader = Read.get_reader("hdx")
+    path = reader.download_file(configuration["url"], file_prefix="custom_sources")
+    data = hxl.data(path, InputOptions(allow_local=True)).cache()
     sources = list()
     for row in data:
         source = row.get("#meta+source")

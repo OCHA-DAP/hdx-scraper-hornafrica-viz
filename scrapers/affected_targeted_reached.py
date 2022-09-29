@@ -2,6 +2,7 @@ import logging
 
 import hxl
 from hdx.scraper.base_scraper import BaseScraper
+from hdx.scraper.utilities.reader import Read
 from hdx.utilities.dictandlist import dict_of_lists_add
 from hdx.utilities.text import number_format
 from hxl import InputOptions
@@ -51,7 +52,9 @@ class AffectedTargetedReached(BaseScraper):
         prioritydict2 = dict()
 
         for countryiso3, url in urls.items():
-            data = hxl.data(url, InputOptions(allow_local=True)).cache()
+            reader = self.get_reader()
+            path = reader.download_file(url)
+            data = hxl.data(path, InputOptions(allow_local=True)).cache()
             admin_level1 = self.adminone.get_admin_level(countryiso3)
             admin_level2 = self.admintwo.get_admin_level(countryiso3)
             for row in data:

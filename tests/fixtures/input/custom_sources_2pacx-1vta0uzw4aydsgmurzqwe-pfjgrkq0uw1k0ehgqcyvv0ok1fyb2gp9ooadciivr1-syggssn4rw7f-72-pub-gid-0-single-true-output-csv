@@ -1,0 +1,24 @@
+Layer,On Hover,Hxltag,View,Country,Level,Source,Date,Url
+,,#indicator+name,#meta+view,#country+name,,#meta+source,#date,#meta+url
+IPC,"IPC levels, Population, IDPs, PiN & Target",#affected+food+ipc+p3plus+num,Regional,All,Admin 1,IPCInfo,Jan 2021-Dec 2022,https://data.humdata.org/dataset/ipc-country-data
+IPC,"IPC levels, Population, IDPs, PiN & Target",#affected+food+ipc+phase+type,Regional,All,Admin 1,IPCInfo,Jan 2021-Dec 2022,https://data.humdata.org/dataset/ipc-country-data
+Rainfall Anomaly,"Population, IPC3+, IDPs, PiN & Target",#climate+rainfall+anomaly,Regional,All,Admin 1,"USGS, FEWS NET, CHIRPS","Jun 21, 2022",https://data.humdata.org/dataset/east-africa-chirps-seasonal-rainfall-accumulation-anomaly-by-pentad
+Population,"Population, IPC3+, IDPs, PiN & Target",#population,Regional,All,Admin 1,Worldpop,"Dec 31, 2020",https://data.humdata.org/search?organization=worldpop&q=%22population%20counts%22
+IPC,"IPC levels, Population, IDPs, PiN & Target",#affected+food+ipc+p3plus+num,Country,Somalia,Admin 2,IPCInfo,Oct-Dec 2022,https://data.humdata.org/dataset/somalia-acute-food-insecurity-country-data
+IPC,"IPC levels, Population, IDPs, PiN & Target",#affected+food+ipc+p3plus+num,Country,Kenya,Admin 2,IPCInfo,Oct-Dec 2022,https://data.humdata.org/dataset/kenya-acute-food-insecurity-country-data
+IPC,"IPC levels, Population, IDPs, PiN & Target",#affected+food+ipc+p3plus+num,Country,Ethiopia,Admin 2,IPCInfo,"May 31, 2021",https://data.humdata.org/dataset/ethiopia-acute-food-insecurity-country-data
+IPC,"IPC levels, Population, IDPs, PiN & Target",#affected+food+ipc+phase+type,Country,Somalia,Admin 2,IPCInfo,Oct-Dec 2022,https://data.humdata.org/dataset/somalia-acute-food-insecurity-country-data
+IPC,"IPC levels, Population, IDPs, PiN & Target",#affected+food+ipc+phase+type,Country,Kenya,Admin 2,IPCInfo,Oct-Dec 2022,https://data.humdata.org/dataset/kenya-acute-food-insecurity-country-data
+IPC,"IPC levels, Population, IDPs, PiN & Target",#affected+food+ipc+phase+type,Country,Ethiopia,Admin 2,IPCInfo,"May 31, 2021",https://data.humdata.org/dataset/ethiopia-acute-food-insecurity-country-data
+Rainfall Anomaly,"Population, IPC3+, IDPs, PiN & Target",#climate+rainfall+anomaly,Country,Somalia,Admin 2,"USGS, FEWS NET, CHIRPS","Jun 21, 2022",https://data.humdata.org/dataset/east-africa-chirps-seasonal-rainfall-accumulation-anomaly-by-pentad
+Rainfall Anomaly,"Population, IPC3+, IDPs, PiN & Target",#climate+rainfall+anomaly,Country,Kenya,Admin 2,"USGS, FEWS NET, CHIRPS","Jun 21, 2022",https://data.humdata.org/dataset/east-africa-chirps-seasonal-rainfall-accumulation-anomaly-by-pentad
+Rainfall Anomaly,"Population, IDPs, PiN & Target",#climate+rainfall+anomaly,Country,Ethiopia,Admin 2,"USGS, FEWS NET, CHIRPS","Jun 21, 2022",https://data.humdata.org/dataset/east-africa-chirps-seasonal-rainfall-accumulation-anomaly-by-pentad
+IDP,"IDPs, IPC3+, Operational Priority, PiN & Target",#affected+idps+ind,Country,Ethiopia,Admin 2,IOM,"Apr 16, 2022",https://data.humdata.org/dataset/ethiopia-baseline-assessment-data-iom-dtm
+IDP,"IDPs, IPC3+, Operational Priority, PiN & Target",#affected+idps+ind,Country,Somalia,Admin 2,UNHCR,"Aug 31, 2022",https://data.humdata.org/dataset/somalia-internally-displaced-persons-idps
+IDP,-,#affected+idps+ind,Country,Kenya,-,-,-,-
+Operational Priority Areas,"Operational Priority, IPC3+, IDPs, PiN & Target",#priority,Country,Somalia,Admin 2,Multiple Source (Humanitarian Partners),"Dec 31, 2022",https://data.humdata.org/dataset/somalia-pin-targeted-reached-by-location-and-cluster
+Operational Priority Areas,"Operational Priority, IPC3+, IDPs, PiN & Target",#priority,Country,Kenya,Admin 1,Multiple Source (Humanitarian Partners),"Oct 31, 2022",https://data.humdata.org/dataset/kenya-pin-targeted-reached-by-location-and-cluster 
+Operational Priority Areas,"Operational Priority, IPC3+, IDPs, PiN & Target",#priority,Country,Ethiopia,Admin 3,Multiple Source (Humanitarian Partners),"Jul 31, 2022",https://data.humdata.org/dataset/ethiopia-pin-targeted-reached-by-location-and-cluster
+Population,"Population, IPC3+, IDPs, PiN & Target",#population,Country,Somalia,Admin 2,Worldpop,"Dec 31, 2020",https://data.humdata.org/dataset/worldpop-population-counts-for-somalia
+Population,"Population, IDPs, PiN & Target",#population,Country,Ethiopia,Admin 2,Worldpop,"Dec 31, 2020",https://data.humdata.org/dataset/worldpop-population-counts-for-ethiopia
+Population,"Population, IPC3+, IDPs, PiN & Target",#population,Country,Kenya,Admin 2,Worldpop,"Dec 31, 2020",https://data.humdata.org/dataset/worldpop-population-counts-for-kenya
