@@ -17,7 +17,7 @@ def idps_post_run(self) -> None:
     )
     idpsdict = dict()
     for row in iterator:
-        if row["Year"] != self.today.year:
+        if row["Year"] not in (self.today.year - 1, self.today.year):
             continue
         if "drought" not in row["Reason"].lower():
             continue
@@ -30,7 +30,9 @@ def idps_post_run(self) -> None:
         if pcode:
             if pcode in values:
                 name = self.admintwo.pcode_to_name[pcode]
-                logger.warning(f"SOM UNHCR IDPs override - ignoring repeated pcode {pcode}({name}) with name {adm2name}!")
+                logger.warning(
+                    f"SOM UNHCR IDPs override - ignoring repeated pcode {pcode}({name}) with name {adm2name}!"
+                )
                 continue
             values[pcode] = sum(idpsdict[adm2name])
     logger.info(f"Adding SOM IDPs!")
