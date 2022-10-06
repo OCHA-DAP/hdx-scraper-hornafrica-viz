@@ -1,6 +1,6 @@
 import logging
 
-from hdx.utilities.text import get_numeric_if_possible, number_format
+from hdx.utilities.text import get_numeric_if_possible
 from scrapers.baseipc import BaseIPC
 
 logger = logging.getLogger(__name__)
