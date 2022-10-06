@@ -14,6 +14,7 @@ from hdx.scraper.outputs.update_tabs import (
 )
 from hdx.scraper.runner import Runner
 from hdx.scraper.utilities.fallbacks import Fallbacks
+from hdx.scraper.utilities.sources import create_source_configuration
 
 from .affected_targeted_reached import AffectedTargetedReached
 from .fts import FTS
@@ -84,7 +85,7 @@ def get_indicators(
                 configuration[f"scraper{suffix}"],
                 level,
                 adminlevel=admintwo,
-                admin_sources=True,
+                source_configuration=create_source_configuration(adminlevel=admintwo),
                 suffix=suffix,
             )
             continue
@@ -92,7 +93,7 @@ def get_indicators(
             configuration[f"scraper{suffix}"],
             level,
             adminlevel=adminone,
-            admin_sources=True,
+            source_configuration=create_source_configuration(adminlevel=adminone),
             suffix=suffix,
         )
     ipc = IPC(configuration["ipc"], today, countries, adminone, admintwo)

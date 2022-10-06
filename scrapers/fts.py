@@ -3,6 +3,7 @@ import re
 
 from dateutil.relativedelta import relativedelta
 from hdx.scraper.base_scraper import BaseScraper
+from hdx.scraper.utilities.sources import create_source_configuration
 from hdx.utilities.dictandlist import dict_of_lists_add
 from hdx.utilities.text import earliest_index, get_fraction_str, multiple_replace
 
@@ -56,7 +57,9 @@ class FTS(BaseScraper):
                     tuple(base_hxltags),
                 ),
             },
-            admin_sources=True,
+            source_configuration=create_source_configuration(
+                admin_sources=True
+            ),
         )
         self.today = today
         self.outputs = outputs

@@ -1,6 +1,7 @@
 import logging
 
 from hdx.scraper.base_scraper import BaseScraper
+from hdx.scraper.utilities.sources import create_source_configuration
 from hdx.utilities.dictandlist import dict_of_lists_add
 
 logger = logging.getLogger(__name__)
@@ -13,7 +14,7 @@ class IOMDTM(BaseScraper):
             "iom_dtm",
             datasetinfo,
             {"admintwo": (("IDPs",), (self.hxltag,))},
-            admin_sources=True,
+            source_configuration=create_source_configuration(adminlevel=admintwo),
         )
         self.today = today
         self.admintwo = admintwo

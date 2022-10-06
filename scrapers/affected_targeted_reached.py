@@ -1,10 +1,10 @@
 import logging
 
-import hxl
-from hdx.scraper.base_scraper import BaseScraper
 from hdx.utilities.dictandlist import dict_of_lists_add
 from hdx.utilities.text import number_format
-from hxl import InputOptions
+
+from hdx.scraper.base_scraper import BaseScraper
+from hdx.scraper.utilities.sources import create_source_configuration
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +16,12 @@ class AffectedTargetedReached(BaseScraper):
             datasetinfo,
             {
                 "adminone": (
-                    ("Total Affected", "Total Targeted", "Total Reached", "Priority"),
+                    (
+                        "Total Affected",
+                        "Total Targeted",
+                        "Total Reached",
+                        "Priority",
+                    ),
                     (
                         "#affected+total",
                         "#targeted+total",
@@ -25,7 +30,12 @@ class AffectedTargetedReached(BaseScraper):
                     ),
                 ),
                 "admintwo": (
-                    ("Total Affected", "Total Targeted", "Total Reached", "Priority"),
+                    (
+                        "Total Affected",
+                        "Total Targeted",
+                        "Total Reached",
+                        "Priority",
+                    ),
                     (
                         "#affected+total",
                         "#targeted+total",
@@ -34,7 +44,9 @@ class AffectedTargetedReached(BaseScraper):
                     ),
                 ),
             },
-            admin_sources=True,
+            source_configuration=create_source_configuration(
+                adminlevel=(adminone, admintwo)
+            ),
         )
         self.today = today
         self.adminone = adminone
@@ -61,10 +73,12 @@ class AffectedTargetedReached(BaseScraper):
         for countryiso3, dataset in datasets.items():
             datasetinfo = {"dataset": dataset, "format": "csv"}
             resource = reader.read_hdx_metadata(datasetinfo)
-            source_dates[f"ADM_{countryiso3}"] = datasetinfo["source_date"]
-            sources[f"ADM_{countryiso3}"] = datasetinfo["source"]
-            source_urls[f"ADM_{countryiso3}"] = datasetinfo["source_url"]
-            data = reader.read_hxl_resource(f"{self.name}-{countryiso3}", resource, self.name)
+            source_dates[f"CUSTOM_{countryiso3}"] = datasetinfo["source_date"]
+            sources[f"CUSTOM_{countryiso3}"] = datasetinfo["source"]
+            source_urls[f"CUSTOM_{countryiso3}"] = datasetinfo["source_url"]
+            data = reader.read_hxl_resource(
+                f"{self.name}-{countryiso3}", resource, self.name
+            )
             admin_level1 = self.adminone.get_admin_level(countryiso3)
             admin_level2 = self.admintwo.get_admin_level(countryiso3)
             for row in data:
@@ -74,7 +88,9 @@ class AffectedTargetedReached(BaseScraper):
                 def add_to_dict(inddict, hxltag, pcode):
                     value = row.get(hxltag)
                     if value is not None:
-                        dict_of_lists_add(inddict, f"{countryiso3}:{pcode}", int(value))
+                        dict_of_lists_add(
+                            inddict, f"{countryiso3}:{pcode}", int(value)
+                        )
 
                 add_to_dict(affecteddict1, "#affected+total", pcode1)
                 add_to_dict(targeteddict1, "#targeted+total", pcode1)
@@ -89,12 +105,16 @@ class AffectedTargetedReached(BaseScraper):
             for countrypcode in input:
                 countryiso3, pcode = countrypcode.split(":")
                 if pcode not in adminlevel.pcodes:
-                    logger.error(f"PCode {pcode} in {countryiso3} does not exist!")
+                    logger.error(
+                        f"PCode {pcode} in {countryiso3} does not exist!"
+                    )
                 else:
                     aggregate_value = sum(input[countrypcode])
                     if average:
                         aggregate_value /= len(input[countrypcode])
-                    output[pcode] = number_format(aggregate_value, format="%.0f")
+                    output[pcode] = number_format(
+                        aggregate_value, format="%.0f"
+                    )
 
         affected = self.get_values("adminone")[0]
         fill_values(affecteddict1, affected, self.adminone)
@@ -112,5 +132,3 @@ class AffectedTargetedReached(BaseScraper):
         fill_values(reacheddict2, reached, self.admintwo)
         priority = self.get_values("admintwo")[3]
         fill_values(prioritydict2, priority, self.admintwo, average=True)
-        self.datasetinfo["source_date"] = self.today
-        self.datasetinfo["source_url"] = ""
