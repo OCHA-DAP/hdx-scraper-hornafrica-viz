@@ -1,41 +1,43 @@
 import logging
 
-from hdx.utilities.text import get_numeric_if_possible
+from hdx.utilities.text import get_numeric_if_possible, number_format
+from scrapers.baseipc import BaseIPC
 
 logger = logging.getLogger(__name__)
 
 
-def ipc_post_run(self) -> None:
-    identifier = "ipc_override"
-    reader = self.get_reader(prefix=identifier)
-    index = self.get_headers("admintwo")[1].index(self.p3plus_hxltag)
-    p3plus_values = self.get_values("admintwo")[index]
-    index = self.get_headers("admintwo")[1].index(self.phase_hxltag)
-    phase_values = self.get_values("admintwo")[index]
-    dataset = reader.read_dataset(self.overrideinfo["dataset"])
-    resource = dataset.get_resource()
-    headers, iterator = reader.get_tabular_rows(
-        resource["url"], dict_form=True, format="csv", headers=4
-    )
-    for pcode in [pcode for pcode in p3plus_values if pcode.startswith("SO")]:
-        del p3plus_values[pcode]
-        del phase_values[pcode]
-    for row in iterator:
-        adm2name = row["District"]
-        if not adm2name:
-            continue
-        p3plus = 0
-        if row["IPC 3"]:
-            p3plus += get_numeric_if_possible(row["IPC 3"])
-        if row["IPC 4"]:
-            p3plus += get_numeric_if_possible(row["IPC 4"])
-        if row["IPC 5"]:
-            p3plus += get_numeric_if_possible(row["IPC 5"])
-        if p3plus == 0:
-            p3plus = None
-        phase = int(row["Phase"])
-        pcode, _ = self.admintwo.get_pcode("SOM", adm2name, identifier)
-        if pcode:
-            p3plus_values[pcode] = p3plus
-            phase_values[pcode] = phase
-    logger.info(f"Adding IPC SOM!")
+class IPCSomalia(BaseIPC):
+    def __init__(self, datasetinfo, today, adminone, admintwo):
+        super().__init__(
+            "ipc_somalia", datasetinfo, today, ("SOM",), adminone, admintwo
+        )
+
+    def run(self) -> None:
+        national_p3plus = self.get_values("national")[0]
+        adminone_p3plus = self.get_values("adminone")[0]
+        admintwo_p3plus = self.get_values("admintwo")[0]
+        reader = self.get_reader(self.name)
+        headers, iterator = reader.read(self.datasetinfo)
+        for row in iterator:
+            adm1name = row["Region"]
+            adm2name = row["District"]
+            p3plus = 0
+            if row["IPC 3"]:
+                p3plus += get_numeric_if_possible(row["IPC 3"])
+            if row["IPC 4"]:
+                p3plus += get_numeric_if_possible(row["IPC 4"])
+            if row["IPC 5"]:
+                p3plus += get_numeric_if_possible(row["IPC 5"])
+            if p3plus == 0:
+                p3plus = None
+            if adm1name == "TOTAL":
+                national_p3plus["SOM"] = p3plus
+                continue
+            pcode, _ = self.adminone.get_pcode("SOM", adm1name, self.name)
+            if pcode:
+                population = adminone_p3plus.get(pcode, 0)
+                population += p3plus
+                adminone_p3plus[pcode] = population
+            pcode, _ = self.admintwo.get_pcode("SOM", adm2name, self.name)
+            if pcode:
+                admintwo_p3plus[pcode] = p3plus

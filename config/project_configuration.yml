@@ -179,6 +179,8 @@ ipc:
 
 ipc_somalia:
   dataset: "somalia-acute-food-insecurity-country-data"
+  format: "csv"
+  headers: 4
 
 affected_targeted_reached:
   source: "Multiple Sources (Humanitarian Partners)"

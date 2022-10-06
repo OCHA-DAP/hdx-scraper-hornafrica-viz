@@ -18,7 +18,9 @@ def custom_sources(configuration):
         if view.lower() == "regional":
             hxltag = f"{base_hxltag}+regional"
         else:
-            countryiso3, _ = Country.get_iso3_country_code_fuzzy(row.get("#country+name"))
+            countryiso3, _ = Country.get_iso3_country_code_fuzzy(
+                row.get("#country+name")
+            )
             if not countryiso3:
                 continue
             hxltag = f"{base_hxltag}+{countryiso3.lower()}"

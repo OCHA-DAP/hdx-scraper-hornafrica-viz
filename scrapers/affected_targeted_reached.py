@@ -2,7 +2,6 @@ import logging
 
 import hxl
 from hdx.scraper.base_scraper import BaseScraper
-from hdx.scraper.utilities.reader import Read
 from hdx.utilities.dictandlist import dict_of_lists_add
 from hdx.utilities.text import number_format
 from hxl import InputOptions

@@ -3,62 +3,14 @@ from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
 from hdx.location.country import Country
-from hdx.scraper.base_scraper import BaseScraper
+from scrapers.baseipc import BaseIPC
 
 logger = logging.getLogger(__name__)
 
 
-class IPC(BaseScraper):
+class IPC(BaseIPC):
     def __init__(self, datasetinfo, today, countryiso3s, adminone, admintwo):
-        self.phases = ["3", "4", "5"]
-        self.projections = ["Current", "First Projection", "Second Projection"]
-        p3plus_header = "FoodInsecurityIPCP3+"
-        self.p3plus_hxltag = "#affected+food+ipc+p3plus+num"
-        phase_header = "FoodInsecurityIPCPhase"
-        self.phase_hxltag = "#affected+food+ipc+phase+type"
-        colheaders = [f"FoodInsecurityIPC{phase}" for phase in self.phases]
-        colheaders.append(p3plus_header)
-        colheaders.append("FoodInsecurityIPCAnalysedNum")
-        colheaders.append("FoodInsecurityIPCAnalysisPeriod")
-        colheaders.append("FoodInsecurityIPCAnalysisPeriodStart")
-        colheaders.append("FoodInsecurityIPCAnalysisPeriodEnd")
-        hxltags = [f"#affected+food+ipc+p{phase}+num" for phase in self.phases]
-        hxltags.append(self.p3plus_hxltag)
-        hxltags.append("#affected+food+ipc+analysed+num")
-        hxltags.append("#date+ipc+period")
-        hxltags.append("#date+ipc+start")
-        hxltags.append("#date+ipc+end")
-        super().__init__(
-            "ipc",
-            datasetinfo,
-            {
-                "national": (tuple(colheaders), tuple(hxltags)),
-                "adminone": (
-                    (
-                        p3plus_header,
-                        phase_header,
-                    ),
-                    (
-                        self.p3plus_hxltag,
-                        self.phase_hxltag,
-                    ),
-                ),
-                "admintwo": (
-                    (
-                        p3plus_header,
-                        phase_header,
-                    ),
-                    (
-                        self.p3plus_hxltag,
-                        self.phase_hxltag,
-                    ),
-                ),
-            },
-        )
-        self.today = today
-        self.countryiso3s = countryiso3s
-        self.adminone = adminone
-        self.admintwo = admintwo
+        super().__init__("ipc", datasetinfo, today, countryiso3s, adminone, admintwo)
 
     def get_period(self, projections, countryiso3):
         if self.admintwo.get_admin_level(countryiso3) == 2:
@@ -104,21 +56,9 @@ class IPC(BaseScraper):
             if countryiso3 not in self.countryiso3s:
                 continue
             countryisos.add((countryiso3, countryiso2))
-        national_outputs = self.get_values("national")
-        national_populations = {
-            phase: national_outputs[i] for i, phase in enumerate(self.phases)
-        }
-        i = len(self.phases)
-        national_populations["P3+"] = national_outputs[i]
-        national_analysed = national_outputs[i + 1]
-        national_period = national_outputs[i + 2]
-        national_start = national_outputs[i + 3]
-        national_end = national_outputs[i + 4]
-        adminone_populations = self.get_values("adminone")[0]
-        admintwo_populations = self.get_values("admintwo")[0]
-        adminone_phases = self.get_values("adminone")[1]
-        admintwo_phases = self.get_values("admintwo")[1]
-        projection_names = ["Current", "First Projection", "Second Projection"]
+        national_p3plus = self.get_values("national")[0]
+        adminone_p3plus = self.get_values("adminone")[0]
+        admintwo_p3plus = self.get_values("admintwo")[0]
         projection_mappings = ["", "_projected", "_second_projected"]
         analysis_dates = set()
         for countryiso3, countryiso2 in sorted(countryisos):
@@ -140,15 +80,8 @@ class IPC(BaseScraper):
                 population = country_data[
                     f"phase{phase}_population{projection_mapping}"
                 ]
-                national_populations[phase][countryiso3] = population
                 sum += population
-            national_populations["P3+"][countryiso3] = sum
-            national_analysed[countryiso3] = country_data[
-                f"estimated_population{projection_mapping}"
-            ]
-            national_period[countryiso3] = projection_names[projection_number]
-            national_start[countryiso3] = start
-            national_end[countryiso3] = end
+            national_p3plus[countryiso3] = sum
             admin1_areas = country_data.get("groups", country_data.get("areas"))
             if admin1_areas:
                 for admin1_area in admin1_areas:
@@ -164,35 +97,16 @@ class IPC(BaseScraper):
                         )
                         if pop:
                             sum += pop
-                    cur_sum = adminone_populations.get(pcode)
+                    cur_sum = adminone_p3plus.get(pcode)
                     if cur_sum:
-                        adminone_populations[pcode] = cur_sum + sum
+                        adminone_p3plus[pcode] = cur_sum + sum
                     else:
-                        adminone_populations[pcode] = sum
-                    phase_class = None
-                    for phase in range(1, 6):
-                        pct = admin1_area.get(
-                            f"phase{phase}_percentage{projection_mapping}"
-                        )
-                        if pct and pct >= 0.2:
-                            phase_class = phase
-                    cur_phase = adminone_phases.get(pcode)
-                    if cur_phase:
-                        if phase_class and phase_class > cur_phase:
-                            adminone_phases[pcode] = phase_class
-                    else:
-                        adminone_phases[pcode] = phase_class
+                        adminone_p3plus[pcode] = sum
                     if self.admintwo.get_admin_level(countryiso3) == 1:
                         if cur_sum:
-                            admintwo_populations[pcode] = cur_sum + sum
+                            admintwo_p3plus[pcode] = cur_sum + sum
                         else:
-                            admintwo_populations[pcode] = sum
-                        if cur_phase:
-                            if phase_class and phase_class > cur_phase:
-                                admintwo_phases[pcode] = phase_class
-                        else:
-                            admintwo_phases[pcode] = phase_class
-                        continue
+                            admintwo_p3plus[pcode] = sum
                     admin2_areas = admin1_area.get("areas")
                     if admin2_areas:
                         for admin2_area in admin2_areas:
@@ -208,22 +122,9 @@ class IPC(BaseScraper):
                                 )
                                 if pop:
                                     sum += pop
-                            cur_sum = admintwo_populations.get(pcode)
+                            cur_sum = admintwo_p3plus.get(pcode)
                             if cur_sum:
-                                admintwo_populations[pcode] = cur_sum + sum
+                                admintwo_p3plus[pcode] = cur_sum + sum
                             else:
-                                admintwo_populations[pcode] = sum
-                            phase_class = None
-                            for phase in range(1, 6):
-                                pct = admin2_area.get(
-                                    f"phase{phase}_percentage{projection_mapping}"
-                                )
-                                if pct and pct >= 0.2:
-                                    phase_class = phase
-                            cur_phase = admintwo_phases.get(pcode)
-                            if cur_phase:
-                                if phase_class and phase_class > cur_phase:
-                                    admintwo_phases[pcode] = phase_class
-                            else:
-                                admintwo_phases[pcode] = phase_class
+                                admintwo_p3plus[pcode] = sum
         reader.read_hdx_metadata(self.datasetinfo)
