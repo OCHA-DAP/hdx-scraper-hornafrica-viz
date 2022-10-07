@@ -13,7 +13,6 @@ class IPCSomalia(BaseIPC):
         )
 
     def run(self) -> None:
-        national_p3plus = self.get_values("national")[0]
         adminone_p3plus = self.get_values("adminone")[0]
         admintwo_p3plus = self.get_values("admintwo")[0]
         reader = self.get_reader(self.name)
@@ -31,7 +30,6 @@ class IPCSomalia(BaseIPC):
             if p3plus == 0:
                 p3plus = None
             if adm1name == "TOTAL":
-                national_p3plus["SOM"] = p3plus
                 continue
             pcode, _ = self.adminone.get_pcode("SOM", adm1name, self.name)
             if pcode:

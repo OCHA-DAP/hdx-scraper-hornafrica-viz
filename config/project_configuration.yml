@@ -77,7 +77,7 @@ aggregate_regional:
     output: "PercentFunded"
     action: "eval"
     formula: "get_fraction_str(#value+funding+total+usd, #value+funding+required+usd) if #value+funding+total+usd is not None and #value+funding+required+usd is not None else ''"
-  "#affected+food":
+  "#affected+food+ipc+p3plus+num":
     action: "sum"
   "#affected+sam":
     action: "sum"
@@ -86,8 +86,6 @@ aggregate_regional:
   "#affected+gam":
     action: "sum"
   "#affected+water":
-    action: "sum"
-  "#affected+food+ipc+p3plus+num":
     action: "sum"
 
 # regional

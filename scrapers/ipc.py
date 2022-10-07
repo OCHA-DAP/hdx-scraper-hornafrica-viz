@@ -56,7 +56,6 @@ class IPC(BaseIPC):
             if countryiso3 not in self.countryiso3s:
                 continue
             countryisos.add((countryiso3, countryiso2))
-        national_p3plus = self.get_values("national")[0]
         adminone_p3plus = self.get_values("adminone")[0]
         admintwo_p3plus = self.get_values("admintwo")[0]
         projection_mappings = ["", "_projected", "_second_projected"]
@@ -74,14 +73,7 @@ class IPC(BaseIPC):
             projections.append(country_data["projected_period_dates"])
             projections.append(country_data["second_projected_period_dates"])
             projection_number, start, end = self.get_period(projections, countryiso3)
-            sum = 0
             projection_mapping = projection_mappings[projection_number]
-            for phase in self.phases:
-                population = country_data[
-                    f"phase{phase}_population{projection_mapping}"
-                ]
-                sum += population
-            national_p3plus[countryiso3] = sum
             admin1_areas = country_data.get("groups", country_data.get("areas"))
             if admin1_areas:
                 for admin1_area in admin1_areas:

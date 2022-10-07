@@ -15,7 +15,6 @@ class BaseIPC(BaseScraper, ABC):
             name,
             datasetinfo,
             {
-                "national": ((p3plus_header,), (p3plus_hxltag,)),
                 "adminone": ((p3plus_header,), (p3plus_hxltag,)),
                 "admintwo": ((p3plus_header,), (p3plus_hxltag,)),
             },
