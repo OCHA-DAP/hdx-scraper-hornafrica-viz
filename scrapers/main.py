@@ -98,7 +98,7 @@ def get_indicators(
         configuration["affected_targeted_reached"], today, adminone, admintwo
     )
 
-    runner.add_customs((ipc, ipc_somalia, fts, iom_dtm, affectedtargetedreached))
+    runner.add_customs((ipc, fts, iom_dtm, affectedtargetedreached))
     runner.add_instance_variables(
         "iom_dtm", overrideinfo=configuration["unhcr_somalia_idps"]
     )

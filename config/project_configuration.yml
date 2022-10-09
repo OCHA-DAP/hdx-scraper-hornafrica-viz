@@ -127,6 +127,23 @@ scraper_adminone:
       - "MeanRainfallAnomaly"
     output_hxl:
       - "#climate+rainfall+anomaly"
+  ipc_somalia:
+    dataset: "somalia-acute-food-insecurity-country-data"
+    format: "csv"
+    headers: 4
+    admin:
+      - "Region"
+    input:
+      - "IPC 3"
+      - "IPC 4"
+      - "IPC 5"
+    sum:
+      - formula: "IPC 3 + IPC 4 + IPC 5"
+        mustbepopulated: False
+    output:
+      - "FoodInsecurityIPCP3+"
+    output_hxl:
+      - "#affected+food+ipc+p3plus+num"
 
 scraper_admintwo:
   population:
@@ -163,6 +180,22 @@ scraper_admintwo:
       - "MeanRainfallAnomaly"
     output_hxl:
       - "#climate+rainfall+anomaly"
+  ipc_somalia:
+    dataset: "somalia-acute-food-insecurity-country-data"
+    format: "csv"
+    headers: 4
+    admin:
+      - "District"
+    input:
+      - "IPC 3"
+      - "IPC 4"
+      - "IPC 5"
+    process:
+      - "IPC 3 + IPC 4 + IPC 5"
+    output:
+      - "FoodInsecurityIPCP3+"
+    output_hxl:
+      - "#affected+food+ipc+p3plus+num"
 
 iom_dtm:
   source: "IOM"
