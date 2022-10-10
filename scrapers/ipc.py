@@ -3,14 +3,28 @@ from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
 from hdx.location.country import Country
-from scrapers.baseipc import BaseIPC
+from hdx.scraper.base_scraper import BaseScraper
 
 logger = logging.getLogger(__name__)
 
 
-class IPC(BaseIPC):
+class IPC(BaseScraper):
     def __init__(self, datasetinfo, today, countryiso3s, adminone, admintwo):
-        super().__init__("ipc", datasetinfo, today, countryiso3s, adminone, admintwo)
+        self.phases = ["3", "4", "5"]
+        p3plus_header = "FoodInsecurityIPCP3+"
+        p3plus_hxltag = "#affected+food+ipc+p3plus+num"
+        super().__init__(
+            "ipc",
+            datasetinfo,
+            {
+                "adminone": ((p3plus_header,), (p3plus_hxltag,)),
+                "admintwo": ((p3plus_header,), (p3plus_hxltag,)),
+            },
+        )
+        self.today = today
+        self.countryiso3s = countryiso3s
+        self.adminone = adminone
+        self.admintwo = admintwo
 
     def get_period(self, projections, countryiso3):
         if self.admintwo.get_admin_level(countryiso3) == 2:

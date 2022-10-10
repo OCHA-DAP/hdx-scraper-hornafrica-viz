@@ -19,7 +19,6 @@ from .affected_targeted_reached import AffectedTargetedReached
 from .fts import FTS
 from .iom_dtm import IOMDTM
 from .ipc import IPC
-from .ipc_somalia import IPCSomalia
 from .unhcr_somalia_idps import idps_post_run
 from .utilities.sources import custom_sources
 
@@ -91,14 +90,13 @@ def get_indicators(
             configuration[f"scraper{suffix}"], level, adminlevel=adminone, suffix=suffix
         )
     ipc = IPC(configuration["ipc"], today, ("ETH", "KEN"), adminone, admintwo)
-    ipc_somalia = IPCSomalia(configuration["ipc_somalia"], today, adminone, admintwo)
     fts = FTS(configuration["fts"], today, outputs, countries)
     iom_dtm = IOMDTM(configuration["iom_dtm"], today, admintwo)
     affectedtargetedreached = AffectedTargetedReached(
         configuration["affected_targeted_reached"], today, adminone, admintwo
     )
 
-    runner.add_customs((ipc, ipc_somalia, fts, iom_dtm, affectedtargetedreached))
+    runner.add_customs((ipc, fts, iom_dtm, affectedtargetedreached))
     runner.add_instance_variables(
         "iom_dtm", overrideinfo=configuration["unhcr_somalia_idps"]
     )
