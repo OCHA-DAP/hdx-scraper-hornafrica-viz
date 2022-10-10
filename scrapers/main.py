@@ -17,9 +17,8 @@ from hdx.scraper.utilities.fallbacks import Fallbacks
 
 from .affected_targeted_reached import AffectedTargetedReached
 from .fts import FTS
-from .iom_dtm import IOMDTM
+from .idps import IDPs
 from .ipc import IPC
-from .unhcr_somalia_idps import idps_post_run
 from .utilities.sources import custom_sources
 
 logger = logging.getLogger(__name__)
@@ -91,16 +90,12 @@ def get_indicators(
         )
     ipc = IPC(configuration["ipc"], today, ("ETH", "KEN"), adminone, admintwo)
     fts = FTS(configuration["fts"], today, outputs, countries)
-    iom_dtm = IOMDTM(configuration["iom_dtm"], today, admintwo)
+    idps = IDPs(configuration["idps"], today, ("ETH", "KEN"), admintwo)
     affectedtargetedreached = AffectedTargetedReached(
         configuration["affected_targeted_reached"], today, adminone, admintwo
     )
 
-    runner.add_customs((ipc, fts, iom_dtm, affectedtargetedreached))
-    runner.add_instance_variables(
-        "iom_dtm", overrideinfo=configuration["unhcr_somalia_idps"]
-    )
-    runner.add_post_run("iom_dtm", idps_post_run)
+    runner.add_customs((ipc, fts, idps, affectedtargetedreached))
     runner.add_aggregators(
         True,
         configuration["aggregate_regional"],

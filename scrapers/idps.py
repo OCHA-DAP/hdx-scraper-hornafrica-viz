@@ -6,15 +6,15 @@ from hdx.utilities.dictandlist import dict_of_lists_add
 logger = logging.getLogger(__name__)
 
 
-class IOMDTM(BaseScraper):
-    def __init__(self, datasetinfo, today, admintwo):
-        self.hxltag = "#affected+idps+ind"
+class IDPs(BaseScraper):
+    def __init__(self, datasetinfo, today, countryiso3s, admintwo):
         super().__init__(
-            "iom_dtm",
+            "idps",
             datasetinfo,
-            {"admintwo": (("IDPs",), (self.hxltag,))},
+            {"admintwo": (("IDPs",), ("#affected+idps+ind",))},
         )
         self.today = today
+        self.countryiso3s = countryiso3s
         self.admintwo = admintwo
 
     def run(self) -> None:
@@ -27,6 +27,8 @@ class IOMDTM(BaseScraper):
         idpsdict = dict()
         for ds_row in rows:
             countryiso3 = ds_row["Country ISO"]
+            if countryiso3 not in self.countryiso3s:
+                continue
             dataset_name = ds_row["Dataset Name"]
             if not dataset_name:
                 logger.warning(f"No IOM DTM data for {countryiso3}.")
@@ -49,14 +51,14 @@ class IOMDTM(BaseScraper):
                     adm2name = row.get(admname)
                     if adm2name:
                         pcode, _ = self.admintwo.get_pcode(
-                            countryiso3, adm2name, "iom_dtm"
+                            countryiso3, adm2name, "idps"
                         )
                 if not pcode:
                     location = row.get("#loc")
                     if location:
                         location = location.split(">")[-1]
                         pcode, _ = self.admintwo.get_pcode(
-                            countryiso3, location, "iom_dtm"
+                            countryiso3, location, "idps"
                         )
                 if pcode:
                     pcode = pcode.strip().upper()

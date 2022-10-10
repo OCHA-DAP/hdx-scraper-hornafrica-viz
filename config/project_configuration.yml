@@ -210,8 +210,27 @@ scraper_admintwo:
       - "FoodInsecurityIPCP3+"
     output_hxl:
       - "#affected+food+ipc+p3plus+num"
+  idps_somalia:
+    dataset: "somalia-internally-displaced-persons-idps"
+    format: "xlsx"
+    filter_cols:
+      - "Reason"
+      - "Year"
+    prefilter: "'drought' in Reason.lower() and Year in (self.source_date.year - 1, self.source_date.year)"
+    admin:
+      - value: "SOM"
+      - "Current (Arrival) District"
+    input:
+      - "Number of Individuals"
+    sum:
+      - formula: "int(Number of Individuals)"
+        mustbepopulated: True
+    output:
+      - "IDPs"
+    output_hxl:
+      - "#affected+idps+ind"
 
-iom_dtm:
+idps:
   source: "IOM"
   url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR1SwDBdPjnlzQBZpSzkIlxkWcCyyP9y66tdVmKV3ytSUGpJzYNjn3xz4_bFWAoe1v-AItEqKlMucxr/pub?gid=0&single=true&output=csv"
 
@@ -574,6 +593,8 @@ admin2:
 
   admin_name_mappings:
     "Baidoa": "SO2401"
+    "Badhan": "SO1503"
+    "Dhahar": "SO1503"
 
   admin_name_replacements:
     " urban": ""
