@@ -1,0 +1,89 @@
+Region,Region p-code,Zone,Zone p-code,Woreda,Woreda p-code,IDP estimates
+,,,,,#adm3+code,#affected+idps+ind
+Afar,ET02,Awsi /Zone 1,ET0201,Elidar,ET020102,1206
+Afar,ET02,Awsi /Zone 1,ET0201,Kori,ET020108,245
+Afar,ET02,Fanti /Zone 4,ET0204,Teru,ET020403,185
+Afar,ET02,Gabi /Zone 3,ET0203,Hanruka,ET020307,1560
+Afar,ET02,Hari /Zone 5,ET0205,Dalefage,ET020504,619
+Afar,ET02,Hari /Zone 5,ET0205,Hadelela,ET020505,1806
+Afar,ET02,Kilbati /Zone2,ET0202,Afdera,ET020207,717
+Oromia,ET04,Borena,ET0412,Elwaya,ET041295,1480
+Oromia,ET04,Borena,ET0412,Yabelo,ET041207,1905
+Oromia,ET04,Borena,ET0412,Dubluk,ET041291,2185
+Oromia,ET04,East Bale,ET0421,Ginir,ET042103,4784
+Oromia,ET04,East Bale,ET0421,Gololcha Bale,ET042101,5765
+Oromia,ET04,East Bale,ET0421,Lege Hida,ET042102,3372
+Oromia,ET04,East Bale,ET0421,Rayitu,ET042104,3260
+Oromia,ET04,East Bale,ET0421,Dawe Serer,ET042199,23822
+Oromia,ET04,East Hararge,ET0410,Haro Maya,ET041006,1
+Oromia,ET04,Guji,ET0414,Gora Dola,ET041413,18683
+Oromia,ET04,Guji,ET0414,Liben,ET041407,21066
+Oromia,ET04,Jimma,ET0404,Botor Tolay,ET040495,234
+Oromia,ET04,Kelem Wellega,ET0418,Denbi Dollo town,ET041806,995
+Oromia,ET04,West Guji,ET0415,Bule Hora,ET041501,1050
+Oromia,ET04,West Guji,ET0415,Dugda Dawa,ET041515,73620
+Oromia,ET04,West Guji,ET0415,Gelana (West Guji),ET041517,631
+Somali,ET05,Afder,ET0508,Barey,ET050807,13870
+Somali,ET05,Afder,ET0508,Charati,ET050802,1
+Somali,ET05,Afder,ET0508,Dolobay,ET050808,5832
+Somali,ET05,Afder,ET0508,God-God,ET050899,1671
+Somali,ET05,Afder,ET0508,Hargele,ET050806,7167
+Somali,ET05,Afder,ET0508,Kohle /Qoxle,ET050898,383
+Somali,ET05,Daawa,ET0511,Hudet,ET051104,2928
+Somali,ET05,Daawa,ET0511,Moyale (SM),ET051103,17727
+Somali,ET05,Daawa,ET0511,Mubarek,ET051187,7651
+Somali,ET05,Doolo,ET0507,Bokh,ET050702,1343
+Somali,ET05,Doolo,ET0507,Danod,ET050701,2851
+Somali,ET05,Doolo,ET0507,Daratole,ET050788,130
+Somali,ET05,Doolo,ET0507,Galadi,ET050703,1752
+Somali,ET05,Doolo,ET0507,Galhamur,ET050799,180
+Somali,ET05,Doolo,ET0507,Lehel-Yucub,ET050798,278
+Somali,ET05,Doolo,ET0507,Warder,ET050704,617
+Somali,ET05,Erer,ET0504,Lagahida,ET050407,790
+Somali,ET05,Erer,ET0504,Qubi,ET050497,1257
+Somali,ET05,Fafan,ET0502,Goljano,ET050290,2214
+Somali,ET05,Fafan,ET0502,Harshin,ET050207,59
+Somali,ET05,Fafan,ET0502,Kebribeyah,ET050206,180
+Somali,ET05,Jarar,ET0503,Aware,ET050303,300
+Somali,ET05,Jarar,ET0503,Bilcil-Bur,ET050306,336
+Somali,ET05,Jarar,ET0503,Daror,ET050392,366
+Somali,ET05,Jarar,ET0503,Degehabur,ET050302,2817
+Somali,ET05,Jarar,ET0503,Dig,ET050399,119
+Somali,ET05,Jarar,ET0503,Gashamo,ET050304,379
+Somali,ET05,Jarar,ET0503,Gunagado,ET050305,179
+Somali,ET05,Korahe,ET0505,Debeweyin,ET050504,2104
+Somali,ET05,Korahe,ET0505,El-Ogaden,ET050598,305
+Somali,ET05,Korahe,ET0505,Goglo,ET050595,391
+Somali,ET05,Korahe,ET0505,Higloley,ET050597,96
+Somali,ET05,Korahe,ET0505,Kebridehar,ET050502,2451
+Somali,ET05,Korahe,ET0505,Lasdhankayre,ET050596,2236
+Somali,ET05,Korahe,ET0505,Marsin,ET050586,151
+Somali,ET05,Korahe,ET0505,Shaygosh,ET050501,1200
+Somali,ET05,Korahe,ET0505,Shilabo,ET050503,321
+Somali,ET05,Liban,ET0509,Bokolmayo,ET050999,1680
+Somali,ET05,Liban,ET0509,Dolo Ado,ET050902,655
+Somali,ET05,Liban,ET0509,Filtu,ET050901,1818
+Somali,ET05,Liban,ET0509,Goro Baqaqsa,ET050903,10524
+Somali,ET05,Liban,ET0509,Guradamole,ET050904,5796
+Somali,ET05,Nogob,ET0510,Ayun,ET051001,1800
+Somali,ET05,Nogob,ET0510,Dihun,ET051006,1502
+Somali,ET05,Nogob,ET0510,Elwayne,ET051002,11
+Somali,ET05,Nogob,ET0510,Garbo,ET051003,2429
+Somali,ET05,Nogob,ET0510,Hararey,ET051096,3150
+Somali,ET05,Nogob,ET0510,Horshagah,ET051095,5082
+Somali,ET05,Nogob,ET0510,Sagag,ET051005,313
+Somali,ET05,Shabelle,ET0506,Aba-Korow,ET050699,647
+Somali,ET05,Shabelle,ET0506,Adadle,ET050602,24188
+Somali,ET05,Shabelle,ET0506,Berocano,ET050608,197
+Somali,ET05,Shabelle,ET0506,Danan,ET050603,9470
+Somali,ET05,Shabelle,ET0506,East Imi,ET050601,7700
+Somali,ET05,Shabelle,ET0506,Elale,ET050698,51
+Somali,ET05,Shabelle,ET0506,Gode,ET050604,8508
+Somali,ET05,Shabelle,ET0506,Kelafo,ET050605,5136
+Somali,ET05,Siti,ET0501,Afdem,ET050105,475
+Somali,ET05,Siti,ET0501,Erer (SM),ET050104,0
+Somali,ET05,Siti,ET0501,Gablalu,ET050199,68
+Somali,ET05,Siti,ET0501,Gota-Biki,ET050198,24
+Somali,ET05,Siti,ET0501,Hadhagala,ET050106,20
+Somali,ET05,Siti,ET0501,Miesso,ET050107,1102
+Somali,ET05,Siti,ET0501,Shinile,ET050103,440

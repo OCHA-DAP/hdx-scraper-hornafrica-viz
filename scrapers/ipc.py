@@ -27,7 +27,7 @@ class IPC(BaseScraper):
         self.admintwo = admintwo
 
     def get_period(self, projections, countryiso3):
-        if self.admintwo.get_admin_level(countryiso3) == 2:
+        if self.admintwo.get_admin_level(countryiso3) > 1:
             projection_number = 0
             projection = projections[projection_number]
             start = datetime.strptime(projection[0:8], "%b %Y").date()
@@ -114,7 +114,7 @@ class IPC(BaseScraper):
                         else:
                             admintwo_p3plus[pcode] = sum
                     admin2_areas = admin1_area.get("areas")
-                    if admin2_areas:
+                    if admin2_areas and self.admintwo.get_admin_level(countryiso3) < 3:
                         for admin2_area in admin2_areas:
                             pcode, _ = self.admintwo.get_pcode(
                                 countryiso3, admin2_area["name"], "IPC"

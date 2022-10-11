@@ -17,7 +17,6 @@ from hdx.scraper.utilities.fallbacks import Fallbacks
 
 from .affected_targeted_reached import AffectedTargetedReached
 from .fts import FTS
-from .idps import IDPs
 from .ipc import IPC
 from .utilities.sources import custom_sources
 
@@ -48,20 +47,27 @@ def get_indicators(
     configuration["countries_fuzzy_try"] = countries
     adminone = AdminLevel(configuration["admin1"])
     admintwo = AdminLevel(
-        configuration["admin2"], admin_level=2, admin_level_overrides={"KEN": 1}
+        configuration["admin2"], admin_level=2, admin_level_overrides={"ETH": 3, "KEN": 1}
     )
     if fallbacks_root is not None:
         fallbacks_path = join(fallbacks_root, configuration["json"]["output"])
         levels_mapping = {
             "regional": "regional_data",
             "national": "national_data",
-            #            "adminone": "adminone_data",
-            #            "admintwo": "admintwo_data",
+            "adminone": "adminone_data",
+            "admintwo": "admintwo_data",
+        }
+        admin_name_mapping = {
+            "regional": "value",
+            "national": "#country+code",
+            "adminone": "#adm1+code",
+            "admintwo": "#adm2+code",
         }
         Fallbacks.add(
             fallbacks_path,
             levels_mapping=levels_mapping,
             sources_key="sources_data",
+            admin_name_mapping=admin_name_mapping,
         )
     runner = Runner(
         countries,
@@ -90,12 +96,11 @@ def get_indicators(
         )
     ipc = IPC(configuration["ipc"], today, ("ETH", "KEN"), adminone, admintwo)
     fts = FTS(configuration["fts"], today, outputs, countries)
-    idps = IDPs(configuration["idps"], today, ("ETH", "KEN"), admintwo)
     affectedtargetedreached = AffectedTargetedReached(
         configuration["affected_targeted_reached"], today, adminone, admintwo
     )
 
-    runner.add_customs((ipc, fts, idps, affectedtargetedreached))
+    runner.add_customs((ipc, fts, affectedtargetedreached))
     runner.add_aggregators(
         True,
         configuration["aggregate_regional"],
