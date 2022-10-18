@@ -3,15 +3,7 @@ from os.path import join
 
 from hdx.location.adminlevel import AdminLevel
 from hdx.location.country import Country
-from hdx.scraper.outputs.update_tabs import (
-    get_toplevel_rows,
-    sources_headers,
-    update_national,
-    update_sources,
-    update_subnational,
-    update_tab,
-    update_toplevel,
-)
+from hdx.scraper.utilities.writer import Writer
 from hdx.scraper.runner import Runner
 from hdx.scraper.utilities.fallbacks import Fallbacks
 
@@ -119,20 +111,19 @@ def get_indicators(
         )
     )
 
+    writer = Writer(runner, outputs)
     if "regional" in tabs:
-        rows = get_toplevel_rows(runner, toplevel="regional")
-        update_toplevel(outputs, rows, tab="regional")
+        rows = writer.get_toplevel_rows(toplevel="regional")
+        writer.update_toplevel(rows, tab="regional")
     if "national" in tabs:
-        update_national(
-            runner,
+        writer.update_national(
             countries,
-            outputs,
         )
     if "adminone" in tabs:
-        update_subnational(runner, adminone, outputs, level="adminone", tab="adminone")
+        writer.update_subnational(adminone, level="adminone", tab="adminone")
 
     if "admintwo" in tabs:
-        update_subnational(runner, admintwo, outputs, level="admintwo", tab="admintwo")
+        writer.update_subnational(admintwo, level="admintwo", tab="admintwo")
 
     adminone.output_matches()
     adminone.output_ignored()
@@ -144,9 +135,9 @@ def get_indicators(
 
     if "sources" in tabs:
         sources = (
-            list(sources_headers)
+            list(writer.sources_headers)
             + custom_sources(configuration["custom_sources_keyfigures"])
             + custom_sources(configuration["custom_sources_other"])
         )
-        update_tab(outputs, "sources", sources)
+        writer.update("sources", sources)
     return countries
