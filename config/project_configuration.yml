@@ -151,6 +151,10 @@ scraper_adminone:
       - "FoodInsecurityIPCP3+"
     output_hxl:
       - "#affected+food+ipc+p3plus+num"
+    source_date_format:
+      start: "%b"
+      separator: "-"
+      end: "%b %Y"
 
 scraper_admintwo:
   population:
@@ -210,6 +214,10 @@ scraper_admintwo:
       - "FoodInsecurityIPCP3+"
     output_hxl:
       - "#affected+food+ipc+p3plus+num"
+    source_date_format:
+      start: "%b"
+      separator: "-"
+      end: "%b %Y"
   idps_ethiopia:
     source: ""
     url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRppQx8JTKkKRCKmzfnCMmTFEcvCpkbP9PdHs1sQTUyacmbsx8tlAXpgBLFce-lcehukreGGuXjA_4S/pub?gid=961087049&single=true&output=csv"
@@ -240,11 +248,10 @@ ipc:
   url: "https://api.ipcinfo.org"
 
 affected_targeted_reached:
-  source: "Multiple Sources (Humanitarian Partners)"
-  urls:
-    SOM: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRppQx8JTKkKRCKmzfnCMmTFEcvCpkbP9PdHs1sQTUyacmbsx8tlAXpgBLFce-lcehukreGGuXjA_4S/pub?gid=1287849586&single=true&output=csv"
-    ETH: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRppQx8JTKkKRCKmzfnCMmTFEcvCpkbP9PdHs1sQTUyacmbsx8tlAXpgBLFce-lcehukreGGuXjA_4S/pub?gid=1428130716&single=true&output=csv"
-    KEN: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRppQx8JTKkKRCKmzfnCMmTFEcvCpkbP9PdHs1sQTUyacmbsx8tlAXpgBLFce-lcehukreGGuXjA_4S/pub?gid=1774496556&single=true&output=csv"
+  datasets:
+    ETH: "ethiopia-pin-targeted-reached-by-location-and-cluster"
+    KEN: "kenya-pin-targeted-reached-by-location-and-cluster"
+    SOM: "somalia-pin-targeted-reached-by-location-and-cluster"
 
 countries:
   - ETH

@@ -3,9 +3,10 @@ from os.path import join
 
 from hdx.location.adminlevel import AdminLevel
 from hdx.location.country import Country
-from hdx.scraper.utilities.writer import Writer
 from hdx.scraper.runner import Runner
 from hdx.scraper.utilities.fallbacks import Fallbacks
+from hdx.scraper.utilities.sources import Sources
+from hdx.scraper.utilities.writer import Writer
 
 from .affected_targeted_reached import AffectedTargetedReached
 from .fts import FTS
@@ -39,7 +40,9 @@ def get_indicators(
     configuration["countries_fuzzy_try"] = countries
     adminone = AdminLevel(configuration["admin1"])
     admintwo = AdminLevel(
-        configuration["admin2"], admin_level=2, admin_level_overrides={"ETH": 3, "KEN": 1}
+        configuration["admin2"],
+        admin_level=2,
+        admin_level_overrides={"ETH": 3, "KEN": 1},
     )
     if fallbacks_root is not None:
         fallbacks_path = join(fallbacks_root, configuration["json"]["output"])
@@ -61,6 +64,7 @@ def get_indicators(
             sources_key="sources_data",
             admin_name_mapping=admin_name_mapping,
         )
+#    Sources.set_should_overwrite_sources(True)
     runner = Runner(
         countries,
         today,
@@ -68,24 +72,23 @@ def get_indicators(
         scrapers_to_run=scrapers_to_run,
     )
     configurable_scrapers = dict()
-    for level in (
-        "national",
-        "regional",
-        "adminone",
-        "admintwo",
-    ):
+
+    def create_configurable_scrapers(level, suffix_attribute=None, adminlevel=None):
         suffix = f"_{level}"
-        if level == "admintwo":
-            configurable_scrapers[level] = runner.add_configurables(
-                configuration[f"scraper{suffix}"],
-                level,
-                adminlevel=admintwo,
-                suffix=suffix,
-            )
-            continue
+        source_configuration = Sources.create_source_configuration(
+            suffix_attribute=suffix_attribute, admin_sources=True, adminlevel=adminlevel)
         configurable_scrapers[level] = runner.add_configurables(
-            configuration[f"scraper{suffix}"], level, adminlevel=adminone, suffix=suffix
+            configuration[f"scraper{suffix}"],
+            level,
+            adminlevel=adminlevel,
+            source_configuration=source_configuration,
+            suffix=suffix,
         )
+
+    create_configurable_scrapers("regional", suffix_attribute="regional")
+    create_configurable_scrapers("national")
+    create_configurable_scrapers("adminone", adminlevel=adminone)
+    create_configurable_scrapers("admintwo", adminlevel=admintwo)
     ipc = IPC(configuration["ipc"], today, ("ETH", "KEN"), adminone, admintwo)
     fts = FTS(configuration["fts"], today, outputs, countries)
     affectedtargetedreached = AffectedTargetedReached(
@@ -134,10 +137,11 @@ def get_indicators(
     admintwo.output_errors()
 
     if "sources" in tabs:
-        sources = (
-            list(writer.sources_headers)
-            + custom_sources(configuration["custom_sources_keyfigures"])
-            + custom_sources(configuration["custom_sources_other"])
-        )
-        writer.update("sources", sources)
+        # sources = (
+        #     list(writer.sources_headers)
+        #     + custom_sources(configuration["custom_sources_keyfigures"])
+        #     + custom_sources(configuration["custom_sources_other"])
+        # )
+        # writer.update("sources", sources)
+        writer.update_sources()
     return countries
