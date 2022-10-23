@@ -77,6 +77,16 @@ aggregate_regional:
     output: "PercentFunded"
     action: "eval"
     formula: "get_fraction_str(#value+funding+total+usd, #value+funding+required+usd) if #value+funding+total+usd is not None and #value+funding+required+usd is not None else ''"
+  "#value+funding+hrp+required+usd":
+    output: "RequiredFunding"
+    action: "sum"
+  "#value+funding+hrp+total+usd":
+    output: "Funding"
+    action: "sum"
+  "#value+funding+hrp+pct":
+    output: "PercentFunded"
+    action: "eval"
+    formula: "get_fraction_str(#value+funding+total+usd, #value+funding+required+usd) if #value+funding+total+usd is not None and #value+funding+required+usd is not None else ''"
   "#affected+food+ipc+p3plus+num":
     action: "sum"
   "#affected+sam":
