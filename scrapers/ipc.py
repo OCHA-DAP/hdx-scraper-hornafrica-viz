@@ -4,6 +4,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from hdx.location.country import Country
 from hdx.scraper.base_scraper import BaseScraper
+from hdx.scraper.utilities.sources import Sources
 
 logger = logging.getLogger(__name__)
 
@@ -20,6 +21,9 @@ class IPC(BaseScraper):
                 "adminone": ((p3plus_header,), (p3plus_hxltag,)),
                 "admintwo": ((p3plus_header,), (p3plus_hxltag,)),
             },
+            source_configuration=Sources.create_source_configuration(
+                adminlevel=(adminone, admintwo)
+            ),
         )
         self.today = today
         self.countryiso3s = countryiso3s
