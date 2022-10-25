@@ -7,6 +7,7 @@ from hdx.scraper.utilities.writer import Writer
 from hdx.scraper.runner import Runner
 from hdx.scraper.utilities.fallbacks import Fallbacks
 
+from .acled import ACLED
 from .affected_targeted_reached import AffectedTargetedReached
 from .fts import FTS
 from .ipc import IPC
@@ -91,8 +92,9 @@ def get_indicators(
     affectedtargetedreached = AffectedTargetedReached(
         configuration["affected_targeted_reached"], today, adminone, admintwo
     )
+    acled = ACLED(configuration["acled"], today, (231, 404, 706), outputs, admintwo)
 
-    runner.add_customs((ipc, fts, affectedtargetedreached))
+    runner.add_customs((ipc, fts, affectedtargetedreached, acled))
     runner.add_aggregators(
         True,
         configuration["aggregate_regional"],

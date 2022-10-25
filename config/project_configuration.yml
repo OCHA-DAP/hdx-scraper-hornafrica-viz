@@ -3,6 +3,7 @@ tabs:
   national: "NationalData"
   adminone: "AdminOneData"
   admintwo: "AdminTwoData"
+  fatalities: "Fatalities"
   sources: "Sources"
 
 
@@ -245,6 +246,12 @@ affected_targeted_reached:
     SOM: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRppQx8JTKkKRCKmzfnCMmTFEcvCpkbP9PdHs1sQTUyacmbsx8tlAXpgBLFce-lcehukreGGuXjA_4S/pub?gid=1287849586&single=true&output=csv"
     ETH: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRppQx8JTKkKRCKmzfnCMmTFEcvCpkbP9PdHs1sQTUyacmbsx8tlAXpgBLFce-lcehukreGGuXjA_4S/pub?gid=1428130716&single=true&output=csv"
     KEN: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRppQx8JTKkKRCKmzfnCMmTFEcvCpkbP9PdHs1sQTUyacmbsx8tlAXpgBLFce-lcehukreGGuXjA_4S/pub?gid=1774496556&single=true&output=csv"
+
+acled:
+  source: "ACLED"
+  source_url: "https://acleddata.com/"
+  url: "https://api.acleddata.com/acled/read.csv?iso=%d&year=%d&limit=0"
+  start_date: "2022-01-01"
 
 countries:
   - ETH
