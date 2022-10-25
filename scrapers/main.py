@@ -3,9 +3,9 @@ from os.path import join
 
 from hdx.location.adminlevel import AdminLevel
 from hdx.location.country import Country
-from hdx.scraper.utilities.writer import Writer
 from hdx.scraper.runner import Runner
 from hdx.scraper.utilities.fallbacks import Fallbacks
+from hdx.scraper.utilities.writer import Writer
 
 from .acled import ACLED
 from .affected_targeted_reached import AffectedTargetedReached
@@ -40,7 +40,9 @@ def get_indicators(
     configuration["countries_fuzzy_try"] = countries
     adminone = AdminLevel(configuration["admin1"])
     admintwo = AdminLevel(
-        configuration["admin2"], admin_level=2, admin_level_overrides={"ETH": 3, "KEN": 1}
+        configuration["admin2"],
+        admin_level=2,
+        admin_level_overrides={"ETH": 3, "KEN": 1},
     )
     if fallbacks_root is not None:
         fallbacks_path = join(fallbacks_root, configuration["json"]["output"])
