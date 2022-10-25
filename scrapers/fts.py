@@ -15,45 +15,21 @@ class FTSException(Exception):
 
 class FTS(BaseScraper):
     def __init__(self, datasetinfo, today, outputs, countryiso3s):
-        base_hxltags = [
-            "#value+funding+hrp+required+usd",
-            "#value+funding+hrp+total+usd",
-            "#value+funding+hrp+pct",
-        ]
-        national_hxltags = base_hxltags + [
-            "#value+covid+funding+hrp+total+usd",
-            "#value+funding+other+plan_name",
-            "#value+funding+other+required+usd",
-            "#value+funding+other+total+usd",
-            "#value+funding+other+pct",
-        ]
-        self.reg_reqfund_hxltags = {
-            "Plan Name": "#value+funding+regional+plan_name",
-            "Requirements": "#value+funding+regional+required+usd",
-            "Funding": "#value+funding+regional+total+usd",
-            "PercentFunded": "#value+funding+regional+pct",
-        }
-
         super().__init__(
             "fts",
             datasetinfo,
             {
                 "national": (
                     (
-                        "RequiredHRPFunding",
-                        "HRPFunding",
-                        "HRPPercentFunded",
-                        "HRPCovidFunding",
-                        "OtherPlans",
-                        "RequiredOtherPlansFunding",
-                        "OtherPlansFunding",
-                        "OtherPlansPercentFunded",
+                        "RequiredFunding",
+                        "Funding",
+                        "PercentFunded",
                     ),
-                    tuple(national_hxltags),
-                ),
-                "global": (
-                    ("RequiredFunding", "Funding", "PercentFunded"),
-                    tuple(base_hxltags),
+                    (
+                        "#value+funding+required+usd",
+                        "#value+funding+total+usd",
+                        "#value+funding+pct",
+                    ),
                 ),
             },
         )
@@ -70,18 +46,6 @@ class FTS(BaseScraper):
 
     def download_data(self, url, reader):
         return self.download(url, reader)["data"]
-
-    def get_covid_funding(self, plan_id, plan_name, fundingobjects):
-        if len(fundingobjects) != 0:
-            objectsbreakdown = fundingobjects[0].get("objectsBreakdown")
-            if objectsbreakdown:
-                for fundobj in objectsbreakdown:
-                    fund_id = fundobj.get("id")
-                    fund = fundobj["totalFunding"]
-                    if fund_id and fund_id == plan_id:
-                        logger.info(f"{plan_name}: Funding={fund}")
-                        return fund
-        return None
 
     def get_requirements_and_funding_location(
         self, base_url, plan, countryid_iso3mapping, reader
@@ -129,76 +93,23 @@ class FTS(BaseScraper):
                     allfunds[countryiso] = fundobj["totalFunding"]
         return allreqs, allfunds
 
-    @staticmethod
-    def map_planname(origname):
-        name = None
-        origname_simplified = origname.replace("  ", " ")
-        origname_simplified = re.sub(
-            r"\d\d\d\d(-\d\d\d\d)?", "", origname_simplified
-        )  # strip date
-        origname_simplified = re.sub(
-            r"[\(\[].*?[\)\]]", "", origname_simplified
-        )  # strip stuff in brackets
-        origname_simplified = origname_simplified.strip()
-        origname_lower = origname_simplified.lower()
-        regional_strings = ["regional", "refugee", "migrant"]
-        if any(x in origname_lower for x in regional_strings):
-            location = None
-            try:
-                for_index = origname_lower.index(" for ")
-                location = origname_simplified[for_index + 5 :]
-                location = location.replace("the", "").strip()
-            except ValueError:
-                non_location_index = earliest_index(origname_lower, regional_strings)
-                if non_location_index:
-                    location = origname_simplified[: non_location_index - 1]
-            if location:
-                name = f"{location} Regional"
-        if not name:
-            name = multiple_replace(
-                origname_simplified,
-                {
-                    "Plan": "",
-                    "Intersectoral": "",
-                    "Joint": "",
-                    "Flash Appeal": "Appeal",
-                    "Emergency Response": "Emergency",
-                },
-            )
-            name = name.strip()
-        if origname == name:
-            logger.info(f'Plan name "{name}" not simplified')
-        else:
-            logger.info(f'Plan name "{name}" simplified from "{origname}"')
-        return name
-
     def run(self) -> None:
         (
-            hrp_requirements,
-            hrp_funding,
-            hrp_percentage,
-            hrp_covid_funding,
-            other_planname,
-            other_requirements,
-            other_funding,
-            other_percentage,
+            requirements_values,
+            funding_values,
+            percent_values,
         ) = self.get_values("national")
 
-        def add_other_requirements_and_funding(iso3, name, req, fund, pct):
-            dict_of_lists_add(other_planname, iso3, name)
-            if req:
-                dict_of_lists_add(other_requirements, iso3, req)
-                if fund:
-                    dict_of_lists_add(other_percentage, iso3, pct)
-                else:
-                    dict_of_lists_add(other_percentage, iso3, None)
-            else:
-                dict_of_lists_add(other_requirements, iso3, None)
-                dict_of_lists_add(other_percentage, iso3, None)
-            if fund:
-                dict_of_lists_add(other_funding, iso3, fund)
-            else:
-                dict_of_lists_add(other_funding, iso3, None)
+        plantype_values = dict()
+
+        def set_values(
+            plan_type_value, requirements_value, funding_value, percent_value
+        ):
+            plantype_values[countryiso] = plan_type_value
+            requirements_values[countryiso] = requirements_value
+            if allfund:
+                funding_values[countryiso] = funding_value
+                percent_values[countryiso] = percent_value
 
         base_url = self.datasetinfo["url"]
         reader = self.get_reader(self.name)
@@ -206,20 +117,7 @@ class FTS(BaseScraper):
         url = f"{base_url}2/fts/flow/plan/overview/progress/{curdate.year}"
         data = self.download_data(url, reader)
         plans = data["plans"]
-        plan_ids = ",".join([str(plan["id"]) for plan in plans])
-        url = f"{base_url}1/fts/flow/custom-search?emergencyid=911&planid={plan_ids}&groupby=plan"
-        funding_data = self.download_data(url, reader)
-        fundingtotals = funding_data["report3"]["fundingTotals"]
-        fundingobjects = fundingtotals["objects"]
-        reg_reqfund_output = [
-            list(self.reg_reqfund_hxltags.keys()),
-            list(self.reg_reqfund_hxltags.values()),
-        ]
         for plan in plans:
-            plan_id = str(plan["id"])
-            if plan_id == "1071":  #  Ignore South Sudan Regional Response Plan:
-                continue
-            plan_name = plan["name"]
             allreq = plan["requirements"]["revisedRequirements"]
             funding = plan.get("funding")
             if funding:
@@ -230,6 +128,7 @@ class FTS(BaseScraper):
                 allpct = None
             if plan.get("customLocationCode") == "COVD":
                 continue
+            plan_type = plan["planType"]["name"].lower()
 
             countries = plan["countries"]
             countryid_iso3mapping = dict()
@@ -244,74 +143,39 @@ class FTS(BaseScraper):
                 countryiso = countryid_iso3mapping.popitem()[1]
                 if not countryiso or countryiso not in self.countryiso3s:
                     continue
-                plan_type = plan["planType"]["name"].lower()
-                if plan_type == "humanitarian response plan":
-                    if allreq:
-                        hrp_requirements[countryiso] = allreq
-                    else:
-                        hrp_requirements[countryiso] = None
-                    if allfund and allreq:
-                        hrp_funding[countryiso] = allfund
-                        hrp_percentage[countryiso] = allpct
-                    covidfund = self.get_covid_funding(
-                        plan_id, plan_name, fundingobjects
-                    )
-                    if covidfund is not None:
-                        hrp_covid_funding[countryiso] = covidfund
-                else:
-                    plan_name = self.map_planname(plan_name)
-                    add_other_requirements_and_funding(
-                        countryiso, plan_name, allreq, allfund, allpct
-                    )
-                    if plan_type == "regional response plan":
-                        reg_reqfund_output.append([plan_name, allreq, allfund, allpct])
+                plantype_value = plantype_values.get(countryiso)
+                if plantype_value == "humanitarian response plan":
+                    continue
+                if allreq:
+                    if (
+                        plan_type == "humanitarian response plan"
+                        or requirements_values.get(countryiso) is None
+                        or plantype_value == "regional response plan"
+                    ):
+                        set_values(plan_type, allreq, allfund, allpct)
             else:
                 allreqs, allfunds = self.get_requirements_and_funding_location(
                     base_url, plan, countryid_iso3mapping, reader
                 )
-                plan_name = self.map_planname(plan_name)
-                reg_reqfund_output.append([plan_name, allreq, allfund, allpct])
                 for countryiso in allfunds:
+                    plantype_value = plantype_values.get(countryiso)
+                    if plantype_value in ("humanitarian response plan", "flash appeal"):
+                        continue
                     allfund = allfunds[countryiso]
                     allreq = allreqs.get(countryiso)
                     if allreq:
                         allpct = get_fraction_str(allfund, allreq)
                     else:
                         allpct = None
-                    add_other_requirements_and_funding(
-                        countryiso, plan_name, allreq, allfund, allpct
-                    )
+                    if requirements_values.get(countryiso) is None and allreq:
+                        set_values(plan_type, allreq, allfund, allpct)
                 for countryiso in allreqs:
                     if countryiso in allfunds:
                         continue
-                    add_other_requirements_and_funding(
-                        countryiso, plan_name, allreqs[countryiso], None, None
-                    )
+                    plantype_value = plantype_values.get(countryiso)
+                    if plantype_value in ("humanitarian response plan", "flash appeal"):
+                        continue
+                    if requirements_values.get(countryiso) is None and allreq:
+                        set_values(plan_type, allreqs[countryiso], None, None)
 
-        def create_output(vallist):
-            strings = list()
-            for val in vallist:
-                if val is None:
-                    strings.append("")
-                else:
-                    strings.append(str(val))
-            return "|".join(strings)
-
-        for countryiso in other_planname:
-            other_planname[countryiso] = create_output(other_planname[countryiso])
-            other_requirements[countryiso] = create_output(
-                other_requirements[countryiso]
-            )
-            other_funding[countryiso] = create_output(other_funding[countryiso])
-            other_percentage[countryiso] = create_output(other_percentage[countryiso])
-        total_allreq = data["totals"]["revisedRequirements"]
-        total_allfund = data["totals"]["totalFunding"]
-        total_allpercent = get_fraction_str(data["totals"]["progress"], 100)
-        global_values = self.get_values("global")
-        global_values[0]["value"] = total_allreq
-        global_values[1]["value"] = total_allfund
-        global_values[2]["value"] = total_allpercent
-        tabname = "regional_reqfund"
-        for output in self.outputs.values():
-            output.update_tab(tabname, reg_reqfund_output)
         self.datasetinfo["source_date"] = self.today
