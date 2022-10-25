@@ -138,8 +138,8 @@ def get_indicators(
     if "sources" in tabs:
         sources = (
             list(writer.sources_headers)
-            + custom_sources(configuration["custom_sources_keyfigures"])
-            + custom_sources(configuration["custom_sources_other"])
+            + custom_sources(configuration["custom_sources_keyfigures"], today)
+            + custom_sources(configuration["custom_sources_other"], today)
         )
         writer.update("sources", sources)
     return countries

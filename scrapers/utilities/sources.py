@@ -4,7 +4,7 @@ from hdx.scraper.utilities.reader import Read
 from hxl import InputOptions
 
 
-def custom_sources(configuration):
+def custom_sources(configuration, today):
     reader = Read.get_reader("hdx")
     path = reader.download_file(configuration["url"], file_prefix="custom_sources")
     data = hxl.data(path, InputOptions(allow_local=True)).cache()
@@ -25,6 +25,8 @@ def custom_sources(configuration):
                 continue
             hxltag = f"{base_hxltag}+{countryiso3.lower()}"
         date = row.get("#date")
+        if not date:
+            date = today.strftime("%b %d, %Y")
         source_url = row.get("#meta+url")
         sources.append((hxltag, date, source, source_url))
     return sources
