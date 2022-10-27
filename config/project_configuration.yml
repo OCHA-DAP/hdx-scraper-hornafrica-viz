@@ -3,6 +3,7 @@ tabs:
   national: "NationalData"
   adminone: "AdminOneData"
   admintwo: "AdminTwoData"
+  fatalities: "Fatalities"
   sources: "Sources"
 
 
@@ -263,6 +264,12 @@ affected_targeted_reached:
     ETH: "ethiopia-pin-targeted-reached-by-location-and-cluster"
     KEN: "kenya-pin-targeted-reached-by-location-and-cluster"
     SOM: "somalia-pin-targeted-reached-by-location-and-cluster"
+
+acled:
+  source: "ACLED"
+  source_url: "https://acleddata.com/"
+  url: "https://api.acleddata.com/acled/read.csv?iso=%d&year=%d&limit=0"
+  start_date: "2022-01-01"
 
 countries:
   - ETH
