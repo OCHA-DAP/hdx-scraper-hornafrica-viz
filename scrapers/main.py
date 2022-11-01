@@ -5,6 +5,7 @@ from hdx.location.adminlevel import AdminLevel
 from hdx.location.country import Country
 from hdx.scraper.runner import Runner
 from hdx.scraper.utilities.fallbacks import Fallbacks
+from hdx.scraper.utilities.sources import Sources
 from hdx.scraper.utilities.writer import Writer
 
 from .acled import ACLED
@@ -71,24 +72,25 @@ def get_indicators(
         scrapers_to_run=scrapers_to_run,
     )
     configurable_scrapers = dict()
-    for level in (
-        "national",
-        "regional",
-        "adminone",
-        "admintwo",
-    ):
+
+    def create_configurable_scrapers(level, suffix_attribute=None, adminlevel=None):
         suffix = f"_{level}"
-        if level == "admintwo":
-            configurable_scrapers[level] = runner.add_configurables(
-                configuration[f"scraper{suffix}"],
-                level,
-                adminlevel=admintwo,
-                suffix=suffix,
-            )
-            continue
-        configurable_scrapers[level] = runner.add_configurables(
-            configuration[f"scraper{suffix}"], level, adminlevel=adminone, suffix=suffix
+        source_configuration = Sources.create_source_configuration(
+            suffix_attribute=suffix_attribute, admin_sources=True, adminlevel=adminlevel
         )
+        configurable_scrapers[level] = runner.add_configurables(
+            configuration[f"scraper{suffix}"],
+            level,
+            adminlevel=adminlevel,
+            source_configuration=source_configuration,
+            suffix=suffix,
+        )
+
+    create_configurable_scrapers("regional", suffix_attribute="regional")
+    create_configurable_scrapers("national")
+    create_configurable_scrapers("adminone", adminlevel=adminone)
+    create_configurable_scrapers("admintwo", adminlevel=admintwo)
+
     ipc = IPC(configuration["ipc"], today, ("ETH", "KEN"), adminone, admintwo)
     fts = FTS(configuration["fts"], today, outputs, countries)
     affectedtargetedreached = AffectedTargetedReached(
@@ -144,4 +146,5 @@ def get_indicators(
             + custom_sources(configuration["custom_sources_other"], today)
         )
         writer.update("sources", sources)
+#        writer.update_sources()
     return countries

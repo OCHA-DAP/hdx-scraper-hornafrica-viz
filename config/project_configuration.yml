@@ -159,6 +159,10 @@ scraper_adminone:
       - "FoodInsecurityIPCP3+"
     output_hxl:
       - "#affected+food+ipc+p3plus+num"
+    source_date_format:
+      start: "%b"
+      separator: "-"
+      end: "%b %Y"
 
 scraper_admintwo:
   population:
@@ -218,6 +222,10 @@ scraper_admintwo:
       - "FoodInsecurityIPCP3+"
     output_hxl:
       - "#affected+food+ipc+p3plus+num"
+    source_date_format:
+      start: "%b"
+      separator: "-"
+      end: "%b %Y"
   idps_ethiopia:
     source: ""
     url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRppQx8JTKkKRCKmzfnCMmTFEcvCpkbP9PdHs1sQTUyacmbsx8tlAXpgBLFce-lcehukreGGuXjA_4S/pub?gid=961087049&single=true&output=csv"
@@ -246,6 +254,10 @@ scraper_admintwo:
 ipc:
   dataset: "ipc-country-data"
   url: "https://api.ipcinfo.org"
+  source_date_format:
+    start: "%b"
+    separator: "-"
+    end: "%b %Y"
 
 affected_targeted_reached:
   source: "Multiple Sources (Humanitarian Partners)"
