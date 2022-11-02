@@ -1,4 +1,0 @@
-Country,Date,Total Affected,Total Targeted,Targeted %,Total Reached,Reached %,Food Insecurity,Malnutrition,SAM,MAM,GAM,PLW,Internal Displacement,School Dropout,Livestock Deaths,Water Insecurity,Diseases: AWD/Cholera,Diseases: Measles,Source
-#country+code,#date,#affected+total,#targeted+total,#targeted+pct,#reached+total,#reached+pct,#affected+food+ipc+p3plus+num,,#affected+sam,#affected+mam,#affected+gam,,#affected+idps,,,#affected+water,,,
-ETH,8/24/2022,24106527,16986639,0.70,13800000,0.81,9873984,2900000,704499,1481983,2186482,685920,595717,1400000,3500000,8200000,608,6542,https://reliefweb.int/report/ethiopia/horn-africa-drought-regional-humanitarian-overview-call-action-revised-24-august-2022
-ETH,9/21/2022,24106527,16986639,0.70,13800000,0.81,9873984,2900000,704499,1481983,2186482,1871239,345000,482061,3500000,8300000,1700,7519,https://reliefweb.int/report/ethiopia/horn-africa-drought-regional-humanitarian-overview-call-action-revised-21-september-2022
