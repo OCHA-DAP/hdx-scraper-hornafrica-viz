@@ -96,15 +96,19 @@ def get_indicators(
     affectedtargetedreached = AffectedTargetedReached(
         configuration["affected_targeted_reached"], today, adminone, admintwo
     )
-    acled = ACLED(configuration["acled"], today, (231, 404, 706), outputs, admintwo)
+    acled = ACLED(configuration["acled"], today, countries, outputs, admintwo)
 
     runner.add_customs((ipc, fts, affectedtargetedreached, acled))
+    source_configuration = Sources.create_source_configuration(
+        suffix_attribute="regional"
+    )
     runner.add_aggregators(
         True,
         configuration["aggregate_regional"],
         "national",
         "regional",
         countries,
+        source_configuration=source_configuration,
         force_add_to_run=True,
     )
 

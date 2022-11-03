@@ -2,7 +2,9 @@ import logging
 import re
 
 from dateutil.relativedelta import relativedelta
+from hdx.location.country import Country
 from hdx.scraper.base_scraper import BaseScraper
+from hdx.scraper.utilities.sources import Sources
 from hdx.utilities.dictandlist import dict_of_lists_add
 from hdx.utilities.text import earliest_index, get_fraction_str, multiple_replace
 
@@ -32,6 +34,9 @@ class FTS(BaseScraper):
                     ),
                 ),
             },
+            source_configuration=Sources.create_source_configuration(
+                admin_sources=True
+            ),
         )
         self.today = today
         self.outputs = outputs
@@ -179,3 +184,24 @@ class FTS(BaseScraper):
                         set_values(plan_type, allreqs[countryiso], None, None)
 
         self.datasetinfo["source_date"] = self.today
+
+    def add_sources(self) -> None:
+        self.datasetinfo["source_date"] = {}
+        source_dates = self.datasetinfo["source_date"]
+        self.datasetinfo["source"] = {}
+        sources = self.datasetinfo["source"]
+        self.datasetinfo["source_url"] = {}
+        source_urls = self.datasetinfo["source_url"]
+        reader = self.get_reader()
+        for countryiso3 in self.countryiso3s:
+            countryname = Country.get_country_name_from_iso3(countryiso3).lower()
+            datasetinfo = {"dataset": f"fts-requirements-and-funding-data-for-{countryname}", "format": "csv"}
+            reader.read_hdx_metadata(datasetinfo)
+            source_default_date = datasetinfo["source_date"]["default_date"]
+            source_dates[f"CUSTOM_{countryiso3}"] = source_default_date
+            source_dates["default_date"] = source_default_date
+            sources[f"CUSTOM_{countryiso3}"] = datasetinfo["source"]
+            sources["default_source"] = datasetinfo["source"]
+            source_urls[f"CUSTOM_{countryiso3}"] = datasetinfo["source_url"]
+            source_urls["default_url"] = datasetinfo["source_url"]
+        super().add_sources()
