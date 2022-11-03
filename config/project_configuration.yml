@@ -4,6 +4,7 @@ tabs:
   adminone: "AdminOneData"
   admintwo: "AdminTwoData"
   fatalities: "Fatalities"
+  planorgfunding: "PlanOrgFunding"
   sources: "Sources"
 
 

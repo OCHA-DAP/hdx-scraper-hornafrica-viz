@@ -1,10 +1,8 @@
 import logging
-import re
 
 from dateutil.relativedelta import relativedelta
 from hdx.scraper.base_scraper import BaseScraper
-from hdx.utilities.dictandlist import dict_of_lists_add
-from hdx.utilities.text import earliest_index, get_fraction_str, multiple_replace
+from hdx.utilities.text import get_fraction_str
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +31,13 @@ class FTS(BaseScraper):
                 ),
             },
         )
+        self.planfund_hxltags = {
+            "PlanId": "#activity+id+fts_internal",
+            "CountryISO3": "#country+code",
+            "Organisation": "#org+name+funder",
+            "Funding": "#value+funding+total+usd",
+            "PercentageOfPlanFunding": "#value+funding+plan+pct",
+        }
         self.today = today
         self.outputs = outputs
         self.countryiso3s = countryiso3s
@@ -100,11 +105,13 @@ class FTS(BaseScraper):
             percent_values,
         ) = self.get_values("national")
 
+        chosen_plans = dict()
         plantype_values = dict()
 
         def set_values(
-            plan_type_value, requirements_value, funding_value, percent_value
+            plan_id, plan_type_value, requirements_value, funding_value, percent_value
         ):
+            chosen_plans[countryiso] = plan_id
             plantype_values[countryiso] = plan_type_value
             requirements_values[countryiso] = requirements_value
             if allfund:
@@ -128,6 +135,7 @@ class FTS(BaseScraper):
                 allpct = None
             if plan.get("customLocationCode") == "COVD":
                 continue
+            plan_id = plan["id"]
             plan_type = plan["planType"]["name"].lower()
 
             countries = plan["countries"]
@@ -152,7 +160,7 @@ class FTS(BaseScraper):
                         or requirements_values.get(countryiso) is None
                         or plantype_value == "regional response plan"
                     ):
-                        set_values(plan_type, allreq, allfund, allpct)
+                        set_values(plan_id, plan_type, allreq, allfund, allpct)
             else:
                 allreqs, allfunds = self.get_requirements_and_funding_location(
                     base_url, plan, countryid_iso3mapping, reader
@@ -168,7 +176,7 @@ class FTS(BaseScraper):
                     else:
                         allpct = None
                     if requirements_values.get(countryiso) is None and allreq:
-                        set_values(plan_type, allreq, allfund, allpct)
+                        set_values(plan_id, plan_type, allreq, allfund, allpct)
                 for countryiso in allreqs:
                     if countryiso in allfunds:
                         continue
@@ -176,6 +184,42 @@ class FTS(BaseScraper):
                     if plantype_value in ("humanitarian response plan", "flash appeal"):
                         continue
                     if requirements_values.get(countryiso) is None and allreq:
-                        set_values(plan_type, allreqs[countryiso], None, None)
+                        set_values(plan_id, plan_type, allreqs[countryiso], None, None)
+
+        planfund_output = [
+            list(self.planfund_hxltags.keys()),
+            list(self.planfund_hxltags.values()),
+        ]
+        for countryiso, plan_id in chosen_plans.items():
+            url = f"{base_url}1/fts/flow/custom-search?planid={plan_id}&groupby=organization"
+            data = self.download_data(url, reader)
+            fundingobjects = data["report1"]["fundingTotals"]["objects"]
+            if len(fundingobjects) != 0:
+                objectsbreakdown = fundingobjects[0].get("objectsBreakdown")
+                if objectsbreakdown:
+                    fundingorgs = list()
+                    fundingorgvalues = list()
+                    totalfunding = 0
+                    for fundobj in objectsbreakdown:
+                        orgname = fundobj["name"]
+                        fundingorgs.append(orgname)
+                        funding = fundobj["totalFunding"]
+                        fundingorgvalues.append(funding)
+                        totalfunding += funding
+                    top10indices = sorted(
+                        range(len(fundingorgvalues)),
+                        key=lambda i: fundingorgvalues[i],
+                        reverse=True,
+                    )[:10]
+                    for i in top10indices:
+                        orgname = fundingorgs[i]
+                        funding = fundingorgvalues[i]
+                        percentage = get_fraction_str(funding, totalfunding)
+                        row = [plan_id, countryiso, orgname, funding, percentage]
+                        planfund_output.append(row)
+
+        tabname = "planorgfunding"
+        for output in self.outputs.values():
+            output.update_tab(tabname, planfund_output)
 
         self.datasetinfo["source_date"] = self.today
