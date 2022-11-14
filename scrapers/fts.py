@@ -1,4 +1,5 @@
 import logging
+from operator import itemgetter
 
 from dateutil.relativedelta import relativedelta
 from hdx.scraper.base_scraper import BaseScraper
@@ -42,15 +43,15 @@ class FTS(BaseScraper):
         self.outputs = outputs
         self.countryiso3s = countryiso3s
 
-    def download(self, url, reader):
-        json = reader.download_json(url)
+    def download(self, url, reader, **kwargs):
+        json = reader.download_json(url, **kwargs)
         status = json["status"]
         if status != "ok":
             raise FTSException(f"{url} gives status {status}")
         return json
 
-    def download_data(self, url, reader):
-        return self.download(url, reader)["data"]
+    def download_data(self, url, reader, **kwargs):
+        return self.download(url, reader, **kwargs)["data"]
 
     def get_requirements_and_funding_location(
         self, base_url, plan, countryid_iso3mapping, reader
@@ -105,18 +106,24 @@ class FTS(BaseScraper):
             percent_values,
         ) = self.get_values("national")
 
+        countryiso3_to_id = dict()
         chosen_plans = dict()
         plantype_values = dict()
 
         def set_values(
-            plan_id, plan_type_value, requirements_value, funding_value, percent_value
+            iso,
+            plan_id,
+            plan_type_value,
+            requirements_value,
+            funding_value,
+            percent_value,
         ):
-            chosen_plans[countryiso] = plan_id
-            plantype_values[countryiso] = plan_type_value
-            requirements_values[countryiso] = requirements_value
+            chosen_plans[iso] = plan_id
+            plantype_values[iso] = plan_type_value
+            requirements_values[iso] = requirements_value
             if allfund:
-                funding_values[countryiso] = funding_value
-                percent_values[countryiso] = percent_value
+                funding_values[iso] = funding_value
+                percent_values[iso] = percent_value
 
         base_url = self.datasetinfo["url"]
         reader = self.get_reader(self.name)
@@ -145,6 +152,7 @@ class FTS(BaseScraper):
                 if countryiso:
                     countryid = country["id"]
                     countryid_iso3mapping[str(countryid)] = countryiso
+                    countryiso3_to_id[countryiso] = countryid
             if len(countryid_iso3mapping) == 0:
                 continue
             if len(countryid_iso3mapping) == 1:
@@ -160,7 +168,9 @@ class FTS(BaseScraper):
                         or requirements_values.get(countryiso) is None
                         or plantype_value == "regional response plan"
                     ):
-                        set_values(plan_id, plan_type, allreq, allfund, allpct)
+                        set_values(
+                            countryiso, plan_id, plan_type, allreq, allfund, allpct
+                        )
             else:
                 allreqs, allfunds = self.get_requirements_and_funding_location(
                     base_url, plan, countryid_iso3mapping, reader
@@ -176,7 +186,9 @@ class FTS(BaseScraper):
                     else:
                         allpct = None
                     if requirements_values.get(countryiso) is None and allreq:
-                        set_values(plan_id, plan_type, allreq, allfund, allpct)
+                        set_values(
+                            countryiso, plan_id, plan_type, allreq, allfund, allpct
+                        )
                 for countryiso in allreqs:
                     if countryiso in allfunds:
                         continue
@@ -184,7 +196,14 @@ class FTS(BaseScraper):
                     if plantype_value in ("humanitarian response plan", "flash appeal"):
                         continue
                     if requirements_values.get(countryiso) is None and allreq:
-                        set_values(plan_id, plan_type, allreqs[countryiso], None, None)
+                        set_values(
+                            countryiso,
+                            plan_id,
+                            plan_type,
+                            allreqs[countryiso],
+                            None,
+                            None,
+                        )
 
         planfund_output = [
             list(self.planfund_hxltags.keys()),
@@ -194,29 +213,40 @@ class FTS(BaseScraper):
             url = f"{base_url}1/fts/flow/custom-search?planid={plan_id}&groupby=organization"
             data = self.download_data(url, reader)
             fundingobjects = data["report1"]["fundingTotals"]["objects"]
-            if len(fundingobjects) != 0:
-                objectsbreakdown = fundingobjects[0].get("objectsBreakdown")
-                if objectsbreakdown:
-                    fundingorgs = list()
-                    fundingorgvalues = list()
-                    totalfunding = 0
-                    for fundobj in objectsbreakdown:
-                        orgname = fundobj["name"]
-                        fundingorgs.append(orgname)
-                        funding = fundobj["totalFunding"]
-                        fundingorgvalues.append(funding)
-                        totalfunding += funding
-                    top10indices = sorted(
-                        range(len(fundingorgvalues)),
-                        key=lambda i: fundingorgvalues[i],
-                        reverse=True,
-                    )[:10]
-                    for i in top10indices:
-                        orgname = fundingorgs[i]
-                        funding = fundingorgvalues[i]
-                        percentage = get_fraction_str(funding, totalfunding)
-                        row = [plan_id, countryiso, orgname, funding, percentage]
-                        planfund_output.append(row)
+            if len(fundingobjects) == 0:
+                continue
+            countryid = countryiso3_to_id[countryiso]
+            url = f"{base_url}2/country/{countryid}/summary/sourceOrganizations/{curdate.year}"
+            data = self.download_data(
+                url, reader, filename=f"sourceorganizations_{countryiso.lower()}.json"
+            )
+            childorglookup = dict()
+            for org in data["objects"]:
+                childsorgs = org.get("childOrganizations")
+                if not childsorgs:
+                    continue
+                orgname = org["name"]
+                for childorg in childsorgs:
+                    childorglookup[str(childorg["id"])] = orgname
+            objectsbreakdown = fundingobjects[0].get("objectsBreakdown")
+            if objectsbreakdown:
+                fundingorgs = dict()
+                totalfunding = 0
+                for fundobj in objectsbreakdown:
+                    fundid = fundobj.get("id")
+                    orgname = fundobj["name"]
+                    if fundid:
+                        orgname = childorglookup.get(fundobj["id"], orgname)
+                    funding = fundobj["totalFunding"]
+                    fundingorgs[orgname] = fundingorgs.get(orgname, 0) + funding
+                    totalfunding += funding
+                top10values = sorted(
+                    fundingorgs.items(), key=itemgetter(1), reverse=True
+                )[:10]
+                for orgname, funding in top10values:
+                    percentage = get_fraction_str(funding, totalfunding)
+                    row = [plan_id, countryiso, orgname, funding, percentage]
+                    planfund_output.append(row)
 
         tabname = "planorgfunding"
         for output in self.outputs.values():
