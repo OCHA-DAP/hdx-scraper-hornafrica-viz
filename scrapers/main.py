@@ -99,15 +99,18 @@ def get_indicators(
     acled = ACLED(configuration["acled"], today, countries, outputs, admintwo)
 
     runner.add_customs((ipc, fts, affectedtargetedreached, acled))
+    source_configuration = Sources.create_source_configuration(
+        suffix_attribute="regional"
+    )
     runner.add_aggregators(
         True,
         configuration["aggregate_regional"],
         "national",
         "regional",
         countries,
+        source_configuration=source_configuration,
         force_add_to_run=True,
     )
-
     runner.run(
         prioritise_scrapers=(
             "population_national",

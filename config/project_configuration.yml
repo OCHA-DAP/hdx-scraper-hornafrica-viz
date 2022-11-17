@@ -69,32 +69,46 @@ aggregate_regional:
   "#population":
     action: "sum"
   "#affected+total":
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=droughts&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
     action: "sum"
   "#targeted+total":
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=droughts&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
     action: "sum"
   "#reached+total":
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=droughts&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
     action: "sum"
   "#affected+idps":
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=droughts&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
     action: "sum"
   "#value+funding+required+usd":
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=som&groups=ken&organization=ocha-fts&vocab_Topics=aid%20funding&q=&sort=if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
     output: "RequiredFunding"
     action: "sum"
+    source_date_format: "-"
   "#value+funding+total+usd":
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=som&groups=ken&organization=ocha-fts&vocab_Topics=aid%20funding&q=&sort=if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
     output: "Funding"
     action: "sum"
+    source_date_format: "-"
   "#value+funding+pct":
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=som&groups=ken&organization=ocha-fts&vocab_Topics=aid%20funding&q=&sort=if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
     output: "PercentFunded"
     action: "eval"
     formula: "get_fraction_str(#value+funding+total+usd, #value+funding+required+usd) if #value+funding+total+usd is not None and #value+funding+required+usd is not None else ''"
+    source_date_format: "-"
   "#affected+food+ipc+p3plus+num":
     action: "sum"
   "#affected+sam":
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=droughts&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
     action: "sum"
   "#affected+mam":
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=droughts&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
     action: "sum"
   "#affected+gam":
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=droughts&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
     action: "sum"
   "#affected+water":
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=droughts&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
     action: "sum"
 
 # regional
