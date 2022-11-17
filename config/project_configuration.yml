@@ -268,8 +268,6 @@ affected_targeted_reached:
 
 
 acled:
-  source: "ACLED"
-  source_url: "https://acleddata.com/"
   url: "https://api.acleddata.com/acled/read.csv?iso=%d&year=%d&limit=0"
   start_date: "2022-01-01"
 
