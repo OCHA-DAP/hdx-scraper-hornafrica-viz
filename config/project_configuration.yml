@@ -150,6 +150,10 @@ scraper_adminone:
       - "MeanRainfallAnomaly"
     output_hxl:
       - "#climate+rainfall+anomaly"
+    source_date_format:
+      start: "%b"
+      separator: "-"
+      end: "%b %Y"
   ipc_somalia:
     dataset: "somalia-acute-food-insecurity-country-data"
     format: "csv"
@@ -214,6 +218,10 @@ scraper_admintwo:
       - "MeanRainfallAnomaly"
     output_hxl:
       - "#climate+rainfall+anomaly"
+    source_date_format:
+      start: "%b"
+      separator: "-"
+      end: "%b %Y"
   ipc_somalia:
     dataset: "somalia-acute-food-insecurity-country-data"
     format: "csv"

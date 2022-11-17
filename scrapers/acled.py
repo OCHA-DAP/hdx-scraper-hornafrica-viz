@@ -84,7 +84,6 @@ class ACLED(BaseScraper):
         tabname = "fatalities"
         for output in self.outputs.values():
             output.update_tab(tabname, rows)
-        self.datasetinfo["source_date"] = latest_date
 
     def add_sources(self):
         self.datasetinfo["source_date"] = {}
