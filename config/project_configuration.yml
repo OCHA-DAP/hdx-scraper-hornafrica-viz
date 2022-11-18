@@ -135,6 +135,9 @@ scraper_adminone:
     source_date: "2022-06-21"
     dataset: "east-africa-chirps-seasonal-rainfall-accumulation-anomaly-by-pentad"
     format: "csv"
+    filter_cols:
+      - "Season"
+    prefilter: "Season == 'octdec'"
     admin:
       - "alpha_3"
       - "ADM_PCODE"
@@ -203,6 +206,9 @@ scraper_admintwo:
     source_date: "2022-06-21"
     dataset: "east-africa-chirps-seasonal-rainfall-accumulation-anomaly-by-pentad"
     format: "csv"
+    filter_cols:
+      - "Season"
+    prefilter: "Season == 'octdec'"
     admin:
       - "alpha_3"
       - "ADM_PCODE"
