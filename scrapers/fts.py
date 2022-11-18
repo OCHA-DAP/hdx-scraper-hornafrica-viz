@@ -260,13 +260,8 @@ class FTS(BaseScraper):
         self.datasetinfo["source_date"] = self.today
 
     def add_sources(self) -> None:
-        self.datasetinfo["source_date"] = {}
-        source_dates = self.datasetinfo["source_date"]
-        self.datasetinfo["source"] = {}
-        sources = self.datasetinfo["source"]
-        self.datasetinfo["source_url"] = {}
-        source_urls = self.datasetinfo["source_url"]
         reader = self.get_reader()
+        hxltags = self.get_headers("national")[1]
         for countryiso3 in self.countryiso3s:
             countryname = Country.get_country_name_from_iso3(countryiso3).lower()
             datasetinfo = {
@@ -274,11 +269,6 @@ class FTS(BaseScraper):
                 "format": "csv",
             }
             reader.read_hdx_metadata(datasetinfo)
-            source_default_date = datasetinfo["source_date"]["default_date"]
-            source_dates[f"CUSTOM_{countryiso3}"] = source_default_date
-            source_dates["default_date"] = source_default_date
-            sources[f"CUSTOM_{countryiso3}"] = datasetinfo["source"]
-            sources["default_source"] = datasetinfo["source"]
-            source_urls[f"CUSTOM_{countryiso3}"] = datasetinfo["source_url"]
-            source_urls["default_url"] = datasetinfo["source_url"]
-        super().add_sources()
+            self.add_hxltag_sources(
+                hxltags, datasetinfo=datasetinfo, suffix_attributes=(countryiso3,)
+            )

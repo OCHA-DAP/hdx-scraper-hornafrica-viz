@@ -11,28 +11,22 @@ logger = logging.getLogger(__name__)
 
 class AffectedTargetedReached(BaseScraper):
     def __init__(self, datasetinfo, today, adminone, admintwo):
+        headers = (
+            ("Total Affected", "Total Targeted", "Total Reached", "Priority"),
+            (
+                "#affected+total",
+                "#targeted+total",
+                "#reached+total",
+                "#priority",
+            ),
+        )
+        self.hxltags = headers[1]
         super().__init__(
             "affected_targeted_reached",
             datasetinfo,
             {
-                "adminone": (
-                    ("Total Affected", "Total Targeted", "Total Reached", "Priority"),
-                    (
-                        "#affected+total",
-                        "#targeted+total",
-                        "#reached+total",
-                        "#priority",
-                    ),
-                ),
-                "admintwo": (
-                    ("Total Affected", "Total Targeted", "Total Reached", "Priority"),
-                    (
-                        "#affected+total",
-                        "#targeted+total",
-                        "#reached+total",
-                        "#priority",
-                    ),
-                ),
+                "adminone": headers,
+                "admintwo": headers,
             },
             source_configuration=Sources.create_source_configuration(
                 adminlevel=(adminone, admintwo)
@@ -41,6 +35,7 @@ class AffectedTargetedReached(BaseScraper):
         self.today = today
         self.adminone = adminone
         self.admintwo = admintwo
+        self.datasetinfos = dict()
 
     def run(self) -> None:
         datasets = self.datasetinfo["datasets"]
@@ -54,23 +49,10 @@ class AffectedTargetedReached(BaseScraper):
         reacheddict2 = dict()
         prioritydict2 = dict()
 
-        self.datasetinfo["source_date"] = {}
-        source_dates = self.datasetinfo["source_date"]
-        self.datasetinfo["source"] = {}
-        sources = self.datasetinfo["source"]
-        self.datasetinfo["source_url"] = {}
-        source_urls = self.datasetinfo["source_url"]
-        end_date = default_date
         for countryiso3, dataset in datasets.items():
             datasetinfo = {"dataset": dataset, "format": "csv"}
             resource = reader.read_hdx_metadata(datasetinfo)
-            source_default_date = datasetinfo["source_date"]["default_date"]
-            new_end_date = source_default_date["end"]
-            if new_end_date > end_date:
-                end_date = new_end_date
-            source_dates[f"CUSTOM_{countryiso3}"] = source_default_date
-            sources[f"CUSTOM_{countryiso3}"] = datasetinfo["source"]
-            source_urls[f"CUSTOM_{countryiso3}"] = datasetinfo["source_url"]
+            self.datasetinfos[countryiso3] = datasetinfo
             data = reader.read_hxl_resource(
                 f"{self.name}-{countryiso3}", resource, self.name
             )
@@ -105,7 +87,6 @@ class AffectedTargetedReached(BaseScraper):
                         aggregate_value /= len(input[countrypcode])
                     output[pcode] = number_format(aggregate_value, format="%.0f")
 
-        source_dates["default_date"] = {"end": end_date}
         affected = self.get_values("adminone")[0]
         fill_values(affecteddict1, affected, self.adminone)
         targeted = self.get_values("adminone")[1]
@@ -122,3 +103,9 @@ class AffectedTargetedReached(BaseScraper):
         fill_values(reacheddict2, reached, self.admintwo)
         priority = self.get_values("admintwo")[3]
         fill_values(prioritydict2, priority, self.admintwo, average=True)
+
+    def add_sources(self) -> None:
+        for countryiso3, datasetinfo in self.datasetinfos.items():
+            self.add_hxltag_sources(
+                self.hxltags, datasetinfo=datasetinfo, suffix_attributes=(countryiso3,)
+            )
