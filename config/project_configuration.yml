@@ -137,19 +137,29 @@ scraper_adminone:
     format: "csv"
     filter_cols:
       - "Season"
-    prefilter: "Season == 'octdec'"
     admin:
       - "alpha_3"
       - "ADM_PCODE"
     admin_exact: True
-    input:
-      - "CHIRPS_mean"
-    transform:
-      "CHIRPS_mean": "get_numeric_if_possible(CHIRPS_mean)"
-    output:
-      - "MeanRainfallAnomaly"
-    output_hxl:
-      - "#climate+rainfall+anomaly"
+    subsets:
+      - filter: "Season == 'marmay'"
+        input:
+          - "CHIRPS_mean"
+        transform:
+          "CHIRPS_mean": "get_numeric_if_possible(CHIRPS_mean)"
+        output:
+          - "MeanRainfallAnomalyMarMay"
+        output_hxl:
+          - "#climate+rainfall+anomaly+marmay"
+      - filter: "Season == 'octdec'"
+        input:
+          - "CHIRPS_mean"
+        transform:
+          "CHIRPS_mean": "get_numeric_if_possible(CHIRPS_mean)"
+        output:
+          - "MeanRainfallAnomalyOctDec"
+        output_hxl:
+          - "#climate+rainfall+anomaly+octdec"
     source_date_format:
       start: "%b"
       separator: "-"
@@ -208,19 +218,29 @@ scraper_admintwo:
     format: "csv"
     filter_cols:
       - "Season"
-    prefilter: "Season == 'octdec'"
     admin:
       - "alpha_3"
       - "ADM_PCODE"
     admin_exact: True
-    input:
-      - "CHIRPS_mean"
-    transform:
-      "CHIRPS_mean": "get_numeric_if_possible(CHIRPS_mean)"
-    output:
-      - "MeanRainfallAnomaly"
-    output_hxl:
-      - "#climate+rainfall+anomaly"
+    subsets:
+      - filter: "Season == 'marmay'"
+        input:
+          - "CHIRPS_mean"
+        transform:
+          "CHIRPS_mean": "get_numeric_if_possible(CHIRPS_mean)"
+        output:
+          - "MeanRainfallAnomalyMarMay"
+        output_hxl:
+          - "#climate+rainfall+anomaly+marmay"
+      - filter: "Season == 'octdec'"
+        input:
+          - "CHIRPS_mean"
+        transform:
+          "CHIRPS_mean": "get_numeric_if_possible(CHIRPS_mean)"
+        output:
+          - "MeanRainfallAnomalyOctDec"
+        output_hxl:
+          - "#climate+rainfall+anomaly+octdec"
     source_date_format:
       start: "%b"
       separator: "-"
