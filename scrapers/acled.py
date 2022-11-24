@@ -1,4 +1,5 @@
 import logging
+from copy import deepcopy
 from itertools import chain
 
 from hdx.location.country import Country
@@ -87,16 +88,24 @@ class ACLED(BaseScraper):
 
     def add_sources(self):
         reader = self.get_reader()
+
+        datasetinfos = list()
         for countryiso3 in self.countryiso3s:
             countryname = Country.get_country_name_from_iso3(countryiso3).lower()
             datasetinfo = {
                 "dataset": f"{countryname}-acled-conflict-data",
+                "source": self.datasetinfo["source"],
                 "format": "xlsx",
             }
             reader.read_hdx_metadata(datasetinfo)
-            self.add_hxltag_source(
-                "#date+latest+acled+regional", datasetinfo=datasetinfo
-            )
+            datasetinfos.append((countryiso3, datasetinfo))
+        countryiso3, datasetinfo = datasetinfos[0]
+        regional_datasetinfo = deepcopy(datasetinfo)
+        regional_datasetinfo["source_url"] = "https://acleddata.com/"
+        self.add_hxltag_source(
+            "#date+latest+acled+regional", datasetinfo=regional_datasetinfo
+        )
+        for countryiso3, datasetinfo in datasetinfos:
             self.add_hxltag_source(
                 f"#date+latest+acled+{countryiso3.lower()}", datasetinfo=datasetinfo
             )

@@ -113,7 +113,9 @@ def get_indicators(
     )
     runner.run(
         prioritise_scrapers=(
-            "population_national",
+            "population_eth_national",
+            "population_ken_national",
+            "population_som_national",
             "population_adminone",
             "population_admintwo",
             "population_regional",

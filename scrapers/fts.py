@@ -266,6 +266,7 @@ class FTS(BaseScraper):
             countryname = Country.get_country_name_from_iso3(countryiso3).lower()
             datasetinfo = {
                 "dataset": f"fts-requirements-and-funding-data-for-{countryname}",
+                "source": self.datasetinfo["source"],
                 "format": "csv",
             }
             reader.read_hdx_metadata(datasetinfo)
