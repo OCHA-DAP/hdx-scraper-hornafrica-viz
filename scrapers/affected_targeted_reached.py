@@ -29,7 +29,7 @@ class AffectedTargetedReached(BaseScraper):
                 "admintwo": headers,
             },
             source_configuration=Sources.create_source_configuration(
-                adminlevel=(adminone, admintwo)
+                adminlevel=(adminone, admintwo), should_overwrite_sources=True,
             ),
         )
         self.today = today

@@ -151,5 +151,5 @@ def get_indicators(
             + custom_sources(configuration["custom_sources_other"], today)
         )
         writer.update("sources", sources)
-    #        writer.update_sources()
+#        writer.update_sources()
     return countries
