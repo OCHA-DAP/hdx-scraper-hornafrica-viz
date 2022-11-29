@@ -337,6 +337,11 @@ scraper_admintwo:
     url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRppQx8JTKkKRCKmzfnCMmTFEcvCpkbP9PdHs1sQTUyacmbsx8tlAXpgBLFce-lcehukreGGuXjA_4S/pub?gid=961087049&single=true&output=csv"
     format: "csv"
     use_hxl: True
+  idps_kenya:
+    source: ""
+    url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRppQx8JTKkKRCKmzfnCMmTFEcvCpkbP9PdHs1sQTUyacmbsx8tlAXpgBLFce-lcehukreGGuXjA_4S/pub?gid=84884421&single=true&output=csv"
+    format: "csv"
+    use_hxl: True
   idps_somalia:
     dataset: "somalia-internally-displaced-persons-idps"
     format: "xlsx"
