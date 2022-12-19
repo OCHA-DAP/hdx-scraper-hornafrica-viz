@@ -21,6 +21,25 @@ custom_sources_keyfigures:
 custom_sources_other:
   url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTA0UzW4ayDSGMurZqwE_PFJGRkQ0uw1K0EHgqCyvV0Ok1Fyb2gP9OoAdcIiVR1-SYGGsSn4RW7F_72/pub?gid=0&single=true&output=csv"
 
+additional_sources:
+  - indicator: "#affected+food+ipc+p3plus+num+eth"
+    source_date: "2022-10-31"
+    source: "Food Security Cluster"
+    source_url: "https://data.humdata.org/dataset/ethiopia-targeted-populaton-food-cluster"
+    should_overwrite_source: True
+  - indicator: "#affected+food+ipc+p3plus+num+som"
+    source_date:
+      start: "01/10/2022"
+      end: "31/12/2022"
+    source: "IPCInfo"
+    source_url: "https://data.humdata.org/dataset/somalia-acute-food-insecurity-country-data"
+    source_date_format:
+      start: "%b"
+      separator: "-"
+      end: "%b %Y (First projection)"
+    should_overwrite_source: True
+
+
 # national
 scraper_national:
   population_eth:
@@ -172,49 +191,61 @@ scraper_adminone:
       - "Population"
     output_hxl:
       - "#population"
-  chirps:
-    source: "USGS, UCSB"
-    source_date: "2022-06-21"
+  chirps_previous:
+    source_date: "2022-05-31"
     dataset: "east-africa-chirps-seasonal-rainfall-accumulation-anomaly-by-pentad"
     format: "csv"
     filter_cols:
       - "Season"
+    prefilter: "Season == 'marmay'"
     admin:
       - "alpha_3"
       - "ADM_PCODE"
     admin_exact: True
-    subsets:
-      - filter: "Season == 'marmay'"
-        input:
-          - "CHIRPS_mean"
-        transform:
-          "CHIRPS_mean": "get_numeric_if_possible(CHIRPS_mean)"
-        output:
-          - "MeanRainfallAnomalyMarMay"
-        output_hxl:
-          - "#climate+rainfall+anomaly+marmay"
-      - filter: "Season == 'octdec'"
-        input:
-          - "CHIRPS_mean"
-        transform:
-          "CHIRPS_mean": "get_numeric_if_possible(CHIRPS_mean)"
-        output:
-          - "MeanRainfallAnomalyOctDec"
-        output_hxl:
-          - "#climate+rainfall+anomaly+octdec"
-      - filter: "Season != 'marmay'"
-        input:
-          - "CHIRPS_mean"
-        transform:
-          "CHIRPS_mean": "get_numeric_if_possible(CHIRPS_mean)"
-        output:
-          - "MeanRainfallAnomaly"
-        output_hxl:
-          - "#climate+rainfall+anomaly"
-    source_date_format:
-      start: "%b"
-      separator: "-"
-      end: "%b %Y"
+    input:
+      - "CHIRPS_mean"
+    transform:
+      "CHIRPS_mean": "get_numeric_if_possible(CHIRPS_mean)"
+    output:
+      - "MeanRainfallAnomalyMarMay"
+    output_hxl:
+      - "#climate+rainfall+anomaly+marmay"
+  chirps_current:
+    dataset: "east-africa-chirps-seasonal-rainfall-accumulation-anomaly-by-pentad"
+    format: "csv"
+    filter_cols:
+      - "Season"
+    prefilter: "Season == 'octdec'"
+    admin:
+      - "alpha_3"
+      - "ADM_PCODE"
+    admin_exact: True
+    input:
+      - "CHIRPS_mean"
+    transform:
+      "CHIRPS_mean": "get_numeric_if_possible(CHIRPS_mean)"
+    output:
+      - "MeanRainfallAnomalyOctDec"
+    output_hxl:
+      - "#climate+rainfall+anomaly+octdec"
+  chirps_other:
+    dataset: "east-africa-chirps-seasonal-rainfall-accumulation-anomaly-by-pentad"
+    format: "csv"
+    filter_cols:
+      - "Season"
+    prefilter: "Season != 'marmay'"
+    admin:
+      - "alpha_3"
+      - "ADM_PCODE"
+    admin_exact: True
+    input:
+      - "CHIRPS_mean"
+    transform:
+      "CHIRPS_mean": "get_numeric_if_possible(CHIRPS_mean)"
+    output:
+      - "MeanRainfallAnomaly"
+    output_hxl:
+      - "#climate+rainfall+anomaly"
   ipc_somalia:
     dataset: "somalia-acute-food-insecurity-country-data"
     format: "csv"
@@ -239,10 +270,6 @@ scraper_adminone:
       - "FoodInsecurityIPCP3+"
     output_hxl:
       - "#affected+food+ipc+p3plus+num"
-    source_date_format:
-      start: "%b"
-      separator: "-"
-      end: "%b %Y"
 
 scraper_admintwo:
   population:
@@ -262,49 +289,61 @@ scraper_admintwo:
       - "Population"
     output_hxl:
       - "#population"
-  chirps:
-    source: "USGS, UCSB"
-    source_date: "2022-06-21"
+  chirps_previous:
+    source_date: "2022-05-31"
     dataset: "east-africa-chirps-seasonal-rainfall-accumulation-anomaly-by-pentad"
     format: "csv"
     filter_cols:
       - "Season"
+    prefilter: "Season == 'marmay'"
     admin:
       - "alpha_3"
       - "ADM_PCODE"
     admin_exact: True
-    subsets:
-      - filter: "Season == 'marmay'"
-        input:
-          - "CHIRPS_mean"
-        transform:
-          "CHIRPS_mean": "get_numeric_if_possible(CHIRPS_mean)"
-        output:
-          - "MeanRainfallAnomalyMarMay"
-        output_hxl:
-          - "#climate+rainfall+anomaly+marmay"
-      - filter: "Season == 'octdec'"
-        input:
-          - "CHIRPS_mean"
-        transform:
-          "CHIRPS_mean": "get_numeric_if_possible(CHIRPS_mean)"
-        output:
-          - "MeanRainfallAnomalyOctDec"
-        output_hxl:
-          - "#climate+rainfall+anomaly+octdec"
-      - filter: "Season != 'marmay'"
-        input:
-          - "CHIRPS_mean"
-        transform:
-          "CHIRPS_mean": "get_numeric_if_possible(CHIRPS_mean)"
-        output:
-          - "MeanRainfallAnomaly"
-        output_hxl:
-          - "#climate+rainfall+anomaly"
-    source_date_format:
-      start: "%b"
-      separator: "-"
-      end: "%b %Y"
+    input:
+      - "CHIRPS_mean"
+    transform:
+      "CHIRPS_mean": "get_numeric_if_possible(CHIRPS_mean)"
+    output:
+      - "MeanRainfallAnomalyMarMay"
+    output_hxl:
+      - "#climate+rainfall+anomaly+marmay"
+  chirps_current:
+    dataset: "east-africa-chirps-seasonal-rainfall-accumulation-anomaly-by-pentad"
+    format: "csv"
+    filter_cols:
+      - "Season"
+    prefilter: "Season == 'octdec'"
+    admin:
+      - "alpha_3"
+      - "ADM_PCODE"
+    admin_exact: True
+    input:
+      - "CHIRPS_mean"
+    transform:
+      "CHIRPS_mean": "get_numeric_if_possible(CHIRPS_mean)"
+    output:
+      - "MeanRainfallAnomalyOctDec"
+    output_hxl:
+      - "#climate+rainfall+anomaly+octdec"
+  chirps_other:
+    dataset: "east-africa-chirps-seasonal-rainfall-accumulation-anomaly-by-pentad"
+    format: "csv"
+    filter_cols:
+      - "Season"
+    prefilter: "Season != 'marmay'"
+    admin:
+      - "alpha_3"
+      - "ADM_PCODE"
+    admin_exact: True
+    input:
+      - "CHIRPS_mean"
+    transform:
+      "CHIRPS_mean": "get_numeric_if_possible(CHIRPS_mean)"
+    output:
+      - "MeanRainfallAnomaly"
+    output_hxl:
+      - "#climate+rainfall+anomaly"
   ipc_somalia:
     dataset: "somalia-acute-food-insecurity-country-data"
     format: "csv"
@@ -328,10 +367,6 @@ scraper_admintwo:
       - "FoodInsecurityIPCP3+"
     output_hxl:
       - "#affected+food+ipc+p3plus+num"
-    source_date_format:
-      start: "%b"
-      separator: "-"
-      end: "%b %Y"
   idps_ethiopia:
     source: ""
     url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRppQx8JTKkKRCKmzfnCMmTFEcvCpkbP9PdHs1sQTUyacmbsx8tlAXpgBLFce-lcehukreGGuXjA_4S/pub?gid=961087049&single=true&output=csv"
@@ -363,7 +398,8 @@ scraper_admintwo:
       - "#affected+idps+ind"
 
 ipc:
-  dataset: "ipc-country-data"
+  source: "IPCInfo"
+  source_url: "https://data.humdata.org/dataset/%s-acute-food-insecurity-country-data"
   url: "https://api.ipcinfo.org"
   source_date_format:
     start: "%b"

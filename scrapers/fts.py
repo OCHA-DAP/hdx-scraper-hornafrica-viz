@@ -257,11 +257,10 @@ class FTS(BaseScraper):
         for output in self.outputs.values():
             output.update_tab(tabname, planfund_output)
 
-        self.datasetinfo["source_date"] = self.today
-
     def add_sources(self) -> None:
         reader = self.get_reader()
         hxltags = self.get_headers("national")[1]
+        datasetinfo = None
         for countryiso3 in self.countryiso3s:
             countryname = Country.get_country_name_from_iso3(countryiso3).lower()
             datasetinfo = {
@@ -273,3 +272,4 @@ class FTS(BaseScraper):
             self.add_hxltag_sources(
                 hxltags, datasetinfo=datasetinfo, suffix_attributes=(countryiso3,)
             )
+        self.datasetinfo["source_date"] = datasetinfo["source_date"]

@@ -145,11 +145,11 @@ def get_indicators(
     admintwo.output_errors()
 
     if "sources" in tabs:
-        sources = (
-            list(writer.sources_headers)
-            + custom_sources(configuration["custom_sources_keyfigures"], today)
-            + custom_sources(configuration["custom_sources_other"], today)
-        )
-        writer.update("sources", sources)
-#        writer.update_sources()
+        # sources = (
+        #     list(writer.sources_headers)
+        #     + custom_sources(configuration["custom_sources_keyfigures"], today)
+        #     + custom_sources(configuration["custom_sources_other"], today)
+        # )
+        # writer.update("sources", sources)
+        writer.update_sources(additional_sources=configuration["additional_sources"])
     return countries
