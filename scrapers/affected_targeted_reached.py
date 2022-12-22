@@ -2,7 +2,6 @@ import logging
 
 from hdx.scraper.base_scraper import BaseScraper
 from hdx.scraper.utilities.sources import Sources
-from hdx.utilities.dateparse import default_date
 from hdx.utilities.dictandlist import dict_of_lists_add
 from hdx.utilities.text import number_format
 
@@ -29,7 +28,8 @@ class AffectedTargetedReached(BaseScraper):
                 "admintwo": headers,
             },
             source_configuration=Sources.create_source_configuration(
-                adminlevel=(adminone, admintwo), should_overwrite_sources=True,
+                adminlevel=(adminone, admintwo),
+                should_overwrite_sources=True,
             ),
         )
         self.today = today

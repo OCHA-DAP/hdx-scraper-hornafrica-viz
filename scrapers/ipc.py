@@ -1,4 +1,5 @@
 import logging
+from copy import deepcopy
 from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
@@ -13,22 +14,23 @@ class IPC(BaseScraper):
     def __init__(self, datasetinfo, today, countryiso3s, adminone, admintwo):
         self.phases = ["3", "4", "5"]
         p3plus_header = "FoodInsecurityIPCP3+"
-        p3plus_hxltag = "#affected+food+ipc+p3plus+num"
+        self.p3plus_hxltag = "#affected+food+ipc+p3plus+num"
         super().__init__(
             "ipc",
             datasetinfo,
             {
-                "adminone": ((p3plus_header,), (p3plus_hxltag,)),
-                "admintwo": ((p3plus_header,), (p3plus_hxltag,)),
+                "adminone": ((p3plus_header,), (self.p3plus_hxltag,)),
+                "admintwo": ((p3plus_header,), (self.p3plus_hxltag,)),
             },
             source_configuration=Sources.create_source_configuration(
-                adminlevel=(adminone, admintwo)
+                adminlevel=(adminone, admintwo), should_overwrite_sources=True
             ),
         )
         self.today = today
         self.countryiso3s = countryiso3s
         self.adminone = adminone
         self.admintwo = admintwo
+        self.datasetinfos = dict()
 
     def get_period(self, projections, countryiso3):
         if self.admintwo.get_admin_level(countryiso3) > 1:
@@ -61,7 +63,7 @@ class IPC(BaseScraper):
                 if projection != "":
                     projection_number = i
                     break
-        return projection_number, start.strftime("%Y-%m-%d"), end.strftime("%Y-%m-%d")
+        return projection_number, start, end
 
     def run(self):
         base_url = self.datasetinfo["url"]
@@ -77,7 +79,9 @@ class IPC(BaseScraper):
         adminone_p3plus = self.get_values("adminone")[0]
         admintwo_p3plus = self.get_values("admintwo")[0]
         projection_mappings = ["", "_projected", "_second_projected"]
+        projection_names = ["", " (First projection)", " (Second projection)"]
         analysis_dates = set()
+
         for countryiso3, countryiso2 in sorted(countryisos):
             url = f"{base_url}/population?country={countryiso2}"
             country_data = reader.download_json(url)
@@ -92,6 +96,14 @@ class IPC(BaseScraper):
             projections.append(country_data["second_projected_period_dates"])
             projection_number, start, end = self.get_period(projections, countryiso3)
             projection_mapping = projection_mappings[projection_number]
+            projection_name = projection_names[projection_number]
+            datasetinfo = deepcopy(self.datasetinfo)
+            end_format = datasetinfo["source_date_format"]["end"]
+            datasetinfo["source_date_format"]["end"] = f"{end_format}{projection_name}"
+            datasetinfo["source_date"] = {"start": start, "end": end}
+            countryname = Country.get_country_name_from_iso3(countryiso3)
+            datasetinfo["source_url"] = datasetinfo["source_url"] % countryname.lower()
+            self.datasetinfos[countryiso3] = datasetinfo
             admin1_areas = country_data.get("groups", country_data.get("areas"))
             if admin1_areas:
                 for admin1_area in admin1_areas:
@@ -137,4 +149,11 @@ class IPC(BaseScraper):
                                 admintwo_p3plus[pcode] = cur_sum + sum
                             else:
                                 admintwo_p3plus[pcode] = sum
-        reader.read_hdx_metadata(self.datasetinfo)
+
+    def add_sources(self) -> None:
+        for countryiso3, datasetinfo in self.datasetinfos.items():
+            self.add_hxltag_sources(
+                (self.p3plus_hxltag,),
+                datasetinfo=datasetinfo,
+                suffix_attributes=(countryiso3,),
+            )
