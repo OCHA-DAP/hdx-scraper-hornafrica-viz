@@ -23,9 +23,18 @@ custom_sources_other:
 
 additional_sources:
   - indicator: "#affected+food+ipc+p3plus+num+eth"
-    source_date: "2022-10-31"
-    source: "Food Security Cluster"
-    source_url: "https://data.humdata.org/dataset/ethiopia-targeted-populaton-food-cluster"
+    dataset: "ethiopia-targeted-populaton-food-cluster"
+    should_overwrite_source: True
+  - indicator: "#affected+food+ipc+p3plus+num+regional"
+    source_date:
+      start: "01/10/2022"
+      end: "31/12/2022"
+    source: "IPCInfo (Kenya, Somalia), FS Cluster (Ethiopia)"
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ipc&organization=ocha-ethiopia&vocab_Topics=food%20security&q=&sort=if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
+    source_date_format:
+      start: "%b"
+      separator: "-"
+      end: "%b %Y"
     should_overwrite_source: True
   - indicator: "#affected+food+ipc+p3plus+num+som"
     source_date:
@@ -38,6 +47,36 @@ additional_sources:
       separator: "-"
       end: "%b %Y (First projection)"
     should_overwrite_source: True
+  - indicator: "#affected+idps+ind+regional"
+    copy: "#affected+idps+regional"
+    source_url: "https://data.humdata.org/dataset?groups=som&groups=eth&groups=ken&organization=unhcr&organization=ocha-ethiopia&vocab_Topics=internally%20displaced%20persons%20-%20idp"
+  - indicator: "#affected+idps+ind+ken"
+    source_date: "2022-10-31"
+    source: "IOM"
+    source_url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRppQx8JTKkKRCKmzfnCMmTFEcvCpkbP9PdHs1sQTUyacmbsx8tlAXpgBLFce-lcehukreGGuXjA_4S/pub?gid=84884421&single=true&output=csv"
+    should_overwrite_source: True
+  - indicator: "#affected+idps+ind+regional"
+    copy: "#affected+idps+regional"
+    source_url: "https://data.humdata.org/dataset?groups=som&groups=eth&groups=ken&organization=unhcr&organization=ocha-ethiopia&vocab_Topics=internally%20displaced%20persons%20-%20idp"
+  - indicator: "#affected+idps+eth"
+    copy: "#affected+idps+ind+eth"
+    source_url: "https://data.humdata.org/dataset/ethiopia-drought-related-key-figures"
+    should_overwrite_source: True
+  - indicator: "#affected+idps+ken"
+    copy: "#affected+idps+ind+ken"
+    should_overwrite_source: True
+  - indicator: "#affected+idps+som"
+    copy: "#affected+idps+ind+som"
+    source_url: "https://data.humdata.org/dataset/somalia-drought-related-key-figures"
+    should_overwrite_source: True
+  - indicator: "#climate+rainfall+anomaly+marmay+regional"
+    copy: "#climate+rainfall+anomaly+marmay+eth"
+  - indicator: "#climate+rainfall+anomaly+octdec+regional"
+    copy: "#climate+rainfall+anomaly+octdec+eth"
+  - indicator: "#priority+regional"
+    copy: "#priority+som"
+    source_url: "https://data.humdata.org/dataset?organization=ocha-rosea&q=%22pin%20targeted%20reached%20by%20location%20and%20cluster%22"
+
 
 
 # national
@@ -128,18 +167,20 @@ fts:
 
 aggregate_regional:
   "#population":
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=worldpop&q=%22population%20counts%22&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
     action: "sum"
   "#affected+total":
-    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=droughts&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=drought&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
     action: "sum"
   "#targeted+total":
-    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=droughts&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=drought&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
     action: "sum"
   "#reached+total":
-    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=droughts&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=drought&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
     action: "sum"
   "#affected+idps":
-    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=droughts&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
+    source: "IOM, UNHCR, PRMN"
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=drought&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
     action: "sum"
   "#value+funding+required+usd":
     source_url: "https://data.humdata.org/dataset?groups=eth&groups=som&groups=ken&organization=ocha-fts&vocab_Topics=aid%20funding&q=&sort=if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
@@ -157,16 +198,16 @@ aggregate_regional:
   "#affected+food+ipc+p3plus+num":
     action: "sum"
   "#affected+sam":
-    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=droughts&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=drought&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
     action: "sum"
   "#affected+mam":
-    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=droughts&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=drought&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
     action: "sum"
   "#affected+gam":
-    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=droughts&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=drought&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
     action: "sum"
   "#affected+water":
-    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=droughts&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=drought&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
     action: "sum"
 
 # regional
@@ -228,24 +269,6 @@ scraper_adminone:
       - "MeanRainfallAnomalyOctDec"
     output_hxl:
       - "#climate+rainfall+anomaly+octdec"
-  chirps_other:
-    dataset: "east-africa-chirps-seasonal-rainfall-accumulation-anomaly-by-pentad"
-    format: "csv"
-    filter_cols:
-      - "Season"
-    prefilter: "Season != 'marmay'"
-    admin:
-      - "alpha_3"
-      - "ADM_PCODE"
-    admin_exact: True
-    input:
-      - "CHIRPS_mean"
-    transform:
-      "CHIRPS_mean": "get_numeric_if_possible(CHIRPS_mean)"
-    output:
-      - "MeanRainfallAnomaly"
-    output_hxl:
-      - "#climate+rainfall+anomaly"
   ipc_somalia:
     dataset: "somalia-acute-food-insecurity-country-data"
     format: "csv"
@@ -326,24 +349,6 @@ scraper_admintwo:
       - "MeanRainfallAnomalyOctDec"
     output_hxl:
       - "#climate+rainfall+anomaly+octdec"
-  chirps_other:
-    dataset: "east-africa-chirps-seasonal-rainfall-accumulation-anomaly-by-pentad"
-    format: "csv"
-    filter_cols:
-      - "Season"
-    prefilter: "Season != 'marmay'"
-    admin:
-      - "alpha_3"
-      - "ADM_PCODE"
-    admin_exact: True
-    input:
-      - "CHIRPS_mean"
-    transform:
-      "CHIRPS_mean": "get_numeric_if_possible(CHIRPS_mean)"
-    output:
-      - "MeanRainfallAnomaly"
-    output_hxl:
-      - "#climate+rainfall+anomaly"
   ipc_somalia:
     dataset: "somalia-acute-food-insecurity-country-data"
     format: "csv"
@@ -368,15 +373,17 @@ scraper_admintwo:
     output_hxl:
       - "#affected+food+ipc+p3plus+num"
   idps_ethiopia:
-    source: ""
+    dataset: "ethiopia-drought-induced-displacement"
     url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRppQx8JTKkKRCKmzfnCMmTFEcvCpkbP9PdHs1sQTUyacmbsx8tlAXpgBLFce-lcehukreGGuXjA_4S/pub?gid=961087049&single=true&output=csv"
     format: "csv"
     use_hxl: True
+    should_overwrite_sources: True
   idps_kenya:
     source: ""
     url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRppQx8JTKkKRCKmzfnCMmTFEcvCpkbP9PdHs1sQTUyacmbsx8tlAXpgBLFce-lcehukreGGuXjA_4S/pub?gid=84884421&single=true&output=csv"
     format: "csv"
     use_hxl: True
+    should_overwrite_sources: True
   idps_somalia:
     dataset: "somalia-internally-displaced-persons-idps"
     format: "xlsx"
@@ -396,6 +403,7 @@ scraper_admintwo:
       - "IDPs"
     output_hxl:
       - "#affected+idps+ind"
+    should_overwrite_sources: True
 
 ipc:
   source: "IPCInfo"
@@ -414,7 +422,8 @@ affected_targeted_reached:
 
 
 acled:
-  source: ACLED
+  source: "ACLED"
+  source_url: "https://acleddata.com/"
   url: "https://api.acleddata.com/acled/read.csv?iso=%d&year=%d&limit=0"
   start_date: "2022-01-01"
 
