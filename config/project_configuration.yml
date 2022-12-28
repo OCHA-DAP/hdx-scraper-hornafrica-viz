@@ -45,7 +45,7 @@ additional_sources:
     source_date_format:
       start: "%b"
       separator: "-"
-      end: "%b %Y (First projection)"
+      end: "%b %Y (Current)"
     should_overwrite_source: True
   - indicator: "#affected+idps+ind+regional"
     copy: "#affected+idps+regional"
