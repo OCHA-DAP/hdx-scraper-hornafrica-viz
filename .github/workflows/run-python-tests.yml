@@ -3,7 +3,14 @@
 
 name: build
 
-on: [push, pull_request]
+on:
+  workflow_dispatch: # add run button in github
+  push:
+    branches-ignore:
+      - gh-pages
+  pull_request:
+    branches-ignore:
+      - gh-pages
 
 jobs:
   build:
