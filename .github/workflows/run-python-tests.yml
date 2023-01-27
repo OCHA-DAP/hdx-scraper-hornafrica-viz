@@ -12,6 +12,7 @@ on:
     branches-ignore:
       - gh-pages
 
+
 jobs:
   build:
     runs-on: ubuntu-latest
