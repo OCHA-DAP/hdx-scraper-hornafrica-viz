@@ -132,7 +132,7 @@ class FTS(BaseScraper):
 
         base_url = self.datasetinfo["url"]
         reader = self.get_reader(self.name)
-        curdate = self.today - relativedelta(months=1)
+        curdate = self.today - relativedelta(months=2)
         url = f"{base_url}2/fts/flow/plan/overview/progress/{curdate.year}"
         data = self.download_data(url, reader)
         plans = data["plans"]
