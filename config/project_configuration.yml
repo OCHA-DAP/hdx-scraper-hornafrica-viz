@@ -28,7 +28,7 @@ additional_sources:
   - indicator: "#affected+food+ipc+p3plus+num+regional"
     source_date:
       start: "01/10/2022"
-      end: "31/12/2022"
+      end: "31/03/2023"
     source: "IPCInfo (Kenya, Somalia), FS Cluster (Ethiopia)"
     source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ipc&organization=ocha-ethiopia&vocab_Topics=food%20security&q=&sort=if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
     source_date_format:
@@ -38,14 +38,14 @@ additional_sources:
     should_overwrite_source: True
   - indicator: "#affected+food+ipc+p3plus+num+som"
     source_date:
-      start: "01/10/2022"
-      end: "31/12/2022"
+      start: "01/01/2023"
+      end: "31/03/2023"
     source: "IPCInfo"
     source_url: "https://data.humdata.org/dataset/somalia-acute-food-insecurity-country-data"
     source_date_format:
       start: "%b"
       separator: "-"
-      end: "%b %Y (Current)"
+      end: "%b %Y (First projection)"
     should_overwrite_source: True
   - indicator: "#affected+idps+ind+regional"
     copy: "#affected+idps+regional"
