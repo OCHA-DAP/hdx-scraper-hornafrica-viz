@@ -39,7 +39,6 @@ def get_indicators(
     else:
         countries = configuration["countries"]
     configuration["countries_fuzzy_try"] = countries
-    adminone = AdminLevel(configuration["admin1"])
     admintwo = AdminLevel(
         configuration["admin2"],
         admin_level=2,
@@ -50,13 +49,11 @@ def get_indicators(
         levels_mapping = {
             "regional": "regional_data",
             "national": "national_data",
-            "adminone": "adminone_data",
             "admintwo": "admintwo_data",
         }
         admin_name_mapping = {
             "regional": "value",
             "national": "#country+code",
-            "adminone": "#adm1+code",
             "admintwo": "#adm2+code",
         }
         Fallbacks.add(
@@ -88,13 +85,12 @@ def get_indicators(
 
     create_configurable_scrapers("regional", suffix_attribute="regional")
     create_configurable_scrapers("national")
-    create_configurable_scrapers("adminone", adminlevel=adminone)
     create_configurable_scrapers("admintwo", adminlevel=admintwo)
 
-    ipc = IPC(configuration["ipc"], today, ("ETH", "KEN"), adminone, admintwo)
+    ipc = IPC(configuration["ipc"], today, ("ETH", "KEN"), admintwo)
     fts = FTS(configuration["fts"], today, outputs, countries)
     affectedtargetedreached = AffectedTargetedReached(
-        configuration["affected_targeted_reached"], today, adminone, admintwo
+        configuration["affected_targeted_reached"], today, admintwo
     )
     acled = ACLED(configuration["acled"], today, countries, outputs, admintwo)
 
@@ -116,7 +112,6 @@ def get_indicators(
             "population_eth_national",
             "population_ken_national",
             "population_som_national",
-            "population_adminone",
             "population_admintwo",
             "population_regional",
         )
@@ -130,15 +125,8 @@ def get_indicators(
         writer.update_national(
             countries,
         )
-    if "adminone" in tabs:
-        writer.update_subnational(adminone, level="adminone", tab="adminone")
-
     if "admintwo" in tabs:
         writer.update_subnational(admintwo, level="admintwo", tab="admintwo")
-
-    adminone.output_matches()
-    adminone.output_ignored()
-    adminone.output_errors()
 
     admintwo.output_matches()
     admintwo.output_ignored()
