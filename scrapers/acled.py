@@ -71,11 +71,12 @@ class ACLED(BaseScraper):
                 continue
             if date > latest_date:
                 latest_date = date
-            admlevel = self.admintwo.get_admin_level(inrow["iso3"])
+            iso3 = Country.get_iso3_from_m49(int(inrow["iso"]))
+            admlevel = self.admintwo.get_admin_level(iso3)
             admname = inrow[f"admin{admlevel}"]
             pcode = None
             if admname:
-                pcode, _ = self.admintwo.get_pcode(inrow["iso3"], admname)
+                pcode, _ = self.admintwo.get_pcode(iso3, admname)
             inrow["adm2_pcode"] = pcode
             row = list()
             for header in hxltags:
