@@ -242,8 +242,7 @@ scraper_admintwo:
       - "Population"
     output_hxl:
       - "#population"
-  chirps_previous:
-    source_date: "2022-05-31"
+  chirps_current:
     dataset: "east-africa-chirps-seasonal-rainfall-accumulation-anomaly-by-pentad"
     format: "csv"
     filter_cols:
@@ -261,7 +260,8 @@ scraper_admintwo:
       - "MeanRainfallAnomalyMarMay"
     output_hxl:
       - "#climate+rainfall+anomaly+marmay"
-  chirps_current:
+  chirps_previous:
+    source_date: "2022-12-31"
     dataset: "east-africa-chirps-seasonal-rainfall-accumulation-anomaly-by-pentad"
     format: "csv"
     filter_cols:
