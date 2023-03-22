@@ -29,7 +29,7 @@ additional_sources:
       start: "01/10/2022"
       end: "31/03/2023"
     source: "IPCInfo (Kenya, Somalia), FS Cluster (Ethiopia)"
-    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ipc&organization=ocha-ethiopia&vocab_Topics=food%20security&q=&sort=if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ipc&organization=ocha-ethiopia&vocab_Topics=food%20security"
     source_date_format:
       start: "%b"
       separator: "-"
@@ -59,7 +59,7 @@ additional_sources:
     should_overwrite_source: True
   - indicator: "#affected+idps+ind+regional"
     copy: "#affected+idps+regional"
-    source_url: "https://data.humdata.org/dataset?groups=som&groups=eth&groups=ken&organization=unhcr&organization=ocha-ethiopia&vocab_Topics=internally%20displaced%20persons%20-%20idp"
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-ethiopia&organization=unhcr&vocab_Topics=internally%20displaced%20persons-idp"
   - indicator: "#affected+idps+ind+ken"
     source_date: "2022-10-31"
     source: "IOM"
@@ -67,7 +67,7 @@ additional_sources:
     should_overwrite_source: True
   - indicator: "#affected+idps+ind+regional"
     copy: "#affected+idps+regional"
-    source_url: "https://data.humdata.org/dataset?groups=som&groups=eth&groups=ken&organization=unhcr&organization=ocha-ethiopia&vocab_Topics=internally%20displaced%20persons%20-%20idp"
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-ethiopia&organization=unhcr&vocab_Topics=internally%20displaced%20persons-idp"
   - indicator: "#affected+idps+eth"
     copy: "#affected+idps+ind+eth"
     source_url: "https://data.humdata.org/dataset/ethiopia-drought-related-key-figures"
@@ -177,47 +177,47 @@ fts:
 
 aggregate_regional:
   "#population":
-    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=worldpop&q=%22population%20counts%22&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=worldpop&q=%22population%20counts%22"
     action: "sum"
   "#affected+total":
-    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=drought&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=drought"
     action: "sum"
   "#targeted+total":
-    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=drought&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=drought"
     action: "sum"
   "#reached+total":
-    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=drought&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=drought"
     action: "sum"
   "#affected+idps":
     source: "IOM, UNHCR, PRMN"
-    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=drought&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=drought"
     action: "sum"
   "#value+funding+required+usd":
-    source_url: "https://data.humdata.org/dataset?groups=eth&groups=som&groups=ken&organization=ocha-fts&vocab_Topics=aid%20funding&q=&sort=if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-fts&vocab_Topics=funding"
     output: "RequiredFunding"
     action: "sum"
   "#value+funding+total+usd":
-    source_url: "https://data.humdata.org/dataset?groups=eth&groups=som&groups=ken&organization=ocha-fts&vocab_Topics=aid%20funding&q=&sort=if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-fts&vocab_Topics=funding"
     output: "Funding"
     action: "sum"
   "#value+funding+pct":
-    source_url: "https://data.humdata.org/dataset?groups=eth&groups=som&groups=ken&organization=ocha-fts&vocab_Topics=aid%20funding&q=&sort=if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-fts&vocab_Topics=funding"
     output: "PercentFunded"
     action: "eval"
     formula: "get_fraction_str(#value+funding+total+usd, #value+funding+required+usd) if #value+funding+total+usd is not None and #value+funding+required+usd is not None else ''"
   "#affected+food+ipc+p3plus+num":
     action: "sum"
   "#affected+sam":
-    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=drought&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=drought"
     action: "sum"
   "#affected+mam":
-    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=drought&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=drought"
     action: "sum"
   "#affected+gam":
-    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=drought&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=drought"
     action: "sum"
   "#affected+water":
-    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=drought&q=&sort=score%20desc%2C%20if(gt(last_modified%2Creview_date)%2Clast_modified%2Creview_date)%20desc&ext_page_size=25"
+    source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-rosea&vocab_Topics=drought"
     action: "sum"
 
 # regional
