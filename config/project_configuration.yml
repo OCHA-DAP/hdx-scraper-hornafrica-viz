@@ -279,29 +279,6 @@ scraper_admintwo:
       - "MeanRainfallAnomalyOctDec"
     output_hxl:
       - "#climate+rainfall+anomaly+octdec"
-  ipc_somalia:
-    dataset: "somalia-acute-food-insecurity-country-data"
-    format: "csv"
-    headers: 4
-    stop_row:
-      Region: "TOTAL"
-    admin:
-      - value: "SOM"
-      - "District"
-    input:
-      - "IPC 3"
-      - "IPC 4"
-      - "IPC 5"
-    transform:
-      "IPC 3": "get_numeric_if_possible(IPC 3) if IPC 3 else 0"
-      "IPC 4": "get_numeric_if_possible(IPC 4) if IPC 4 else 0"
-      "IPC 5": "get_numeric_if_possible(IPC 5) if IPC 5 else 0"
-    process:
-      - "IPC 3 + IPC 4 + IPC 5"
-    output:
-      - "FoodInsecurityIPCP3+"
-    output_hxl:
-      - "#affected+food+ipc+p3plus+num"
   idps_ethiopia:
     dataset: "ethiopia-drought-induced-displacement"
     url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRppQx8JTKkKRCKmzfnCMmTFEcvCpkbP9PdHs1sQTUyacmbsx8tlAXpgBLFce-lcehukreGGuXjA_4S/pub?gid=961087049&single=true&output=csv"
