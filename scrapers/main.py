@@ -11,7 +11,6 @@ from hdx.scraper.utilities.writer import Writer
 from .acled import ACLED
 from .affected_targeted_reached import AffectedTargetedReached
 from .fts import FTS
-from .somalia_idps import SomaliaIDPs
 from .utilities.sources import custom_sources
 
 logger = logging.getLogger(__name__)
@@ -88,13 +87,12 @@ def get_indicators(
     create_configurable_scrapers("admintwo", adminlevel=admintwo)
 
     fts = FTS(configuration["fts"], today, outputs, countries)
-    somaliaidps = SomaliaIDPs(configuration["somalia_idps"], admintwo)
     affectedtargetedreached = AffectedTargetedReached(
         configuration["affected_targeted_reached"], today, admintwo
     )
     acled = ACLED(configuration["acled"], today, countries, outputs, admintwo)
 
-    runner.add_customs((fts, somaliaidps, affectedtargetedreached, acled))
+    runner.add_customs((fts, affectedtargetedreached, acled))
     source_configuration = Sources.create_source_configuration(
         suffix_attribute="regional"
     )
