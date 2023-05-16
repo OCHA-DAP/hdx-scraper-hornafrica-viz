@@ -291,26 +291,26 @@ scraper_admintwo:
     format: "csv"
     use_hxl: True
     should_overwrite_sources: True
-  idps_somalia:
-    dataset: "somalia-internally-displaced-persons-idps"
-    format: "xlsx"
-    filter_cols:
-      - "Reason"
-      - "Year"
-    prefilter: "'drought' in Reason.lower() and Year in (self.today.year - 1, self.today.year)"
-    admin:
-      - value: "SOM"
-      - "Current (Arrival) District"
-    input:
-      - "Number of Individuals"
-    sum:
-      - formula: "int(Number of Individuals)"
-        mustbepopulated: True
-    output:
-      - "IDPs"
-    output_hxl:
-      - "#affected+idps+ind"
-    should_overwrite_sources: True
+#  idps_somalia:
+#    dataset: "somalia-internally-displaced-persons-idps"
+#    format: "xlsx"
+#    filter_cols:
+#      - "Reason"
+#      - "Year"
+#    prefilter: "'drought' in Reason.lower() and Year in (self.today.year - 1, self.today.year)"
+#    admin:
+#      - value: "SOM"
+#      - "Current (Arrival) District"
+#    input:
+#      - "Number of Individuals"
+#    sum:
+#      - formula: "int(Number of Individuals)"
+#        mustbepopulated: True
+#    output:
+#      - "IDPs"
+#    output_hxl:
+#      - "#affected+idps+ind"
+#    should_overwrite_sources: True
 
 ipc:
   source: "IPCInfo"
@@ -320,6 +320,10 @@ ipc:
     start: "%b"
     separator: "-"
     end: "%b %Y"
+
+somalia_idps:
+  dataset: "somalia-internally-displaced-persons-idps"
+  format: "xlsx"
 
 affected_targeted_reached:
   datasets:
