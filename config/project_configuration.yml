@@ -37,8 +37,8 @@ additional_sources:
     should_overwrite_source: True
   - indicator: "#affected+food+ipc+p3plus+num+som"
     source_date:
-      start: "01/01/2023"
-      end: "31/03/2023"
+      start: "01/04/2023"
+      end: "30/06/2023"
     source: "IPCInfo"
     source_url: "https://data.humdata.org/dataset/somalia-acute-food-insecurity-country-data"
     source_date_format:
