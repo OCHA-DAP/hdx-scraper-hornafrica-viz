@@ -157,18 +157,21 @@ scraper_national:
     use_hxl: True
     date: "#date"
     date_type: "date"
+    use_date: True
   key_figures_ken:
     dataset: "kenya-drought-related-key-figures"
     format: "csv"
     use_hxl: True
     date: "#date"
     date_type: "date"
+    use_date: True
   key_figures_som:
     dataset: "somalia-drought-related-key-figures"
     format: "csv"
     use_hxl: True
     date: "#date"
     date_type: "date"
+    use_date: True
 
 fts:
   source: "FTS"
