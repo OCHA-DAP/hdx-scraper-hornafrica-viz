@@ -62,10 +62,13 @@ additional_sources:
     source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ocha-ethiopia&organization=unhcr&organization=international-organization-for-migration&vocab_Topics=internally%20displaced%20persons-idp"
   - indicator: "#affected+idps+eth"
     copy: "#affected+idps+ind+eth"
+    should_overwrite_source: True
   - indicator: "#affected+idps+ken"
     copy: "#affected+idps+ind+ken"
+    should_overwrite_source: True
   - indicator: "#affected+idps+som"
     copy: "#affected+idps+ind+som"
+    should_overwrite_source: True
   - indicator: "#climate+rainfall+anomaly+marmay+regional"
     copy: "#climate+rainfall+anomaly+marmay+eth"
   - indicator: "#climate+rainfall+anomaly+octdec+regional"
