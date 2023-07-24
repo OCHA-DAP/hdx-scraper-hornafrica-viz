@@ -27,7 +27,7 @@ additional_sources:
   - indicator: "#affected+food+ipc+p3plus+num+regional"
     source_date:
       start: "01/10/2022"
-      end: "31/03/2023"
+      end: "30/06/2023"
     source: "IPCInfo (Kenya, Somalia), FS Cluster (Ethiopia)"
     source_url: "https://data.humdata.org/dataset?groups=eth&groups=ken&groups=som&organization=ipc&organization=ocha-ethiopia&vocab_Topics=food%20security"
     source_date_format:
