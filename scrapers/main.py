@@ -43,6 +43,7 @@ def get_indicators(
         admin_level=2,
         admin_level_overrides={"ETH": 3, "KEN": 1},
     )
+    admintwo.setup_from_admin_info(configuration["admin2"]["admin_info"])
     if fallbacks_root is not None:
         fallbacks_path = join(fallbacks_root, configuration["json"]["output"])
         levels_mapping = {
