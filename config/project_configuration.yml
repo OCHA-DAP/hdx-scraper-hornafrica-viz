@@ -239,25 +239,6 @@ scraper_admintwo:
     format: "csv"
     filter_cols:
       - "Season"
-    prefilter: "Season == 'marmay'"
-    admin:
-      - "alpha_3"
-      - "ADM_PCODE"
-    admin_exact: True
-    input:
-      - "CHIRPS_mean"
-    transform:
-      "CHIRPS_mean": "get_numeric_if_possible(CHIRPS_mean)"
-    output:
-      - "MeanRainfallAnomalyMarMay"
-    output_hxl:
-      - "#climate+rainfall+anomaly+marmay"
-  chirps_previous:
-    source_date: "2022-12-31"
-    dataset: "east-africa-chirps-seasonal-rainfall-accumulation-anomaly-by-pentad"
-    format: "csv"
-    filter_cols:
-      - "Season"
     prefilter: "Season == 'octdec'"
     admin:
       - "alpha_3"
@@ -271,6 +252,25 @@ scraper_admintwo:
       - "MeanRainfallAnomalyOctDec"
     output_hxl:
       - "#climate+rainfall+anomaly+octdec"
+  chirps_previous:
+    source_date: "2023-05-31"
+    dataset: "east-africa-chirps-seasonal-rainfall-accumulation-anomaly-by-pentad"
+    format: "csv"
+    filter_cols:
+      - "Season"
+    prefilter: "Season == 'marmay'"
+    admin:
+      - "alpha_3"
+      - "ADM_PCODE"
+    admin_exact: True
+    input:
+      - "CHIRPS_mean"
+    transform:
+      "CHIRPS_mean": "get_numeric_if_possible(CHIRPS_mean)"
+    output:
+      - "MeanRainfallAnomalyMarMay"
+    output_hxl:
+      - "#climate+rainfall+anomaly+marmay"
   idps_ethiopia:
     dataset: "ethiopia-drought-induced-displacement"
     url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRppQx8JTKkKRCKmzfnCMmTFEcvCpkbP9PdHs1sQTUyacmbsx8tlAXpgBLFce-lcehukreGGuXjA_4S/pub?gid=961087049&single=true&output=csv"
