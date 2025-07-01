@@ -1,4 +1,5 @@
-# hdx-scraper-hornafrica-viz
+# DEPRECATED - Visualisation discontinued
+## hdx-scraper-hornafrica-viz
 [![Build Status](https://github.com/OCHA-DAP/hdx-scraper-hornafrica-viz/actions/workflows/run-python-tests.yml/badge.svg)](https://github.com/OCHA-DAP/hdx-scraper-hornafrica-viz/actions/workflows/run-python-tests.yml) [![Coverage Status](https://coveralls.io/repos/github/OCHA-DAP/hdx-scraper-hornafrica-viz/badge.svg?branch=main&ts=1)](https://coveralls.io/github/OCHA-DAP/hdx-scraper-hornafrica-viz?branch=main)
 
 Please note:
